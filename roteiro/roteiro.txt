@@ -1,0 +1,73 @@
+# 300 MINUTOS: INÍCIO DE PROVA
+
+- Fábio e Daniel começam lendo os problemas.
+- Roberto começa digitando ".vimrc", "compila" e "modelo.cpp".
+- Roberto gera todos os arquivos-fonte, copiando "modelo.cpp" com -i.
+- Roberto apaga "modelo.cpp" com -i.
+- Quando surgir um problema fácil, todos discutem se ele deve ser o primeiro
+  a ser resolvido.
+- Quando o primeiro problema for escolhido, Fábio o implementa, possivelmente
+  tirando Roberto do computador e interrompendo as digitações.
+- Se surgir um problema ainda mais fácil que o primeiro, Fábio passa a
+  implementar esse novo problema.
+- Enquanto Fábio resolve o primeiro problema, Daniel e Roberto lêem os demais.
+- À medida que Roberto for lendo os problemas, ele os explica para Daniel.
+- Daniel preenche a tabela com os problemas até então lidos:
+  > AC: :)
+  > Ordem: ordem de resolução dos problemas (pode ser infinito).
+  > Escrito: se já há código escrito neste problema, mesmo que no papel.
+  > Leitores: pessoas que já leram o problema.
+  > Complexidade: complexidade da solução implementada.
+  > Resumo: resumo sobre o problema.
+- Assim que o primeiro problema começar a ser compilado, Fábio avisa Daniel e
+  Roberto para escolherem o segundo problema mais fácil.
+- Assim que o primeiro problema for submetido, Fábio sai do computador.
+- Roberto entra no computador, e termina as digitações pendentes.
+- Roberto implementa o segundo problema mais fácil.
+- Fora do computador, Daniel e Fábio escolhem a ordem e os resolvedores
+  dos problemas, com base no tempo de implementação.
+- Se ninguém tiver alguma idéia para resolver um problema, empurre-o para
+  o final (ou seja, a ordem desse problema será infinito).
+- Quando Roberto submete o segundo problema e sai do computador, ele revê
+  a ordenação dos problemas com quem ficou fora do computador.
+
+# 200 MINUTOS: MEIA-PROVA
+
+- A equipe deve resolver no máximo três problemas ao mesmo tempo.
+- Escreva o máximo possível de código no papel.
+- Depure com o código do problema e com a saída do TRACE impressos.
+  > Explique seu código para outra pessoa da equipe.
+  > Acompanhe o código linha por linha, anotando os valores das variáveis e
+    redesenhando as estruturas de dados à medida que forem alteradas.
+- Momentos nos quais quem estiver no computador deve avisar os outros membros
+  da equipe:
+  > Quando estiver pensando ou depurando.
+  > Quando estiver prestes a submeter, para que os outros membros possam fazer
+    testes extras e verificar o formato da saída.
+- Submeta sempre em C++, com extensão .cpp.
+- Logo após submeter, imprima o código.
+- Jogue fora as versões mais antigas do código impresso de um programa.
+- Jogue fora todos os papéis de um problema quando receber Accepted.
+- Mantenha todos os papéis de um problema grampeados.
+
+# 100 MINUTOS: FINAL DE PROVA
+
+- A equipe deve resolver apenas um problema no final da prova.
+- Use os balões das outras equipes para escolher o último problema:
+  > Os problemas mais resolvidos por outras equipes provavelmente são mais
+    fáceis que os outros problemas.
+  > Uma equipe mais bem colocada só é informativa quando as demais não o forem.
+- Como Fábio digita mais rápido, ele fica o tempo todo no computador.
+- Daniel e Roberto sentam ao lado de Fábio e dão sugestões para o problema.
+
+# 60 MINUTOS: PLACAR CONGELADO
+
+- Preste atenção nos melancias e nas comemorações das outras equipes:
+  os balões continuam vindo!
+
+# __ MINUTOS: JUÍZES CALADOS
+
+- Quando terminar um problema, teste com o exemplo de entrada, submeta
+  e só depois pense em mais casos de teste.
+- Nos últimos cinco minutos, faça alterações pequenas no código, remova o TRACE
+  e submeta.

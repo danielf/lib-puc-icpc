@@ -1,0 +1,107 @@
+n jobs e m maquinas. j indexa o job.
+
+a|b|c: a = ambiente computacional (uma maquina, varias, etc)
+       b = restricoes
+       c = funcao a ser minimizada
+
+a's possiveis:
+  1 = uma maquina
+  Pm = Maquinas iguais em paralelo
+  Qm = Maquinas "proporcionais" em paralelo (cada maquina tem uma velocidade)
+  Rm = Maquinas sem relacao em paralelo (cada maquina faz cada job em um certo
+       tempo)
+  Fm = Flowshop - m estagios em ordem, cada job tem que passar por todos os
+       estagios na mesma ordem
+  Jm = Jobshop - Igual ao Fm, mas cada job tem a sua propria ordem para passar
+  Om = Openshop - m estagios e os jobs tem que passar por todos mas em
+       qualquer ordem
+
+b's possiveis:
+  prmp = Pode preemptar um job e continua-lo depois (ate mesmo em outra m)
+  prec = Relacao de precedencia. prec=chain significa que a precedencia vao
+         ser cadeias independentes (1->2->3; 4->5; 6, por exemplo)
+  rj   = release date, nem todos os trabalhos estao prontos para serem
+         processados no tempo 0
+  block = No Flowshop significa que nao tem espaco entre as maquinas, entao se
+         o job j processou na maquina i e a i+1 ainda nao esta livre, a
+         maquina i fica bloqueada.
+
+c's possiveis:
+  A_max = max(A_j) para qualquer A.
+  C_j = Tempo em que o job j acabou de ser processado
+  L_j = C_j - d_j (d_j eh o "prazo")
+  T_j = max(0, L_j)
+  U_j = indicador se o trabalho j atrasou ou nao (0 ou 1)
+
+
+1||sum w_jC_j - Ordena por pj/wj.
+
+1|prec=chain|sum w_jC_j - Cada vez que a maquina fica livre faz o trabalho
+cuja cadeia tem o maior p = max_{1<=l<=k} (sum_{j=1..l} wj/sum_{j=1..l} pj)
+De fato, pode processar a cadeia ate l* = argmax_...
+
+1|rj,prmp|sum C_j - Em cada momento escolhe o job com menor pj/wj, onde pj
+eh o tempo que falta. Os pontos importantes sao quando a maquina fica livre
+e quando um novo job eh liberado.
+
+1|prec|hmax - hmax = max(h1(C1), h2(C2), ..., hn(Cn)), onde hj eh nao
+decrescente. Exemplo, maximo atraso.
+O Schedule eh construido de tras pra frente. Guloso. Encontre entre todos os
+jobs que podem ser o ultimo (que nao tem mais sucessores) o que minimiza
+hj(sum_entre_os_que_faltam pk).
+
+1||sum Uj: Ordene os jobs por prazo. Nessa ordem faca o seguinte:
+Insira o job j no schedule. Se o somatorio dos tempos passar d_j tire o job
+com maior tempo.
+
+1||sum Tj: Assuma que os jobs estao ordenados por d_j.
+PD Complicada. Seja J(j, l, k) = {i|j<=i<=l && p_i <= p_k}.
+Seja V(conjunto, t) = soma dos atrasos para o conjunto de jobs comecando a
+processar no tempo t.
+Caso base: V(vazio, t) = 0, V({j}, t) = max(0, t+p_j-d_j)
+Recorrencia:
+V(J(j,l,k),t)=min_d(V(J(j,k'+d,k'),t)+max(0,Ck'(d)-dk')+V(J(k'+d+1,l,k'),Ck'(d)))
+Onde k' eh o job com maior tempo de processamento em J(j,l,k).
+Ck'(d) = sum_{j<=i<=k'+d} pi
+A resposta eh V({1,2,...,n},0)
+
+1||sum |L_j| - Separar os jobs em 2 conjuntos, um para ser executado antes do
+prazo (J1) e outro para depois do prazo (J2). Antes do prazo ordene em ordem
+decrescente de tempo e depois em ordem crescente.
+Ordene todos os jobs em ordem decrescente de tempo. De 2 em 2 nessa ordem,
+coloque um em J1 e o outro em J2 (tanto faz).
+
+Pm|prpm|Cmax - Jobs em ordem decrescente.
+Cmax = max(p1, 1/m*sum pj). Ordene os jobs como se fosse em uma maquina soh.
+De os primeiros Cmax para a maquina 1, de Cmax ate 2*Cmax para a maquina 2,
+..., (m-1)*Cmax ate m*Cmax para a maquina m.
+
+Pm|prmp|Cmax discreto (soh pode preemptar em tempo inteiro): Longest Remaining
+Processing Time.
+
+Qm|prpm|Cmax discreto : Longest Remaining Processing Time on the fastest machine.
+
+Pm||sum Cj - Longest Processing Time
+
+Rm||sum Cj - grafo bipartido com n vertices de um lado e n*m do outro.
+
+Qm|prmp|sum Cj - Shortest Remaining Processing Time Fastest Machine
+
+F2||Cmax - Seja A={j|p1j <= p2j} e B={j|p2j < p1j}. Primeiro vai A em ordem de
+p1j, e depois vai B em ordem inversa de p2j.
+
+Fm|pij=pj|Cmax - independe do schedule. Cmax=sum pj + (m-1)*max(pj)
+
+F2|block|Cmax - TSP com n+1 cidades. 
+d(0,k)=p1k;d(j,0)=p2j;d(j,k)=max(p2j;p1k)
+
+J2||Cmax - Separa em dois conjuntos A = antes na maquina 1 e B = antes na
+maquina 2. A tem prioridade na maquina 1 sobre B, e B na maquina 2 sobre A.
+Ordena A como se fosse um F2||Cmax com maquinas (1,2) e B como se fosse um
+F2||Cmax com maquinas (2,1)
+
+O2||Cmax - Seja o maior tempo entre todos o tempo (j,b), ou seja, processar o
+job j na máquina b. Comece processando o job j na "outra máquina" (que não a b)
+e depois coloque j na fila da máquina b com a menor prioridade. Os outros jobs
+faz em qualquer ordem. Obs.: j na máquina b vai ser o último OU O PENÚLTIMO!
+Valor ótimo = max(max_j(p1j+p2j), sum_j p1j, sum_j p2j)

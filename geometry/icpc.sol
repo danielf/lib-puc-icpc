@@ -1,0 +1,3006 @@
+Instancia 1
+1.50 0.00 1.50
+
+Instancia 2
+1.00 1.00 1.41
+
+Instancia 3
+1.50 0.00 1.50
+
+Instancia 4
+50.32 50.57 50.63
+
+Instancia 5
+61.24 50.92 55.70
+
+Instancia 6
+53.27 45.79 61.86
+
+Instancia 7
+50.09 55.65 62.23
+
+Instancia 8
+44.24 50.99 60.57
+
+Instancia 9
+56.28 51.51 54.31
+
+Instancia 10
+53.29 45.52 53.08
+
+Instancia 11
+50.30 52.43 61.57
+
+Instancia 12
+45.96 43.79 62.36
+
+Instancia 13
+40.67 52.69 60.12
+
+Instancia 14
+43.07 48.13 57.79
+
+Instancia 15
+52.93 64.92 50.97
+
+Instancia 16
+49.05 48.83 62.47
+
+Instancia 17
+51.06 50.14 64.78
+
+Instancia 18
+49.94 46.83 62.95
+
+Instancia 19
+49.18 55.11 62.27
+
+Instancia 20
+48.46 48.37 63.54
+
+Instancia 21
+44.84 50.98 59.07
+
+Instancia 22
+51.89 51.90 65.25
+
+Instancia 23
+55.13 52.57 61.01
+
+Instancia 24
+58.34 60.74 49.79
+
+Instancia 25
+51.63 47.66 66.68
+
+Instancia 26
+49.31 50.90 62.08
+
+Instancia 27
+50.03 48.04 62.70
+
+Instancia 28
+55.40 51.44 56.56
+
+Instancia 29
+56.60 46.72 59.00
+
+Instancia 30
+56.03 52.62 42.52
+
+Instancia 31
+51.95 50.75 53.44
+
+Instancia 32
+46.57 48.94 52.70
+
+Instancia 33
+53.34 44.67 55.84
+
+Instancia 34
+48.00 48.41 59.69
+
+Instancia 35
+43.14 53.09 48.00
+
+Instancia 36
+50.47 47.51 66.01
+
+Instancia 37
+54.16 47.79 55.17
+
+Instancia 38
+49.53 51.14 59.91
+
+Instancia 39
+49.32 53.30 57.37
+
+Instancia 40
+50.47 44.27 51.06
+
+Instancia 41
+46.60 58.21 59.86
+
+Instancia 42
+43.44 57.93 55.56
+
+Instancia 43
+56.47 54.20 42.55
+
+Instancia 44
+50.86 49.20 61.01
+
+Instancia 45
+54.90 55.84 49.97
+
+Instancia 46
+44.19 47.98 63.60
+
+Instancia 47
+45.91 52.97 58.78
+
+Instancia 48
+60.48 52.81 57.69
+
+Instancia 49
+50.03 55.90 61.67
+
+Instancia 50
+51.25 49.57 63.08
+
+Instancia 51
+51.30 48.67 63.56
+
+Instancia 52
+52.67 47.12 59.12
+
+Instancia 53
+50.03 46.77 61.09
+
+Instancia 54
+59.51 54.56 56.20
+
+Instancia 55
+49.80 49.80 62.95
+
+Instancia 56
+47.38 55.20 63.06
+
+Instancia 57
+39.35 54.57 55.13
+
+Instancia 58
+44.93 44.26 60.60
+
+Instancia 59
+43.72 50.12 64.88
+
+Instancia 60
+45.91 45.38 58.37
+
+Instancia 61
+52.07 47.23 66.15
+
+Instancia 62
+47.09 45.90 54.59
+
+Instancia 63
+48.77 56.41 57.53
+
+Instancia 64
+49.22 68.43 47.33
+
+Instancia 65
+48.85 47.38 65.87
+
+Instancia 66
+54.62 55.41 56.93
+
+Instancia 67
+50.90 51.43 63.86
+
+Instancia 68
+52.76 44.23 50.20
+
+Instancia 69
+51.21 51.86 67.85
+
+Instancia 70
+47.83 48.18 63.86
+
+Instancia 71
+48.39 55.69 62.20
+
+Instancia 72
+57.86 52.73 56.49
+
+Instancia 73
+52.37 53.12 60.50
+
+Instancia 74
+47.23 46.82 64.10
+
+Instancia 75
+53.45 49.91 60.79
+
+Instancia 76
+50.86 50.44 63.84
+
+Instancia 77
+51.25 55.33 58.37
+
+Instancia 78
+39.87 58.85 31.75
+
+Instancia 79
+45.81 46.44 61.96
+
+Instancia 80
+47.92 63.56 51.58
+
+Instancia 81
+50.68 46.06 63.59
+
+Instancia 82
+50.59 50.18 66.61
+
+Instancia 83
+41.85 36.54 42.11
+
+Instancia 84
+45.49 46.12 50.82
+
+Instancia 85
+50.79 43.21 54.53
+
+Instancia 86
+55.96 45.09 58.56
+
+Instancia 87
+45.15 46.99 62.98
+
+Instancia 88
+48.09 52.57 66.19
+
+Instancia 89
+50.53 46.29 64.58
+
+Instancia 90
+47.82 46.26 58.49
+
+Instancia 91
+52.63 49.74 68.32
+
+Instancia 92
+50.49 49.33 62.54
+
+Instancia 93
+63.27 51.17 57.00
+
+Instancia 94
+57.98 52.22 44.62
+
+Instancia 95
+52.13 53.85 64.04
+
+Instancia 96
+49.41 48.60 66.89
+
+Instancia 97
+51.29 45.16 61.47
+
+Instancia 98
+50.01 43.85 59.34
+
+Instancia 99
+48.52 48.15 63.16
+
+Instancia 100
+51.56 50.04 66.37
+
+Instancia 101
+32.95 49.90 57.21
+
+Instancia 102
+52.49 51.89 59.10
+
+Instancia 103
+52.48 44.85 52.59
+
+Instancia 104
+51.70 48.03 61.43
+
+Instancia 105
+51.74 48.45 63.00
+
+Instancia 106
+46.96 51.59 64.57
+
+Instancia 107
+53.42 46.41 58.34
+
+Instancia 108
+55.19 48.23 57.01
+
+Instancia 109
+45.94 53.28 60.37
+
+Instancia 110
+46.33 44.24 58.70
+
+Instancia 111
+48.21 54.84 57.58
+
+Instancia 112
+55.09 53.82 52.34
+
+Instancia 113
+45.44 52.78 62.21
+
+Instancia 114
+55.58 59.75 25.40
+
+Instancia 115
+55.81 55.33 62.37
+
+Instancia 116
+46.18 43.85 54.94
+
+Instancia 117
+51.88 48.98 61.88
+
+Instancia 118
+56.01 43.02 54.22
+
+Instancia 119
+48.17 49.48 64.37
+
+Instancia 120
+57.29 51.97 60.51
+
+Instancia 121
+46.84 55.33 63.10
+
+Instancia 122
+50.44 48.98 49.66
+
+Instancia 123
+48.31 62.33 56.12
+
+Instancia 124
+49.95 37.05 52.01
+
+Instancia 125
+49.94 51.74 56.47
+
+Instancia 126
+9.71 72.02 1.02
+
+Instancia 127
+48.18 45.69 59.54
+
+Instancia 128
+46.98 46.45 60.74
+
+Instancia 129
+49.49 55.48 59.86
+
+Instancia 130
+51.74 53.26 59.35
+
+Instancia 131
+46.36 52.38 58.52
+
+Instancia 132
+49.61 49.91 62.70
+
+Instancia 133
+44.95 47.84 61.73
+
+Instancia 134
+50.15 50.70 62.04
+
+Instancia 135
+48.41 48.84 56.67
+
+Instancia 136
+53.65 50.41 61.65
+
+Instancia 137
+50.70 54.68 56.31
+
+Instancia 138
+48.24 46.87 56.79
+
+Instancia 139
+49.37 55.56 62.94
+
+Instancia 140
+49.31 43.20 46.12
+
+Instancia 141
+43.54 54.22 54.95
+
+Instancia 142
+48.86 47.69 61.37
+
+Instancia 143
+52.30 50.31 63.83
+
+Instancia 144
+51.44 50.70 62.98
+
+Instancia 145
+46.90 48.98 64.29
+
+Instancia 146
+45.49 42.48 57.65
+
+Instancia 147
+49.90 47.74 62.93
+
+Instancia 148
+58.01 54.13 57.06
+
+Instancia 149
+50.33 51.51 65.42
+
+Instancia 150
+54.97 53.57 58.75
+
+Instancia 151
+56.64 47.60 62.81
+
+Instancia 152
+51.02 50.06 66.86
+
+Instancia 153
+52.95 52.29 62.64
+
+Instancia 154
+40.59 49.18 58.22
+
+Instancia 155
+50.34 50.48 67.63
+
+Instancia 156
+51.50 52.66 59.78
+
+Instancia 157
+47.04 53.05 65.06
+
+Instancia 158
+42.59 58.84 54.15
+
+Instancia 159
+42.56 58.80 53.07
+
+Instancia 160
+48.73 49.70 67.88
+
+Instancia 161
+50.78 55.11 60.28
+
+Instancia 162
+50.51 49.73 59.80
+
+Instancia 163
+57.46 53.19 58.50
+
+Instancia 164
+81.28 37.93 29.14
+
+Instancia 165
+49.70 45.62 62.77
+
+Instancia 166
+51.45 56.20 61.39
+
+Instancia 167
+61.78 61.40 42.95
+
+Instancia 168
+48.29 49.46 67.21
+
+Instancia 169
+50.91 50.87 64.72
+
+Instancia 170
+54.15 48.72 63.15
+
+Instancia 171
+35.66 32.34 45.68
+
+Instancia 172
+45.77 59.87 56.87
+
+Instancia 173
+50.55 53.59 55.08
+
+Instancia 174
+43.11 47.64 54.89
+
+Instancia 175
+51.27 43.36 64.24
+
+Instancia 176
+43.23 35.15 54.31
+
+Instancia 177
+41.36 45.28 43.87
+
+Instancia 178
+52.39 47.90 65.96
+
+Instancia 179
+42.31 42.75 0.00
+
+Instancia 180
+49.79 47.16 63.74
+
+Instancia 181
+50.36 48.00 58.61
+
+Instancia 182
+45.98 51.62 61.47
+
+Instancia 183
+47.30 45.59 57.28
+
+Instancia 184
+51.73 49.64 65.26
+
+Instancia 185
+41.36 49.82 62.11
+
+Instancia 186
+44.45 45.94 63.07
+
+Instancia 187
+50.68 47.62 64.25
+
+Instancia 188
+51.39 51.33 57.72
+
+Instancia 189
+46.84 54.60 55.31
+
+Instancia 190
+48.39 53.77 63.54
+
+Instancia 191
+49.02 51.99 64.41
+
+Instancia 192
+47.35 55.86 52.28
+
+Instancia 193
+47.96 64.87 32.65
+
+Instancia 194
+55.66 1.60 21.27
+
+Instancia 195
+49.71 50.36 65.19
+
+Instancia 196
+48.52 46.42 62.52
+
+Instancia 197
+46.10 52.06 56.61
+
+Instancia 198
+48.51 52.44 62.17
+
+Instancia 199
+44.27 53.41 61.31
+
+Instancia 200
+47.49 48.82 59.56
+
+Instancia 201
+62.63 50.29 50.82
+
+Instancia 202
+51.51 49.09 62.99
+
+Instancia 203
+48.69 42.00 51.87
+
+Instancia 204
+46.65 47.70 62.08
+
+Instancia 205
+47.98 49.02 60.95
+
+Instancia 206
+57.95 52.78 62.33
+
+Instancia 207
+50.65 49.57 59.90
+
+Instancia 208
+54.89 51.33 61.67
+
+Instancia 209
+46.32 51.82 47.86
+
+Instancia 210
+45.32 47.49 55.04
+
+Instancia 211
+44.57 23.77 17.91
+
+Instancia 212
+50.17 49.73 68.42
+
+Instancia 213
+41.83 50.95 61.51
+
+Instancia 214
+49.08 51.86 63.17
+
+Instancia 215
+47.26 46.78 59.43
+
+Instancia 216
+50.21 51.06 64.65
+
+Instancia 217
+56.09 51.13 62.67
+
+Instancia 218
+52.10 47.83 61.73
+
+Instancia 219
+55.43 45.72 54.80
+
+Instancia 220
+45.65 46.99 64.06
+
+Instancia 221
+48.95 49.59 60.89
+
+Instancia 222
+57.91 50.89 62.13
+
+Instancia 223
+51.60 55.62 58.53
+
+Instancia 224
+43.93 67.10 45.17
+
+Instancia 225
+48.89 48.91 57.56
+
+Instancia 226
+53.64 48.46 61.40
+
+Instancia 227
+48.62 53.57 64.59
+
+Instancia 228
+46.36 49.40 60.49
+
+Instancia 229
+56.56 53.66 58.98
+
+Instancia 230
+47.57 47.10 53.54
+
+Instancia 231
+47.92 57.77 57.88
+
+Instancia 232
+61.48 55.93 49.27
+
+Instancia 233
+50.71 50.38 65.60
+
+Instancia 234
+51.11 49.75 59.22
+
+Instancia 235
+53.72 52.75 60.09
+
+Instancia 236
+53.39 48.48 53.63
+
+Instancia 237
+42.98 49.53 64.06
+
+Instancia 238
+52.00 51.32 58.89
+
+Instancia 239
+48.52 44.80 64.24
+
+Instancia 240
+49.50 44.45 59.91
+
+Instancia 241
+50.93 51.68 55.97
+
+Instancia 242
+49.34 57.01 58.05
+
+Instancia 243
+49.23 43.81 58.61
+
+Instancia 244
+52.23 46.73 56.57
+
+Instancia 245
+48.05 56.62 60.73
+
+Instancia 246
+53.04 48.06 62.23
+
+Instancia 247
+50.63 47.21 65.50
+
+Instancia 248
+49.10 54.86 54.22
+
+Instancia 249
+60.28 44.74 53.18
+
+Instancia 250
+50.23 55.63 63.57
+
+Instancia 251
+47.59 47.67 57.38
+
+Instancia 252
+45.14 50.66 59.19
+
+Instancia 253
+52.93 48.20 61.64
+
+Instancia 254
+49.70 48.84 62.85
+
+Instancia 255
+49.34 48.30 62.33
+
+Instancia 256
+47.25 45.70 62.01
+
+Instancia 257
+54.75 48.40 58.92
+
+Instancia 258
+47.85 50.14 64.45
+
+Instancia 259
+43.95 49.70 58.16
+
+Instancia 260
+40.38 49.93 59.58
+
+Instancia 261
+53.82 51.34 65.00
+
+Instancia 262
+51.48 50.48 64.87
+
+Instancia 263
+48.18 50.69 63.89
+
+Instancia 264
+50.80 48.58 54.54
+
+Instancia 265
+58.76 46.73 57.31
+
+Instancia 266
+46.86 52.69 60.32
+
+Instancia 267
+53.23 45.25 61.99
+
+Instancia 268
+44.82 62.94 56.15
+
+Instancia 269
+50.41 46.70 60.44
+
+Instancia 270
+50.48 46.07 53.50
+
+Instancia 271
+45.45 53.20 57.92
+
+Instancia 272
+50.57 56.52 59.21
+
+Instancia 273
+56.56 51.25 60.24
+
+Instancia 274
+51.35 44.46 64.29
+
+Instancia 275
+48.38 55.95 60.12
+
+Instancia 276
+44.91 61.88 49.34
+
+Instancia 277
+43.71 50.53 54.91
+
+Instancia 278
+52.08 53.09 65.39
+
+Instancia 279
+48.61 79.42 0.00
+
+Instancia 280
+69.42 51.57 33.33
+
+Instancia 281
+43.39 46.12 56.71
+
+Instancia 282
+55.18 50.56 50.84
+
+Instancia 283
+51.34 54.88 62.89
+
+Instancia 284
+49.92 55.63 61.30
+
+Instancia 285
+51.87 65.50 50.97
+
+Instancia 286
+53.17 44.58 57.26
+
+Instancia 287
+52.41 50.79 63.93
+
+Instancia 288
+49.51 45.13 63.76
+
+Instancia 289
+46.22 46.71 42.01
+
+Instancia 290
+50.03 48.14 63.04
+
+Instancia 291
+54.01 54.44 63.04
+
+Instancia 292
+47.98 53.97 64.73
+
+Instancia 293
+49.57 49.12 63.60
+
+Instancia 294
+51.31 30.62 35.59
+
+Instancia 295
+46.09 49.59 62.37
+
+Instancia 296
+50.03 50.73 63.33
+
+Instancia 297
+50.98 64.81 52.41
+
+Instancia 298
+46.08 51.25 55.42
+
+Instancia 299
+48.73 55.22 59.30
+
+Instancia 300
+58.96 49.33 63.33
+
+Instancia 301
+50.58 47.67 44.56
+
+Instancia 302
+47.16 51.05 58.85
+
+Instancia 303
+44.53 51.82 57.89
+
+Instancia 304
+53.83 49.91 65.41
+
+Instancia 305
+46.38 51.40 52.86
+
+Instancia 306
+49.53 37.28 49.18
+
+Instancia 307
+57.38 47.35 41.03
+
+Instancia 308
+47.00 44.56 61.39
+
+Instancia 309
+52.16 66.40 49.22
+
+Instancia 310
+56.32 49.56 61.79
+
+Instancia 311
+43.86 56.91 55.52
+
+Instancia 312
+51.22 48.42 61.55
+
+Instancia 313
+87.07 75.17 0.00
+
+Instancia 314
+49.84 58.26 55.50
+
+Instancia 315
+43.60 45.58 57.70
+
+Instancia 316
+43.32 56.44 59.02
+
+Instancia 317
+44.66 46.02 54.86
+
+Instancia 318
+51.95 48.56 65.40
+
+Instancia 319
+52.01 49.74 62.86
+
+Instancia 320
+51.73 50.55 60.68
+
+Instancia 321
+49.41 48.95 60.24
+
+Instancia 322
+47.51 53.61 62.40
+
+Instancia 323
+56.23 41.83 56.95
+
+Instancia 324
+59.21 48.84 51.48
+
+Instancia 325
+54.82 51.76 57.45
+
+Instancia 326
+58.63 63.70 30.20
+
+Instancia 327
+46.66 52.91 60.79
+
+Instancia 328
+52.04 47.32 62.89
+
+Instancia 329
+46.67 58.83 54.18
+
+Instancia 330
+31.29 36.23 24.67
+
+Instancia 331
+45.03 51.66 65.75
+
+Instancia 332
+45.91 44.57 60.01
+
+Instancia 333
+46.21 51.28 58.93
+
+Instancia 334
+50.81 46.93 61.67
+
+Instancia 335
+53.45 49.56 64.67
+
+Instancia 336
+49.75 59.90 56.26
+
+Instancia 337
+51.49 43.44 52.54
+
+Instancia 338
+52.84 51.48 65.51
+
+Instancia 339
+43.78 43.55 61.26
+
+Instancia 340
+50.84 51.71 64.44
+
+Instancia 341
+38.92 53.46 51.97
+
+Instancia 342
+50.32 49.74 68.90
+
+Instancia 343
+51.04 49.74 58.24
+
+Instancia 344
+47.83 53.21 60.01
+
+Instancia 345
+51.02 50.98 63.85
+
+Instancia 346
+46.35 50.78 63.57
+
+Instancia 347
+52.59 50.83 59.54
+
+Instancia 348
+49.82 50.35 62.96
+
+Instancia 349
+42.06 45.84 45.91
+
+Instancia 350
+52.87 51.54 57.37
+
+Instancia 351
+43.31 50.78 63.35
+
+Instancia 352
+51.79 54.20 60.10
+
+Instancia 353
+44.91 48.53 60.67
+
+Instancia 354
+49.70 55.69 62.04
+
+Instancia 355
+43.41 55.22 55.31
+
+Instancia 356
+48.95 49.96 63.97
+
+Instancia 357
+47.39 42.41 58.40
+
+Instancia 358
+52.67 51.21 63.39
+
+Instancia 359
+47.29 51.82 58.38
+
+Instancia 360
+49.34 48.29 66.82
+
+Instancia 361
+52.35 52.66 65.39
+
+Instancia 362
+49.03 50.97 57.90
+
+Instancia 363
+49.76 48.21 65.16
+
+Instancia 364
+55.82 49.97 57.66
+
+Instancia 365
+56.79 49.17 58.00
+
+Instancia 366
+49.98 55.54 65.84
+
+Instancia 367
+53.34 48.16 62.31
+
+Instancia 368
+50.20 51.91 66.31
+
+Instancia 369
+53.81 46.46 59.56
+
+Instancia 370
+45.32 48.76 59.64
+
+Instancia 371
+48.27 48.04 67.20
+
+Instancia 372
+52.37 57.77 59.12
+
+Instancia 373
+51.02 48.12 62.94
+
+Instancia 374
+51.20 52.97 58.58
+
+Instancia 375
+54.31 51.14 58.78
+
+Instancia 376
+42.47 53.05 49.83
+
+Instancia 377
+40.99 52.17 43.87
+
+Instancia 378
+47.40 60.16 60.76
+
+Instancia 379
+43.95 46.67 53.88
+
+Instancia 380
+43.86 44.16 25.40
+
+Instancia 381
+49.45 51.16 66.57
+
+Instancia 382
+50.38 44.72 54.53
+
+Instancia 383
+46.13 45.19 59.64
+
+Instancia 384
+50.39 55.80 60.68
+
+Instancia 385
+50.68 52.64 53.24
+
+Instancia 386
+60.50 49.27 55.64
+
+Instancia 387
+48.28 52.90 58.49
+
+Instancia 388
+50.36 50.09 67.56
+
+Instancia 389
+39.90 50.50 61.59
+
+Instancia 390
+46.91 50.41 63.57
+
+Instancia 391
+42.84 57.33 52.04
+
+Instancia 392
+48.03 50.93 63.25
+
+Instancia 393
+50.56 48.96 64.59
+
+Instancia 394
+53.38 43.20 56.68
+
+Instancia 395
+47.21 51.80 58.06
+
+Instancia 396
+51.87 60.62 44.60
+
+Instancia 397
+54.72 47.87 63.56
+
+Instancia 398
+57.22 59.20 47.11
+
+Instancia 399
+59.41 50.92 59.43
+
+Instancia 400
+45.88 48.78 66.22
+
+Instancia 401
+51.30 45.77 60.83
+
+Instancia 402
+47.46 48.15 65.29
+
+Instancia 403
+49.39 52.30 59.42
+
+Instancia 404
+52.71 46.70 56.97
+
+Instancia 405
+50.00 47.67 66.54
+
+Instancia 406
+52.06 46.83 61.77
+
+Instancia 407
+65.44 58.26 42.56
+
+Instancia 408
+49.48 48.98 63.70
+
+Instancia 409
+43.62 51.12 58.98
+
+Instancia 410
+46.41 50.86 65.81
+
+Instancia 411
+50.27 47.16 65.86
+
+Instancia 412
+51.12 38.08 54.30
+
+Instancia 413
+51.95 52.80 61.03
+
+Instancia 414
+49.35 55.48 63.31
+
+Instancia 415
+49.52 49.10 59.47
+
+Instancia 416
+51.73 52.48 65.12
+
+Instancia 417
+48.08 51.01 42.37
+
+Instancia 418
+47.39 57.36 60.21
+
+Instancia 419
+50.95 57.78 62.42
+
+Instancia 420
+48.14 53.37 59.47
+
+Instancia 421
+47.64 51.15 62.37
+
+Instancia 422
+47.77 55.38 56.39
+
+Instancia 423
+57.41 46.28 54.75
+
+Instancia 424
+50.50 53.24 59.88
+
+Instancia 425
+49.88 36.45 48.64
+
+Instancia 426
+57.38 55.57 51.63
+
+Instancia 427
+50.66 49.40 51.33
+
+Instancia 428
+47.99 44.26 55.73
+
+Instancia 429
+44.12 52.20 62.86
+
+Instancia 430
+46.53 46.15 64.11
+
+Instancia 431
+49.26 65.98 53.55
+
+Instancia 432
+45.62 45.18 52.35
+
+Instancia 433
+52.54 51.95 65.83
+
+Instancia 434
+57.34 48.77 51.86
+
+Instancia 435
+48.42 47.92 66.81
+
+Instancia 436
+53.10 54.13 61.43
+
+Instancia 437
+52.80 48.84 65.59
+
+Instancia 438
+46.34 52.82 60.10
+
+Instancia 439
+49.72 44.16 61.95
+
+Instancia 440
+46.92 54.89 64.10
+
+Instancia 441
+45.85 51.34 66.44
+
+Instancia 442
+46.27 54.05 54.57
+
+Instancia 443
+49.76 45.04 57.20
+
+Instancia 444
+51.02 50.47 65.92
+
+Instancia 445
+54.30 55.01 59.45
+
+Instancia 446
+49.40 50.66 56.51
+
+Instancia 447
+46.52 57.47 60.39
+
+Instancia 448
+55.87 47.66 54.32
+
+Instancia 449
+37.98 45.46 51.98
+
+Instancia 450
+48.70 44.62 54.59
+
+Instancia 451
+53.52 59.32 45.80
+
+Instancia 452
+50.71 49.61 60.48
+
+Instancia 453
+45.99 49.14 61.12
+
+Instancia 454
+56.56 51.49 64.05
+
+Instancia 455
+54.57 52.83 61.65
+
+Instancia 456
+52.55 44.57 55.56
+
+Instancia 457
+55.21 44.16 52.68
+
+Instancia 458
+51.95 47.62 61.58
+
+Instancia 459
+50.69 47.01 65.60
+
+Instancia 460
+48.07 50.24 61.69
+
+Instancia 461
+53.17 61.02 57.79
+
+Instancia 462
+49.34 47.49 63.59
+
+Instancia 463
+49.28 47.62 55.21
+
+Instancia 464
+48.09 47.39 52.46
+
+Instancia 465
+62.02 51.80 39.73
+
+Instancia 466
+87.86 24.48 12.00
+
+Instancia 467
+51.16 53.40 52.07
+
+Instancia 468
+53.68 50.65 63.62
+
+Instancia 469
+52.49 52.23 61.49
+
+Instancia 470
+55.73 39.02 51.58
+
+Instancia 471
+37.23 47.08 49.90
+
+Instancia 472
+45.44 45.26 61.72
+
+Instancia 473
+52.90 45.63 58.51
+
+Instancia 474
+78.99 32.27 23.43
+
+Instancia 475
+40.60 47.23 59.24
+
+Instancia 476
+63.43 36.75 31.95
+
+Instancia 477
+56.05 50.81 53.02
+
+Instancia 478
+50.80 51.71 65.74
+
+Instancia 479
+50.29 53.06 56.68
+
+Instancia 480
+47.69 53.44 61.30
+
+Instancia 481
+56.38 52.20 51.48
+
+Instancia 482
+51.87 49.98 63.96
+
+Instancia 483
+50.36 49.28 55.66
+
+Instancia 484
+54.19 43.83 51.05
+
+Instancia 485
+41.99 46.41 57.63
+
+Instancia 486
+47.80 45.17 64.88
+
+Instancia 487
+47.01 53.92 62.96
+
+Instancia 488
+51.22 51.71 62.45
+
+Instancia 489
+42.46 56.90 40.80
+
+Instancia 490
+56.14 46.46 60.82
+
+Instancia 491
+50.15 55.14 60.66
+
+Instancia 492
+51.28 55.43 57.34
+
+Instancia 493
+47.37 49.19 61.62
+
+Instancia 494
+53.40 50.91 65.11
+
+Instancia 495
+50.35 53.91 60.02
+
+Instancia 496
+49.31 54.91 55.91
+
+Instancia 497
+58.10 57.66 52.05
+
+Instancia 498
+43.91 52.12 60.06
+
+Instancia 499
+43.50 48.60 45.75
+
+Instancia 500
+57.10 48.10 60.72
+
+Instancia 501
+53.49 50.74 59.37
+
+Instancia 502
+47.48 50.69 64.06
+
+Instancia 503
+50.43 53.76 64.73
+
+Instancia 504
+56.25 60.67 46.37
+
+Instancia 505
+52.11 52.16 63.96
+
+Instancia 506
+55.88 46.92 55.94
+
+Instancia 507
+54.55 52.85 59.07
+
+Instancia 508
+48.31 48.50 64.95
+
+Instancia 509
+76.41 64.84 26.45
+
+Instancia 510
+47.19 55.38 61.35
+
+Instancia 511
+50.00 43.62 55.57
+
+Instancia 512
+49.77 52.56 57.27
+
+Instancia 513
+50.06 59.11 47.48
+
+Instancia 514
+42.38 57.74 53.64
+
+Instancia 515
+56.80 49.39 63.28
+
+Instancia 516
+40.24 49.33 54.39
+
+Instancia 517
+50.07 51.25 58.14
+
+Instancia 518
+52.97 47.92 58.36
+
+Instancia 519
+59.79 48.39 41.86
+
+Instancia 520
+50.98 41.62 60.77
+
+Instancia 521
+48.31 54.34 58.73
+
+Instancia 522
+35.82 49.86 41.64
+
+Instancia 523
+44.29 49.30 59.49
+
+Instancia 524
+54.72 55.20 59.28
+
+Instancia 525
+51.07 47.06 63.24
+
+Instancia 526
+52.39 49.45 64.04
+
+Instancia 527
+49.53 47.89 65.17
+
+Instancia 528
+44.24 49.17 61.78
+
+Instancia 529
+49.90 48.48 62.37
+
+Instancia 530
+50.40 52.28 66.42
+
+Instancia 531
+50.77 53.23 61.35
+
+Instancia 532
+46.07 52.70 56.15
+
+Instancia 533
+48.43 54.66 60.62
+
+Instancia 534
+51.89 49.37 58.55
+
+Instancia 535
+49.47 50.58 64.57
+
+Instancia 536
+55.15 51.03 61.81
+
+Instancia 537
+51.42 50.69 67.11
+
+Instancia 538
+55.53 45.82 52.96
+
+Instancia 539
+51.62 50.42 61.59
+
+Instancia 540
+51.58 46.92 61.07
+
+Instancia 541
+52.33 52.75 65.58
+
+Instancia 542
+50.93 46.56 56.11
+
+Instancia 543
+58.11 49.92 54.49
+
+Instancia 544
+48.78 46.47 60.73
+
+Instancia 545
+55.73 48.85 62.97
+
+Instancia 546
+46.13 44.15 41.01
+
+Instancia 547
+47.10 54.92 57.39
+
+Instancia 548
+57.85 54.20 49.21
+
+Instancia 549
+56.77 52.41 58.41
+
+Instancia 550
+53.31 45.59 56.63
+
+Instancia 551
+50.90 52.91 65.92
+
+Instancia 552
+49.88 44.94 62.64
+
+Instancia 553
+54.53 47.43 58.77
+
+Instancia 554
+46.92 48.45 66.64
+
+Instancia 555
+65.77 8.77 0.00
+
+Instancia 556
+49.30 52.00 65.35
+
+Instancia 557
+48.54 48.69 48.56
+
+Instancia 558
+49.76 48.08 63.46
+
+Instancia 559
+49.64 51.13 66.21
+
+Instancia 560
+43.95 49.35 60.81
+
+Instancia 561
+49.42 57.80 60.56
+
+Instancia 562
+55.30 51.38 60.23
+
+Instancia 563
+52.20 40.41 58.36
+
+Instancia 564
+55.78 48.96 42.29
+
+Instancia 565
+54.96 48.54 62.65
+
+Instancia 566
+50.41 52.43 63.82
+
+Instancia 567
+51.41 51.00 62.14
+
+Instancia 568
+44.75 46.79 58.96
+
+Instancia 569
+51.11 48.82 52.34
+
+Instancia 570
+51.94 51.78 56.90
+
+Instancia 571
+47.27 47.89 63.25
+
+Instancia 572
+55.46 51.86 60.71
+
+Instancia 573
+52.71 53.90 59.96
+
+Instancia 574
+54.44 52.20 59.06
+
+Instancia 575
+54.22 53.32 58.76
+
+Instancia 576
+48.30 50.06 66.72
+
+Instancia 577
+51.76 57.80 56.33
+
+Instancia 578
+54.47 46.54 56.64
+
+Instancia 579
+48.73 47.38 62.80
+
+Instancia 580
+49.54 48.85 55.54
+
+Instancia 581
+46.93 49.55 63.41
+
+Instancia 582
+41.46 43.77 19.91
+
+Instancia 583
+48.39 45.66 61.95
+
+Instancia 584
+50.62 49.68 66.02
+
+Instancia 585
+44.25 48.96 62.11
+
+Instancia 586
+50.14 47.55 63.83
+
+Instancia 587
+57.60 52.36 59.74
+
+Instancia 588
+55.37 50.25 56.11
+
+Instancia 589
+70.11 46.49 45.71
+
+Instancia 590
+41.54 49.33 45.11
+
+Instancia 591
+50.50 60.79 57.34
+
+Instancia 592
+57.29 46.40 19.39
+
+Instancia 593
+49.41 49.21 60.51
+
+Instancia 594
+43.71 44.86 56.75
+
+Instancia 595
+45.59 46.21 59.98
+
+Instancia 596
+51.28 51.14 61.43
+
+Instancia 597
+54.69 53.24 53.38
+
+Instancia 598
+36.10 40.75 42.25
+
+Instancia 599
+42.84 50.22 58.18
+
+Instancia 600
+47.66 41.80 58.55
+
+Instancia 601
+44.45 44.15 54.85
+
+Instancia 602
+52.92 47.44 64.32
+
+Instancia 603
+45.81 49.53 57.60
+
+Instancia 604
+46.72 55.03 58.20
+
+Instancia 605
+50.94 56.61 59.70
+
+Instancia 606
+53.23 54.27 61.65
+
+Instancia 607
+51.66 45.30 50.68
+
+Instancia 608
+46.00 45.04 61.39
+
+Instancia 609
+69.17 32.69 26.59
+
+Instancia 610
+53.11 53.16 54.77
+
+Instancia 611
+55.81 42.03 35.01
+
+Instancia 612
+51.10 48.88 64.89
+
+Instancia 613
+51.13 49.70 64.00
+
+Instancia 614
+53.74 49.06 60.80
+
+Instancia 615
+49.57 52.97 61.54
+
+Instancia 616
+58.21 49.69 57.89
+
+Instancia 617
+48.95 55.72 63.99
+
+Instancia 618
+50.03 51.69 57.57
+
+Instancia 619
+45.74 50.21 56.25
+
+Instancia 620
+46.86 51.59 52.67
+
+Instancia 621
+55.66 50.79 61.21
+
+Instancia 622
+48.88 48.08 65.95
+
+Instancia 623
+60.76 50.59 55.86
+
+Instancia 624
+59.76 51.80 53.21
+
+Instancia 625
+51.74 51.75 63.41
+
+Instancia 626
+49.21 46.34 62.81
+
+Instancia 627
+49.52 36.21 48.56
+
+Instancia 628
+94.58 81.69 0.00
+
+Instancia 629
+49.99 47.26 50.35
+
+Instancia 630
+50.82 47.99 56.28
+
+Instancia 631
+55.35 45.10 58.21
+
+Instancia 632
+53.46 54.42 61.27
+
+Instancia 633
+56.42 49.32 56.01
+
+Instancia 634
+53.81 51.96 59.97
+
+Instancia 635
+45.91 49.48 64.93
+
+Instancia 636
+88.82 98.70 0.00
+
+Instancia 637
+49.61 53.05 56.72
+
+Instancia 638
+51.11 50.12 61.15
+
+Instancia 639
+58.55 46.59 53.87
+
+Instancia 640
+49.48 52.23 53.73
+
+Instancia 641
+45.44 47.87 50.83
+
+Instancia 642
+50.97 50.53 61.76
+
+Instancia 643
+51.77 50.73 64.53
+
+Instancia 644
+58.44 46.08 51.96
+
+Instancia 645
+50.23 47.71 59.15
+
+Instancia 646
+39.59 50.89 53.72
+
+Instancia 647
+20.69 33.82 33.11
+
+Instancia 648
+45.40 33.57 43.54
+
+Instancia 649
+46.97 55.05 62.00
+
+Instancia 650
+44.30 59.75 51.16
+
+Instancia 651
+56.40 33.52 49.39
+
+Instancia 652
+44.41 49.25 60.86
+
+Instancia 653
+49.14 56.93 59.01
+
+Instancia 654
+50.67 50.63 53.64
+
+Instancia 655
+47.92 50.68 61.21
+
+Instancia 656
+49.86 46.97 63.23
+
+Instancia 657
+43.65 41.70 39.68
+
+Instancia 658
+43.97 50.95 60.72
+
+Instancia 659
+51.89 47.51 63.29
+
+Instancia 660
+50.69 54.38 63.74
+
+Instancia 661
+44.40 52.83 60.94
+
+Instancia 662
+46.09 54.08 58.61
+
+Instancia 663
+52.56 47.37 60.49
+
+Instancia 664
+55.59 48.97 53.39
+
+Instancia 665
+47.66 46.33 52.63
+
+Instancia 666
+59.38 54.06 58.39
+
+Instancia 667
+49.05 54.98 63.05
+
+Instancia 668
+58.05 47.39 59.73
+
+Instancia 669
+57.88 49.77 58.45
+
+Instancia 670
+49.06 53.65 63.22
+
+Instancia 671
+48.75 58.18 55.58
+
+Instancia 672
+50.59 47.42 61.89
+
+Instancia 673
+47.46 51.05 64.92
+
+Instancia 674
+53.16 54.57 61.06
+
+Instancia 675
+23.43 50.31 46.08
+
+Instancia 676
+52.23 48.18 62.84
+
+Instancia 677
+51.10 44.79 53.22
+
+Instancia 678
+52.55 50.59 60.80
+
+Instancia 679
+53.71 56.67 51.53
+
+Instancia 680
+54.26 51.23 61.30
+
+Instancia 681
+50.50 56.05 56.94
+
+Instancia 682
+48.67 52.77 66.48
+
+Instancia 683
+50.11 44.08 61.47
+
+Instancia 684
+60.14 49.91 57.66
+
+Instancia 685
+60.57 55.19 49.03
+
+Instancia 686
+46.46 43.57 54.47
+
+Instancia 687
+59.79 60.20 54.52
+
+Instancia 688
+55.85 55.52 58.65
+
+Instancia 689
+51.83 50.06 63.29
+
+Instancia 690
+51.40 50.79 63.30
+
+Instancia 691
+62.58 44.12 51.37
+
+Instancia 692
+54.10 52.98 62.87
+
+Instancia 693
+44.70 43.73 56.89
+
+Instancia 694
+48.69 48.41 61.31
+
+Instancia 695
+53.86 57.81 54.54
+
+Instancia 696
+53.38 50.97 63.69
+
+Instancia 697
+50.78 44.27 56.83
+
+Instancia 698
+49.27 55.28 52.63
+
+Instancia 699
+49.29 46.23 61.31
+
+Instancia 700
+52.64 49.85 64.37
+
+Instancia 701
+40.60 49.37 59.09
+
+Instancia 702
+52.25 46.54 57.93
+
+Instancia 703
+52.54 46.31 65.65
+
+Instancia 704
+52.04 50.98 57.85
+
+Instancia 705
+47.56 49.27 60.80
+
+Instancia 706
+37.91 83.27 0.00
+
+Instancia 707
+46.62 46.74 57.72
+
+Instancia 708
+50.33 52.46 62.92
+
+Instancia 709
+53.78 49.61 55.66
+
+Instancia 710
+49.16 50.18 64.76
+
+Instancia 711
+47.27 55.42 62.64
+
+Instancia 712
+40.06 48.22 55.71
+
+Instancia 713
+57.80 48.66 59.26
+
+Instancia 714
+70.48 50.33 49.71
+
+Instancia 715
+49.16 51.70 64.16
+
+Instancia 716
+48.07 49.72 64.52
+
+Instancia 717
+48.25 48.62 63.02
+
+Instancia 718
+57.59 54.00 59.85
+
+Instancia 719
+60.08 53.96 51.59
+
+Instancia 720
+52.48 51.33 48.73
+
+Instancia 721
+49.59 51.30 64.92
+
+Instancia 722
+44.67 57.12 59.48
+
+Instancia 723
+45.96 59.93 56.36
+
+Instancia 724
+45.95 50.49 65.58
+
+Instancia 725
+48.24 44.82 64.32
+
+Instancia 726
+41.53 36.46 26.79
+
+Instancia 727
+54.79 45.23 53.25
+
+Instancia 728
+35.61 39.09 43.33
+
+Instancia 729
+45.51 38.57 58.80
+
+Instancia 730
+67.04 80.20 30.34
+
+Instancia 731
+47.47 54.44 64.86
+
+Instancia 732
+49.33 50.32 65.76
+
+Instancia 733
+46.59 48.83 62.01
+
+Instancia 734
+51.69 52.41 65.22
+
+Instancia 735
+48.99 46.06 53.36
+
+Instancia 736
+44.51 50.11 61.08
+
+Instancia 737
+52.69 49.88 61.37
+
+Instancia 738
+44.40 47.52 58.40
+
+Instancia 739
+63.91 25.80 24.10
+
+Instancia 740
+50.05 43.99 60.96
+
+Instancia 741
+51.96 48.16 48.04
+
+Instancia 742
+51.05 47.54 61.52
+
+Instancia 743
+46.10 47.34 57.31
+
+Instancia 744
+44.58 53.89 56.53
+
+Instancia 745
+60.32 48.21 59.75
+
+Instancia 746
+52.59 50.53 56.86
+
+Instancia 747
+43.17 48.15 59.83
+
+Instancia 748
+44.49 47.43 46.39
+
+Instancia 749
+53.85 47.16 56.39
+
+Instancia 750
+57.84 50.68 60.79
+
+Instancia 751
+52.14 47.17 59.67
+
+Instancia 752
+48.16 49.09 62.13
+
+Instancia 753
+46.04 48.94 57.39
+
+Instancia 754
+49.46 49.02 48.54
+
+Instancia 755
+51.62 54.42 64.20
+
+Instancia 756
+40.33 50.07 50.85
+
+Instancia 757
+49.93 50.92 53.56
+
+Instancia 758
+45.65 51.38 63.67
+
+Instancia 759
+56.07 50.64 60.75
+
+Instancia 760
+49.97 57.22 63.50
+
+Instancia 761
+50.13 45.34 61.61
+
+Instancia 762
+42.82 50.09 62.04
+
+Instancia 763
+51.64 48.64 59.41
+
+Instancia 764
+45.97 44.29 50.55
+
+Instancia 765
+46.83 48.23 60.74
+
+Instancia 766
+64.46 48.90 36.27
+
+Instancia 767
+56.87 49.95 63.49
+
+Instancia 768
+40.49 23.90 3.87
+
+Instancia 769
+50.46 48.60 54.54
+
+Instancia 770
+57.05 54.11 61.03
+
+Instancia 771
+47.66 43.95 63.15
+
+Instancia 772
+49.30 52.71 64.66
+
+Instancia 773
+46.51 59.83 51.36
+
+Instancia 774
+44.51 48.76 53.05
+
+Instancia 775
+42.76 47.53 60.27
+
+Instancia 776
+53.43 42.70 57.32
+
+Instancia 777
+41.80 45.32 55.70
+
+Instancia 778
+45.86 47.94 60.93
+
+Instancia 779
+46.61 49.52 64.13
+
+Instancia 780
+49.64 48.86 58.80
+
+Instancia 781
+59.20 47.51 47.09
+
+Instancia 782
+42.42 45.05 58.17
+
+Instancia 783
+58.62 50.99 57.28
+
+Instancia 784
+64.78 56.21 47.01
+
+Instancia 785
+48.16 50.47 60.72
+
+Instancia 786
+39.70 34.69 43.42
+
+Instancia 787
+50.62 48.61 63.83
+
+Instancia 788
+64.63 23.02 28.63
+
+Instancia 789
+48.90 46.03 56.60
+
+Instancia 790
+49.44 51.47 64.96
+
+Instancia 791
+46.36 46.01 55.67
+
+Instancia 792
+46.58 53.46 45.19
+
+Instancia 793
+50.90 40.75 58.28
+
+Instancia 794
+49.32 51.73 57.50
+
+Instancia 795
+52.78 52.87 60.04
+
+Instancia 796
+44.40 59.30 57.94
+
+Instancia 797
+50.67 52.24 59.22
+
+Instancia 798
+47.23 50.80 60.48
+
+Instancia 799
+49.08 52.45 65.66
+
+Instancia 800
+49.99 54.61 60.18
+
+Instancia 801
+51.24 48.32 62.69
+
+Instancia 802
+49.17 49.98 54.69
+
+Instancia 803
+47.26 56.52 58.07
+
+Instancia 804
+49.77 49.81 66.20
+
+Instancia 805
+48.51 49.97 63.56
+
+Instancia 806
+47.62 62.72 47.53
+
+Instancia 807
+46.76 50.98 56.42
+
+Instancia 808
+47.84 55.38 62.69
+
+Instancia 809
+54.05 57.22 56.52
+
+Instancia 810
+50.16 2.94 9.74
+
+Instancia 811
+48.67 47.93 60.34
+
+Instancia 812
+52.13 46.49 61.30
+
+Instancia 813
+53.48 51.87 61.03
+
+Instancia 814
+49.92 52.56 67.90
+
+Instancia 815
+51.34 49.11 59.40
+
+Instancia 816
+49.68 50.95 58.00
+
+Instancia 817
+56.81 54.18 56.32
+
+Instancia 818
+51.39 50.50 58.18
+
+Instancia 819
+54.47 50.29 64.75
+
+Instancia 820
+56.79 50.77 64.54
+
+Instancia 821
+55.21 53.30 59.90
+
+Instancia 822
+45.88 52.83 38.50
+
+Instancia 823
+50.21 53.02 58.79
+
+Instancia 824
+50.36 51.97 61.00
+
+Instancia 825
+49.16 56.07 65.90
+
+Instancia 826
+52.04 50.53 61.88
+
+Instancia 827
+56.02 50.64 65.24
+
+Instancia 828
+50.31 53.14 63.08
+
+Instancia 829
+49.20 59.42 51.47
+
+Instancia 830
+46.85 49.51 66.91
+
+Instancia 831
+51.78 48.16 51.84
+
+Instancia 832
+48.58 53.85 57.39
+
+Instancia 833
+46.44 48.25 62.76
+
+Instancia 834
+48.90 49.08 61.83
+
+Instancia 835
+47.59 43.41 59.42
+
+Instancia 836
+49.17 47.33 65.42
+
+Instancia 837
+40.01 47.90 52.78
+
+Instancia 838
+54.80 50.14 59.89
+
+Instancia 839
+52.29 51.98 62.36
+
+Instancia 840
+58.31 49.12 52.66
+
+Instancia 841
+50.81 52.76 66.28
+
+Instancia 842
+48.09 55.10 59.34
+
+Instancia 843
+38.21 3.21 0.00
+
+Instancia 844
+60.65 47.69 61.15
+
+Instancia 845
+52.27 46.08 61.70
+
+Instancia 846
+44.39 40.18 54.93
+
+Instancia 847
+48.34 46.63 64.48
+
+Instancia 848
+50.50 51.99 61.87
+
+Instancia 849
+53.97 52.91 60.53
+
+Instancia 850
+52.21 45.77 58.34
+
+Instancia 851
+41.54 48.22 44.08
+
+Instancia 852
+48.48 49.41 63.74
+
+Instancia 853
+50.48 44.46 61.22
+
+Instancia 854
+48.52 53.25 63.29
+
+Instancia 855
+53.10 54.56 62.80
+
+Instancia 856
+56.84 53.34 62.61
+
+Instancia 857
+47.22 50.14 66.82
+
+Instancia 858
+49.68 47.63 53.36
+
+Instancia 859
+51.27 49.73 50.02
+
+Instancia 860
+49.02 50.23 60.86
+
+Instancia 861
+50.42 51.28 61.95
+
+Instancia 862
+51.22 68.83 47.07
+
+Instancia 863
+54.57 51.23 60.74
+
+Instancia 864
+50.26 58.62 59.02
+
+Instancia 865
+49.93 51.19 62.05
+
+Instancia 866
+54.97 51.79 56.83
+
+Instancia 867
+53.06 48.91 64.31
+
+Instancia 868
+42.40 54.69 53.07
+
+Instancia 869
+49.42 50.72 65.71
+
+Instancia 870
+49.23 53.28 59.64
+
+Instancia 871
+3.85 64.00 0.00
+
+Instancia 872
+51.05 57.58 59.17
+
+Instancia 873
+57.11 48.13 60.22
+
+Instancia 874
+45.50 51.32 60.88
+
+Instancia 875
+42.40 45.73 54.53
+
+Instancia 876
+49.71 52.14 61.80
+
+Instancia 877
+50.36 55.09 61.30
+
+Instancia 878
+49.91 48.71 65.23
+
+Instancia 879
+51.61 53.75 55.56
+
+Instancia 880
+48.26 43.24 59.65
+
+Instancia 881
+49.76 48.92 57.46
+
+Instancia 882
+48.50 50.56 60.10
+
+Instancia 883
+48.84 51.38 60.10
+
+Instancia 884
+57.35 51.46 58.43
+
+Instancia 885
+47.04 49.56 66.43
+
+Instancia 886
+44.19 41.68 43.46
+
+Instancia 887
+54.02 47.25 61.92
+
+Instancia 888
+50.37 53.81 63.35
+
+Instancia 889
+49.75 53.14 62.29
+
+Instancia 890
+45.65 53.75 59.15
+
+Instancia 891
+58.54 50.16 58.35
+
+Instancia 892
+60.88 51.64 61.82
+
+Instancia 893
+46.59 51.70 62.78
+
+Instancia 894
+40.89 51.51 58.70
+
+Instancia 895
+51.04 53.03 64.95
+
+Instancia 896
+52.08 43.83 61.16
+
+Instancia 897
+38.31 54.82 37.03
+
+Instancia 898
+50.05 54.36 61.44
+
+Instancia 899
+55.88 46.07 60.99
+
+Instancia 900
+50.10 51.92 63.16
+
+Instancia 901
+50.74 42.38 62.43
+
+Instancia 902
+46.77 47.98 63.96
+
+Instancia 903
+48.45 51.39 53.78
+
+Instancia 904
+46.34 44.01 62.47
+
+Instancia 905
+55.93 42.11 58.03
+
+Instancia 906
+56.75 48.04 60.98
+
+Instancia 907
+42.12 62.80 46.79
+
+Instancia 908
+54.59 40.08 49.81
+
+Instancia 909
+37.44 38.99 47.69
+
+Instancia 910
+54.30 50.33 65.24
+
+Instancia 911
+50.90 48.52 65.84
+
+Instancia 912
+48.30 59.42 61.94
+
+Instancia 913
+42.60 44.88 57.19
+
+Instancia 914
+47.28 46.59 63.44
+
+Instancia 915
+52.23 42.60 55.68
+
+Instancia 916
+55.81 51.95 60.42
+
+Instancia 917
+49.78 45.61 48.46
+
+Instancia 918
+58.30 51.27 56.13
+
+Instancia 919
+46.73 50.31 61.81
+
+Instancia 920
+61.84 52.52 56.17
+
+Instancia 921
+38.81 48.10 46.51
+
+Instancia 922
+57.52 63.13 45.14
+
+Instancia 923
+49.25 53.57 62.05
+
+Instancia 924
+51.40 50.94 62.39
+
+Instancia 925
+55.36 55.18 60.24
+
+Instancia 926
+59.32 49.16 60.04
+
+Instancia 927
+45.56 47.22 59.46
+
+Instancia 928
+47.15 50.55 50.82
+
+Instancia 929
+43.59 50.50 51.92
+
+Instancia 930
+47.19 47.43 59.37
+
+Instancia 931
+50.51 44.16 55.86
+
+Instancia 932
+52.75 41.73 54.79
+
+Instancia 933
+53.35 42.25 57.82
+
+Instancia 934
+48.73 50.73 61.81
+
+Instancia 935
+54.32 44.13 60.55
+
+Instancia 936
+49.56 51.01 52.96
+
+Instancia 937
+42.48 52.70 54.36
+
+Instancia 938
+43.57 46.75 60.13
+
+Instancia 939
+45.97 42.88 60.52
+
+Instancia 940
+46.16 49.20 62.26
+
+Instancia 941
+55.39 46.47 55.40
+
+Instancia 942
+51.41 51.41 57.05
+
+Instancia 943
+47.70 55.90 62.59
+
+Instancia 944
+41.44 48.80 59.62
+
+Instancia 945
+43.66 62.30 54.48
+
+Instancia 946
+50.39 57.70 58.66
+
+Instancia 947
+49.89 58.10 59.20
+
+Instancia 948
+51.38 51.39 61.71
+
+Instancia 949
+48.79 55.29 56.55
+
+Instancia 950
+50.88 46.80 61.01
+
+Instancia 951
+48.18 49.96 68.46
+
+Instancia 952
+47.73 50.13 65.42
+
+Instancia 953
+48.22 51.54 59.97
+
+Instancia 954
+42.98 56.70 56.25
+
+Instancia 955
+53.62 43.53 56.59
+
+Instancia 956
+50.52 48.69 50.31
+
+Instancia 957
+52.21 46.68 60.26
+
+Instancia 958
+24.80 54.55 48.84
+
+Instancia 959
+69.09 47.71 54.17
+
+Instancia 960
+47.14 50.53 66.71
+
+Instancia 961
+47.27 52.90 60.34
+
+Instancia 962
+52.02 53.59 62.72
+
+Instancia 963
+43.01 43.19 57.57
+
+Instancia 964
+47.97 53.51 63.36
+
+Instancia 965
+52.12 48.75 62.28
+
+Instancia 966
+53.07 49.94 62.22
+
+Instancia 967
+54.35 44.39 58.41
+
+Instancia 968
+53.86 52.79 58.24
+
+Instancia 969
+58.82 57.02 42.69
+
+Instancia 970
+46.49 53.31 61.52
+
+Instancia 971
+45.96 51.61 58.50
+
+Instancia 972
+47.56 50.08 62.68
+
+Instancia 973
+45.74 52.24 60.12
+
+Instancia 974
+56.14 52.18 63.03
+
+Instancia 975
+69.44 50.15 50.90
+
+Instancia 976
+51.98 55.65 56.87
+
+Instancia 977
+53.99 54.59 63.72
+
+Instancia 978
+48.53 53.31 47.14
+
+Instancia 979
+52.03 47.53 57.26
+
+Instancia 980
+54.02 38.83 56.34
+
+Instancia 981
+48.12 49.24 66.27
+
+Instancia 982
+48.48 48.61 60.97
+
+Instancia 983
+58.76 49.73 61.95
+
+Instancia 984
+54.52 51.20 61.96
+
+Instancia 985
+51.70 49.10 67.64
+
+Instancia 986
+51.68 56.96 57.20
+
+Instancia 987
+48.08 51.16 60.06
+
+Instancia 988
+48.38 47.13 57.49
+
+Instancia 989
+52.97 46.09 56.10
+
+Instancia 990
+50.11 52.04 50.39
+
+Instancia 991
+61.19 53.74 56.90
+
+Instancia 992
+52.61 52.11 63.68
+
+Instancia 993
+52.56 50.89 66.56
+
+Instancia 994
+45.46 51.62 44.01
+
+Instancia 995
+46.56 45.28 62.66
+
+Instancia 996
+50.91 44.48 63.92
+
+Instancia 997
+46.53 58.93 57.93
+
+Instancia 998
+56.56 48.48 59.59
+
+Instancia 999
+50.12 48.61 62.08
+
+Instancia 1000
+49.41 48.00 65.54
+
+Instancia 1001
+52.28 52.84 62.29
+
+Instancia 1002
+43.82 50.26 55.83
+

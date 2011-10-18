@@ -1,0 +1,21 @@
+# ANTES DA PROVA
+
+- Revisar os algoritmos disponíveis na biblioteca.
+- Revisar a referência STL.
+- Reler este roteiro.
+- Ouvir o discurso motivacional do técnico.
+
+# ANTES DE IMPLEMENTAR UM PROBLEMA
+
+- Quem for implementar deve relê-lo antes.
+- Peça todas as clarifications que forem necessárias.
+- Marque as restrições e faça contas com os limites da entrada.
+- Teste o algoritmo no papel e convença outra pessoa de que ele funciona.
+- Planeje a resolução para os problemas grandes: a equipe se junta para definir
+  as estruturas de dados, mas cada pessoa escreve uma função.
+
+# DEBUGAR UM PROGRAMA
+
+- Ao encontrar um bug, escreva um caso de teste que o dispare.
+- Reimplementar trechos de programas entendidos errados.
+- Em caso de RE, procure todos os [, / e %.

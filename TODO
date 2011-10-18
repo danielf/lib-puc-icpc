@@ -1,0 +1,18 @@
+* Implementar o 'Regata de Cientistas'
+* Consertar o 'Mission Impossible'
+* Revisar:
+	- util/util.cpp
+	- poker/poker.cpp
+	- geometry/geometry.cpp
+	- geometry/field.cpp
+	- geometry/triangulation.cpp
+	- polynomial/polynomial.cpp
+	- segment_tree/segment_tree.cpp
+	- big_integer/big_integer.cpp
+	- number_theory/number_theory.cpp
+	- linear_algebra/linear_algebra.cpp
+	- linear_algebra/simplex.cpp
+	- graph/graph.cpp
+	- aho-corasick/aho-corasick.cpp
+* Redigitar a segtree
+* Integrar os testes do Roberto na árvore principal

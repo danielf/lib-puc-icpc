@@ -1,0 +1,174 @@
+%% Font declarations
+/Apple-Monaco (monaco.ttf) findfont definefont
+
+%% Utility functions
+/mm { 10 div 2.54 div 72 mul } bind def
+
+%% Page size
+/page-width 297 mm def
+/page-height 210 mm def
+
+%% Parameters
+/font-size 8 def
+/medium-font-size 14 def
+/big-font-size 24 def
+/line-height 8 def
+/number-of-chars-per-line 80 def
+/number-of-lines-per-column 60 def
+/center-margin 5 mm def
+/margin-top 24 mm def
+/university-name (Pontificia Universidade Catolica do Rio de Janeiro) def
+
+%% Computed constants
+/stdin (%stdin) (r) file def
+
+/column-width
+	/Apple-Monaco findfont font-size scalefont setfont
+	(0) stringwidth pop number-of-chars-per-line mul
+def
+
+/column-height
+	/Apple-Monaco findfont font-size scalefont setfont
+	number-of-lines-per-column 1 sub line-height mul font-size add
+def
+
+/column-0-offset-x
+	page-width 2 div
+	center-margin sub
+	column-width sub
+def
+
+/column-1-offset-x
+	page-width 2 div
+	center-margin add
+def
+
+/column-offset-y
+	page-height
+	margin-top sub
+def
+
+/column-0-offset { column-0-offset-x column-offset-y } bind def
+
+%% Global vars
+/line-number 0 def
+/column-number 0 def
+/page-number 0 def
+/temp-buffer 1024 string def
+/temp-buffer-2 1024 string def
+
+%% Functions
+/write-line {
+	% Show page / move to next column
+	line-number number-of-lines-per-column eq {
+		/line-number 0 def
+		/column-number column-number 1 add def
+		column-number 2 eq {
+			/column-number 0 def
+			finish-page
+		} if
+	} if
+	% Write the line
+	/Apple-Monaco findfont font-size scalefont setfont
+	newpath
+		column-number 0 eq { column-0-offset-x } { column-1-offset-x } ifelse
+		column-offset-y
+		line-number line-height mul sub
+		font-size sub
+		moveto
+		% $1
+	show
+	/line-number line-number 1 add def
+} def
+
+/finish-page {
+	/Apple-Monaco findfont medium-font-size scalefont setfont
+	% University name
+	newpath
+		%page-width 2 div
+		column-0-offset-x
+		page-height margin-top 2 div sub
+		moveto
+		university-name
+		0
+		medium-font-size neg 2 div
+		rmoveto
+	show
+	/Apple-Monaco findfont medium-font-size scalefont setfont
+	% Page number
+	/page-number page-number 1 add def
+	newpath
+		column-1-offset-x column-width add
+		page-height margin-top 2 div sub
+		moveto
+		page-number temp-buffer cvs dup stringwidth pop neg
+		medium-font-size neg 2 div
+		rmoveto
+	show
+	% Central line
+	newpath
+		page-width 2 div
+		column-offset-y
+		moveto
+		0
+		column-height neg
+		rlineto
+	stroke
+	showpage
+	config-page
+} def
+
+/config-page {
+	% Set page in landscape
+	90 rotate
+	0 page-height neg translate
+} def
+
+/untabify {
+	/current-line exch def
+	/output-pointer 0 def
+	/page-break 0 def
+	0 1 current-line length 1 sub {
+		current-line exch get
+		dup 9 eq {
+			% Expand a tab
+			pop    % discard tab
+			1 1 2 {
+				pop    % discard iterator
+				temp-buffer-2 output-pointer 32 put
+				/output-pointer output-pointer 1 add def
+			} for
+		} {
+			dup 12 eq {
+				% Page break
+				pop    % discard form feed
+				/page-break 1 def
+				/line-number number-of-lines-per-column def
+				exit
+			} {
+				% Copy the character
+				temp-buffer-2 exch output-pointer exch put
+				/output-pointer output-pointer 1 add def
+			} ifelse
+		} ifelse
+	} for
+	% Finish
+	/temp-buffer-3 output-pointer string def
+	temp-buffer-2 0 output-pointer getinterval
+	temp-buffer-3 0 3 -1 roll putinterval
+	page-break 0 eq {
+		temp-buffer-3 write-line
+	} if
+} def
+
+%% Main routine
+
+config-page
+
+{
+	stdin temp-buffer readline
+	not { exit } if    % break if EOF
+	untabify
+} loop
+
+finish-page

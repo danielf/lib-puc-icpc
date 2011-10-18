@@ -1,0 +1,173 @@
+%% Font declarations
+/fonts.Apple-Monaco (monaco.ttf) findfont definefont
+/fonts.MS-Times (times.ttf) findfont definefont
+/fonts.MS-Times-Bold (timesbd.ttf) findfont definefont
+/fonts.MS-Arial (arial.ttf) findfont definefont
+/fonts.MS-Arial-Bold (arialbd.ttf) findfont definefont
+/fonts.URW-Helvetica-Condensed (uhvr8ac.pfb) findfont definefont
+/fonts.URW-Helvetica-Bold (uhvb8a.pfb) findfont definefont
+
+%% Utility functions
+/mm { 10 div 2.54 div 72 mul } bind def
+
+%% Page size
+/page.width 297 mm def
+/page.height 210 mm def
+
+%% Parameters
+/font.size 11 mm def
+/line.padding 3 mm def
+/page.margin.top 10 mm def
+/problem.number 12 def
+
+%% Computed constants
+/stdin (%stdin) (r) file def
+/column.default.width line.padding font.size 1 mm add add def
+%/page.margin.left page.width line.width sub 2 div def %% FIXME
+%/page.margin.right page.width line.width sub 2 div def %% FIXME
+/page.margin.left 13.5 mm def
+/page.margin.right 13.5 mm def
+
+%% Global vars
+/line.position.x 0 def
+/temp.buffer 1024 string def
+/problem.current (@) def
+
+%% Functions
+/page.config {
+	% Set page in landscape
+	90 rotate
+	0 page.height neg translate
+} bind def
+
+/box.center-text {
+	/box.text exch def
+	dup 0 get /box.width exch def
+	dup 1 get /box.height exch def
+	pop
+
+	box.text stringwidth pop
+	/box.text.width exch def
+	newpath
+		box.width box.text.width sub 2 div % x
+		line.padding % y
+		moveto
+		box.text
+	show
+} bind def 
+
+/box.draw {
+	/box.thickness exch def
+	dup 0 get /box.width exch def
+	dup 1 get /box.height exch def
+	pop
+
+	box.thickness setlinewidth
+	newpath
+		0         0          moveto
+		box.width 0          lineto
+		box.width box.height lineto
+		0         box.height lineto
+		closepath
+	stroke
+} bind def
+
+/line.draw {
+	/line.desc exch def
+	/line.font.size exch def
+	/line.font.family exch def
+
+	% Set font
+	line.font.family findfont
+	line.font.size scalefont
+	setfont
+
+	line.desc length /line.desc.length exch def
+
+	/line.height line.padding line.font.size add def
+	/line.width 0 def
+	gsave
+		% Set line position
+		page.margin.left page.height page.margin.top sub translate
+		0 line.position.x neg translate
+		0 line.height neg translate
+		gsave
+		1 1 line.desc.length {
+			% Get box description
+			line.desc exch 1 sub get /column.desc exch def
+			% Draw box contour
+			[ column.desc 0 get   line.height ]
+			1
+			box.draw
+			% Draw text, if necessary
+			column.desc length 1 gt {
+				[ column.desc 0 get   line.height ]
+				column.desc 1 get
+				box.center-text
+			} if
+			% Translate and add to line.width
+			column.desc 0 get line.width add /line.width exch def
+			column.desc 0 get 0 translate
+		} for
+		grestore
+		% Draw wrapper box
+		[ line.width   line.height ] 2 box.draw
+	grestore
+	% Move line pointer
+	/line.position.x line.position.x line.height add def
+} def
+
+/problem.draw {
+	problem.current 0 get
+	1 add
+	problem.current 0 3 -1 roll put
+	/line.padding 3 mm def
+	% Draw the line
+	/fonts.URW-Helvetica-Bold font.size
+	[
+		[ column.default.width 1 mul problem.current ]
+		[ column.default.width 2 mul ]
+		[ column.default.width 2 mul ]
+		[ column.default.width 2 mul ]
+		[ column.default.width 3 mul ]
+		[ column.default.width 8 mul ]
+	]
+	line.draw
+} def
+
+/header.draw {
+	/line.padding 2 mm def
+	/fonts.URW-Helvetica-Condensed font.size 2 div
+	[
+        [ column.default.width 1 mul (AC) ]
+        [ column.default.width 2 mul (Ordem) ]
+        [ column.default.width 2 mul (Escrito) ]
+		[ column.default.width 2 mul (Leitores) ]
+        [ column.default.width 3 mul (Complexidade) ]
+        [ column.default.width 8 mul (Resumo) ]
+	]
+	line.draw
+} bind def
+
+/title.draw {
+	/line.padding 4 mm def
+	/fonts.MS-Times font.size
+	[
+        [ column.default.width 18 mul team.name ]
+	]
+	line.draw
+} bind def
+
+%% Main routine
+
+page.config
+
+stdin temp.buffer readline pop /team.name exch def %% team name
+
+title.draw
+header.draw
+1 1 problem.number { pop
+	problem.draw
+} for
+
+showpage

@@ -1,0 +1,12 @@
+#!/bin/sh
+
+clear
+rm -f $1.out
+
+if (javac $1.java) then
+	echo "### COMPILOU ###"
+	if !(java $1 < $1.in > $1.out) then
+		echo "### RUNTIME ERROR ###" >> $1.out
+	fi
+	less $1.out
+fi
