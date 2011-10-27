@@ -18,7 +18,10 @@ using namespace std;
 #define rall(v) (v).rbegin(), (v).rend()
 
 #define _FOR(it, b, e) for (typeof(b) it = (b); it != (e); ++it)
-#define FOR(x...) _FOR(x)
+#define foreach(x...) _FOR(x)
+#define fu(i, a) foreach(i, 0, a)
+#define forall(i, v) foreach(i, all(v))
+
 #define MSET(c, v) memset(c, v, sizeof(c)
 
 #define rep(i, n) FOR(i,0,n)

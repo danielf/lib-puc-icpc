@@ -7,23 +7,23 @@ struct grafo {
 
 	//////////////////////////////////////////////////////////////////////////////
 	// Definições compartilhadas.
-	// lala
 	//
 
-	int dest[2 * AR]; // "2 *" apenas para CFC.
-	int adj[VT][2 * VT]; // "2 *" apenas para Fluxos e CFC.
-	int nadj[VT], nvt, nar;
+	vector<int> dest; // "2 *" apenas para CFC.
+	vector<int> adj[VT]; // "2 *" apenas para Fluxos e CFC.
+	int nvt, nar;
 
-	inline int inv(int a) { return a ^ 0x1; } // Apenas para Fluxos e PP.
+	_inline(int inv)(int a) { return a ^ 0x1; } // Apenas para Fluxos e PP.
 
 	//////////////////////////////////////////////////////////////////////////////
 	// Definições específicas para Fluxos.
 	//
 
-	int cap[AR], fluxo[AR], ent[VT];
+	vector<int> cap, fluxo;
+	int ent[VT];
 
-	inline int orig(int a) { return dest[inv(a)]; }
-	inline int capres(int a) { return cap[a] - fluxo[a]; }
+	_inline(int orig)(int a) { return dest[inv(a)]; }
+	_inline(int capres)(int a) { return cap[a] - fluxo[a]; }
 
 	//////////////////////////////////////////////////////////////////////////////
 	// Definições específicas para Fluxo Máximo.
@@ -36,9 +36,10 @@ struct grafo {
 	//
 
 	int imb[VT], marc[VT], delta;
-	double custo[AR], pot[VT], dist[VT];
+	double pot[VT], dist[VT];
+	vector<double> custo;
 
-	inline double custores(int a) {
+	_inline(double custores)(int a) {
 		return custo[a] - pot[orig(a)] + pot[dest[a]];
 	}
 
@@ -52,7 +53,8 @@ struct grafo {
 	// Definições específicas para Pontos de Articulação e Pontes.
 	//
 
-	char part[VT], ponte[AR];
+	char part[VT]
+	vector<char> ponte[AR];
 	int menor[VT], npart, nponte;
 
 	//////////////////////////////////////////////////////////////////////////////
@@ -61,14 +63,14 @@ struct grafo {
 
 	int ord[VT], comp[VT], repcomp[VT], nord, ncomp;
 
-	inline int transp(int a) { return (a & 0x1); }
+	_inline(int transp)(int a) { return (a & 0x1); }
 
 	//////////////////////////////////////////////////////////////////////////////
 	// Definições específicas para 2 SAT.
 	//
 
-	inline int verd(int v) { return 2 * v + 1; }
-	inline int falso(int v) { return 2 * v; }
+	_inline(int verd)(int v) { return 2 * v + 1; }
+	_inline(int falso)(int v) { return 2 * v; }
 
 	//////////////////////////////////////////////////////////////////////////////
 	// Funções compartilhadas.
@@ -78,9 +80,11 @@ struct grafo {
 	// Inicializa o grafo.
 	//
 
-	void inic(int n = 0) { // start: 48c71c16bf67ffb97a444b716e6677b5
+	void inic(int n = 0) {
 		nvt = n;
 		nar = 0;
+		fu(i, VT) 
+			adj[i].clear();
 		memset(nadj, 0, sizeof(nadj));
 		memset(imb, 0, sizeof(imb)); // Apenas para FCM
 	}
@@ -91,20 +95,18 @@ struct grafo {
 	// "int u" apenas para Fluxos; "double c" apenas para FCM.
 	//
 
-	// start: 67d1557ea04aeec3a29cbb8daf5b1336
 	int aresta(int i, int j, int u = 0, double c = 0) {
 		int ar = nar;
 	
-		custo[nar] = c; // Apenas para FCM.
-		cap[nar] = u; // Apenas para Fluxos.
-		dest[nar] = j;
-		adj[i][nadj[i]++] = nar++;
+		custo.pb(c);
+		cap.pb(u);
+		dest.pb(j);
+		adj[i].pb(nar++);
 
-		custo[nar] = -c; // Apenas para FCM.
-		cap[nar] = 0; // Apenas para Fluxos.
-		dest[nar] = i;
-		adj[j][nadj[j]++] = nar++;
-
+		custo.pb(-c);
+		cap.pb(0);
+		dest.pb(i);
+		adj[j].pb(nar++);
 		return ar;
 	}
 
@@ -112,7 +114,6 @@ struct grafo {
 	// Funções específicas para Fluxo Máximo.
 	//
 
-	// start: c374dc80b1c1cb7d9e14faf1839c7dc0
 	void revbfs(int ini, int fim) {
 		int i, no, viz, ar;
 
@@ -126,7 +127,7 @@ struct grafo {
 			no = fila.front(); fila.pop();
 			qtd[nivel[no]]++;
 
-			for (i = 0; i < nadj[no]; i++) {
+			for (i = 0; i < adj[no].size(); i++) {
 				ar = adj[no][i]; viz = dest[ar];
 				if (cap[ar] == 0 && nivel[viz] == NULO) {
 					nivel[viz] = nivel[no] + 1; fila.push(viz);
@@ -149,7 +150,7 @@ struct grafo {
 		int i, ar, viz, menor = NULO;
 		if (--qtd[nivel[no]] == 0) return NULO;
 
-		for (i = 0; i < nadj[no]; i++) {
+		for (i = 0; i < adj[no].size(); i++) {
 			ar = adj[no][i]; viz = dest[ar];
 			if (capres(ar) <= 0) continue;
 			if (menor == NULO || nivel[viz] < nivel[menor]) menor = viz;
@@ -176,7 +177,6 @@ struct grafo {
 		}
 		return fmax;
 	}
-	// end: c374dc80b1c1cb7d9e14faf1839c7dc0
 
 	//////////////////////////////////////////////////////////////////////////////
 	// Função específica para Fluxo a Custo Mínimo.
@@ -184,7 +184,7 @@ struct grafo {
 	// Algoritmo de Dijkstra: O(m * log n)
 	//
 
-	void dijkstra(int ini) { // start: f3d1a16bb01ee4f46e44f03310f18b59
+	void dijkstra(int ini) {
 		int i, j, k, a;
 		double d;
 
@@ -198,7 +198,7 @@ struct grafo {
 		while (!heap.empty()) {
 			i = heap.top().second; heap.pop();
 			if (marc[i]) continue; marc[i] = 1;
-			for (k = 0; k < nadj[i]; k++) {
+			for (k = 0; k < adj[i].size(); k++) {
 				a = adj[i][k]; j = dest[a]; d = dist[i] + custores(a);
 				if (capres(a) >= delta && cmp(d, dist[j]) < 0) {
 					heap.push(make_pair( -(dist[j] = d), j));
@@ -212,11 +212,10 @@ struct grafo {
 	// Função específica para Pontos de Articulação e Pontes.
 	//
 
-	// start: 5e9f0f653ac8f4cf4ab7edbc6738bda6
 	int dfs_partponte(int no, int ent) {
 		int i, ar, viz, nf = 0;
 
-		for (i = 0; i < nadj[no]; i++) {
+		for (i = 0; i < adj[no].size(); i++) {
 			ar = adj[no][i]; viz = dest[ar];
 
 			if (prof[viz] == NULO) {
@@ -234,16 +233,15 @@ struct grafo {
 
 		return nf;
 	}
-
+
 	//////////////////////////////////////////////////////////////////////////////
 	// Funções específicas para Componentes Fortemente Conexas.
 	//
 	// Ordenação Topológica (duas primeiras funções).
 	//
 
-	// start: f9e30d5f0035d75466e0b1b7496e91f9
 	void dfs_topsort(int no) {
-		for (int i = 0; i < nadj[no]; i++) {
+		for (int i = 0; i < adj[no].size(); i++) {
 			int ar = adj[no][i], viz = dest[ar];
 			if (!transp(ar) && prof[viz] == NULO) {
 				prof[viz] = prof[no] + 1; dfs_topsort(viz);
@@ -264,12 +262,11 @@ struct grafo {
 
 	void dfs_compfortcon(int no) {
 		comp[no] = ncomp;
-		for (int i = 0; i < nadj[no]; i++) {
+		for (int i = 0; i < adj[no].size(); i++) {
 			int ar = adj[no][i], viz = dest[ar];
 			if (transp(ar) && comp[viz] == NULO) dfs_compfortcon(viz);
 		}
 	}
-	// end: f9e30d5f0035d75466e0b1b7496e91f9
 
 	//////////////////////////////////////////////////////////////////////////////
 	// Função específica para 2 SAT.
@@ -278,7 +275,6 @@ struct grafo {
 	// ((x = valx) ou (y = valy))
 	//
 
-	// start: 2228d040e8f84fc8ca0e7928a6440ba0
 	void clausula(int x, bool valx, int y, bool valy) {
 		int hipA, teseA, hipB, teseB;
 
@@ -291,18 +287,16 @@ struct grafo {
 		aresta(hipA, teseA);
 		aresta(hipB, teseB);
 	}
-
-
-
-
+
 	//////////////////////////////////////////////////////////////////////////////
 	// Fluxo Máximo: O(n^2 * m)
 	//
 
-	int maxflow(int ini, int fim) { // start: 7cdb2ec5d82189460e7ee6d9652683d3
+	int maxflow(int ini, int fim) {
 		int ar, no = ini, fmax = 0;
 
-		memset(fluxo, 0, sizeof(fluxo));
+		for (int i = 0; i < nar; i++)
+			fluxo.push_back(0);
 		memset(padj, 0, sizeof(padj));
 
 		revbfs(ini, fim);
@@ -322,14 +316,13 @@ struct grafo {
 	// Fluxo a Custo Mínimo: O(m^2 * log n * log U)
 	//
 	// Parametro global específico: imb
-	// (Nota: Lembrar de testar viabilidade da rede com o nó artificial gerado)
+	//
 
-	double mincostflow() { // start: e9ff00a38b57cf4d0c8594bc0bd12eb6
+	double mincostflow() {
 		int a, i, j, k, l, U = 0;
 		double C = 0.;
 
 		memset(pot, 0, sizeof(pot));
-		memset(fluxo, 0, sizeof(fluxo));
 
 		for (a = 0; a < nar ; a++) {
 			if (cmp(custo[a]) > 0) C += custo[a];
@@ -343,6 +336,9 @@ struct grafo {
 			aresta(i, nvt, U, C);
 			aresta(nvt, i, U, C);
 		}
+
+		fluxo.clear();
+		fu(i, nar) fluxo.pb(0);
 		nvt++;
 
 		while (delta >= 1) {
@@ -380,7 +376,7 @@ struct grafo {
 	// Encontra os Pontos de Articulação e as Pontes.
 	//
 
-	void partponte() { // start: 3446aa62c39e51799769355c6d7c48c3
+	void partponte() {
 		memset(part, 0, sizeof(part));
 		memset(ponte, 0, sizeof(ponte));
 		memset(prof, NULO, sizeof(prof));
@@ -401,7 +397,7 @@ struct grafo {
 	// Encontra as Componentes Fortemente Conexas.
 	//
 
-	int compfortcon() { // start: 1fc82eb8cbe082e662db25ab7d74d272
+	int compfortcon() {
 		memset(comp, NULO, sizeof(comp));
 		ncomp = 0;
 		topsort();
@@ -417,10 +413,9 @@ struct grafo {
 	}
 	//////////////////////////////////////////////////////////////////////////////
 	// Decide se a conjunção das cláusulas pode ser satisfeita.
-	// (Nota 1: requer código de componente fortemente conexa)
-	// (Nota 2: lembrar de inicializar o grafo com 2*num_variaveis (x_i e ~x_i))
+	//
 
-	int twosat(int nvar) { // start: 2ac831ced98087e2e9a19b2c986b3261
+	int twosat(int nvar) {
 		compfortcon();
 		for (int i = 0; i < nvar; i++)
 			if (comp[verd(i)] == comp[falso(i)])
