@@ -124,7 +124,7 @@ library.txt: \
 	rm -f $@.tmp
 
 library.pdf: library.txt
-	ps2pdf -sPAPERSIZE=a4 template.ps < library.txt
+	ps2pdf -dNOSAFER -sPAPERSIZE=a4 template.ps < library.txt
 	mv template.pdf library.pdf
 
 problem-table.pdf: problem-table.ps
