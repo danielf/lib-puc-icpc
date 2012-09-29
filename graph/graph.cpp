@@ -9,11 +9,11 @@ struct grafo {
 	// Definições compartilhadas.
 	//
 
-	vector<int> dest; // "2 *" apenas para CFC.
-	vector<int> adj[VT]; // "2 *" apenas para Fluxos e CFC.
+	vector<int> dest;
+	vector<int> adj[VT];
 	int nvt, nar;
 
-	_inline(int inv)(int a) { return a ^ 0x1; } // Apenas para Fluxos e PP.
+	int inv(int a) { return a ^ 0x1; } // Apenas para Fluxos e PP.
 
 	//////////////////////////////////////////////////////////////////////////////
 	// Definições específicas para Fluxos.
@@ -22,8 +22,8 @@ struct grafo {
 	vector<int> cap, fluxo;
 	int ent[VT];
 
-	_inline(int orig)(int a) { return dest[inv(a)]; }
-	_inline(int capres)(int a) { return cap[a] - fluxo[a]; }
+	int orig(int a) { return dest[inv(a)]; }
+	int capres(int a) { return cap[a] - fluxo[a]; }
 
 	//////////////////////////////////////////////////////////////////////////////
 	// Definições específicas para Fluxo Máximo.
@@ -39,7 +39,7 @@ struct grafo {
 	double pot[VT], dist[VT];
 	vector<double> custo;
 
-	_inline(double custores)(int a) {
+	double custores(int a) {
 		return custo[a] - pot[orig(a)] + pot[dest[a]];
 	}
 
@@ -53,8 +53,8 @@ struct grafo {
 	// Definições específicas para Pontos de Articulação e Pontes.
 	//
 
-	char part[VT]
-	vector<char> ponte[AR];
+	char part[VT];
+	char ponte[AR];
 	int menor[VT], npart, nponte;
 
 	//////////////////////////////////////////////////////////////////////////////
@@ -63,14 +63,14 @@ struct grafo {
 
 	int ord[VT], comp[VT], repcomp[VT], nord, ncomp;
 
-	_inline(int transp)(int a) { return (a & 0x1); }
+	int transp(int a) { return (a & 0x1); }
 
 	//////////////////////////////////////////////////////////////////////////////
 	// Definições específicas para 2 SAT.
 	//
 
-	_inline(int verd)(int v) { return 2 * v + 1; }
-	_inline(int falso)(int v) { return 2 * v; }
+	int verd(int v) { return 2 * v + 1; }
+	int falso(int v) { return 2 * v; }
 
 	//////////////////////////////////////////////////////////////////////////////
 	// Funções compartilhadas.
@@ -83,10 +83,9 @@ struct grafo {
 	void inic(int n = 0) {
 		nvt = n;
 		nar = 0;
-		fu(i, VT) 
-			adj[i].clear();
-		memset(nadj, 0, sizeof(nadj));
+		fu(i, VT) adj[i].clear();
 		memset(imb, 0, sizeof(imb)); // Apenas para FCM
+		dest.clear(); cap.clear(); fluxo.clear(); custo.clear();
 	}
 	
 	//////////////////////////////////////////////////////////////////////////////
@@ -118,7 +117,7 @@ struct grafo {
 		int i, no, viz, ar;
 
 		queue<int> fila;
-		memset(nivel, NULO, sizeof(nivel));
+		memset(nivel, -1, sizeof(nivel));
 		memset(qtd, 0, sizeof(qtd));
 
 		nivel[fim] = 0; fila.push(fim);
@@ -129,7 +128,7 @@ struct grafo {
 
 			for (i = 0; i < adj[no].size(); i++) {
 				ar = adj[no][i]; viz = dest[ar];
-				if (cap[ar] == 0 && nivel[viz] == NULO) {
+				if (cap[ar] == 0 && nivel[viz] == -1) {
 					nivel[viz] = nivel[no] + 1; fila.push(viz);
 				}
 			}
@@ -137,28 +136,28 @@ struct grafo {
 	}
 
 	int admissivel(int no) {
-		while (padj[no] < nadj[no]) {
+		while (padj[no] < adj[no].size()) {
 			int ar = adj[no][padj[no]];
 			if (nivel[no] == nivel[dest[ar]] + 1 && capres(ar) > 0) return ar;
 			padj[no]++;
 		}
 		padj[no] = 0;
-		return NULO;
+		return -1;
 	}
 
 	int retrocede(int no) {
-		int i, ar, viz, menor = NULO;
-		if (--qtd[nivel[no]] == 0) return NULO;
+		int i, ar, viz, menor = -1;
+		if (--qtd[nivel[no]] == 0) return -1;
 
 		for (i = 0; i < adj[no].size(); i++) {
 			ar = adj[no][i]; viz = dest[ar];
 			if (capres(ar) <= 0) continue;
-			if (menor == NULO || nivel[viz] < nivel[menor]) menor = viz;
+			if (menor == -1 || nivel[viz] < nivel[menor]) menor = viz;
 		}
 
-		if (menor != NULO) nivel[no] = nivel[menor];
+		if (menor != -1) nivel[no] = nivel[menor];
 		qtd[++nivel[no]]++;
-		return ((ent[no] == NULO) ? no : orig(ent[no]));
+		return ((ent[no] == -1) ? no : orig(ent[no]));
 	}
 
 	int avanca(int no, int ar) {
@@ -189,7 +188,7 @@ struct grafo {
 		double d;
 
 		priority_queue<pair<double, int> > heap;
-		memset(ent, NULO, sizeof(ent));
+		memset(ent, -1, sizeof(ent));
 		memset(marc, 0, sizeof(marc));
 
 		for (i = 0; i < nvt; i++) dist[i] = INFINITY;
@@ -218,7 +217,7 @@ struct grafo {
 		for (i = 0; i < adj[no].size(); i++) {
 			ar = adj[no][i]; viz = dest[ar];
 
-			if (prof[viz] == NULO) {
+			if (prof[viz] == -1) {
 				menor[viz] = prof[viz] = prof[no] + 1;
 				dfs_partponte (viz, ar); nf++;
 
@@ -243,7 +242,7 @@ struct grafo {
 	void dfs_topsort(int no) {
 		for (int i = 0; i < adj[no].size(); i++) {
 			int ar = adj[no][i], viz = dest[ar];
-			if (!transp(ar) && prof[viz] == NULO) {
+			if (!transp(ar) && prof[viz] == -1) {
 				prof[viz] = prof[no] + 1; dfs_topsort(viz);
 			}
 		}
@@ -251,11 +250,11 @@ struct grafo {
 	}
 
 	void topsort() {
-		memset(prof, NULO, sizeof(prof));
+		memset(prof, -1, sizeof(prof));
 		nord = nvt;
 
 		for (int i = 0; i < nvt; i++)
-			if (prof[i] == NULO) {
+			if (prof[i] == -1) {
 				prof[i] = 0; dfs_topsort(i);
 			}
 	}
@@ -264,7 +263,7 @@ struct grafo {
 		comp[no] = ncomp;
 		for (int i = 0; i < adj[no].size(); i++) {
 			int ar = adj[no][i], viz = dest[ar];
-			if (transp(ar) && comp[viz] == NULO) dfs_compfortcon(viz);
+			if (transp(ar) && comp[viz] == -1) dfs_compfortcon(viz);
 		}
 	}
 
@@ -300,10 +299,10 @@ struct grafo {
 		memset(padj, 0, sizeof(padj));
 
 		revbfs(ini, fim);
-		lim[ini] = INF; ent[ini] = NULO;
+		lim[ini] = INF; ent[ini] = -1;
 
-		while (nivel[ini] < nvt && no != NULO) {
-			if ((ar = admissivel(no)) == NULO) no = retrocede(no);
+		while (nivel[ini] < nvt && no != -1) {
+			if ((ar = admissivel(no)) == -1) no = retrocede(no);
 			else if ((no = avanca(no, ar)) == fim) {
 				fmax += aumenta(ini, fim);
 				no = ini;
@@ -331,7 +330,7 @@ struct grafo {
 		for (i = 0; i < nvt; i++) U = max(imb[i], max(-imb[i], U));
 		for (delta = 0x40000000; delta > U; delta /= 2);
 
-		imb[nvt] = nadj[nvt] = 0; U *= 2 * nvt; C *= 2;
+		imb[nvt] = 0 ; U *= 2 * nvt; C *= 2; adj[nvt].clear();
 		for (i = 0; i < nvt; i++) {
 			aresta(i, nvt, U, C);
 			aresta(nvt, i, U, C);
@@ -359,7 +358,7 @@ struct grafo {
 
 				dijkstra(k);
 				for (i = 0 ; i < nvt ; i++) pot[i] -= dist[i];
-				for (a = ent[l]; a != NULO; a = ent[orig(a)])  {
+				for (a = ent[l]; a != -1; a = ent[orig(a)])  {
 					fluxo[a] += delta; fluxo[inv(a)] -= delta;
 				}
 				imb[k] -= delta; imb[l] += delta;
@@ -379,14 +378,14 @@ struct grafo {
 	void partponte() {
 		memset(part, 0, sizeof(part));
 		memset(ponte, 0, sizeof(ponte));
-		memset(prof, NULO, sizeof(prof));
-		memset(menor, NULO, sizeof(menor));
+		memset(prof, -1, sizeof(prof));
+		memset(menor, -1, sizeof(menor));
 		npart = nponte = 0;
 
 		for (int i = 0; i < nvt; i++)
-			if (prof[i] == NULO) {
+			if (prof[i] == -1) {
 				menor[i] = prof[i] = 0;
-				if (dfs_partponte(i, NULO) < 2) part[i] = 0;
+				if (dfs_partponte(i, -1) < 2) part[i] = 0;
 			}
 		for (int i = 0; i < nvt; i++) if (part[i]) npart++;
 		for (int i = 0; i < nar; i++) if (ponte[i]) nponte++;
@@ -398,12 +397,12 @@ struct grafo {
 	//
 
 	int compfortcon() {
-		memset(comp, NULO, sizeof(comp));
+		memset(comp, -1, sizeof(comp));
 		ncomp = 0;
 		topsort();
 
 		for (int i = 0; i < nvt; i++)
-			if (comp[ord[i]] == NULO) {
+			if (comp[ord[i]] == -1) {
 				repcomp[ncomp] = ord[i];
 				dfs_compfortcon(ord[i]);
 				ncomp++;
@@ -415,11 +414,10 @@ struct grafo {
 	// Decide se a conjunção das cláusulas pode ser satisfeita.
 	//
 
-	int twosat(int nvar) {
+	bool twosat(int nvar) {
 		compfortcon();
 		for (int i = 0; i < nvar; i++)
-			if (comp[verd(i)] == comp[falso(i)])
-				return 0;
-		return 1;
+			if (comp[verd(i)] == comp[falso(i)]) return false;
+		return true;
 	}
 };
