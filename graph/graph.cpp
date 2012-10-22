@@ -1,108 +1,38 @@
-#include <queue> // Apenas para Fluxos
+const int VT = 410; // Max number of vertices
 
-const int VT = 1010;
-const int AR = VT * VT;
-
-struct grafo {
+struct graph {
 
 	//////////////////////////////////////////////////////////////////////////////
-	// Definições compartilhadas.
+	// Shared part. Also known as: You will need this!
 	//
 
 	vector<int> dest;
 	vector<int> adj[VT];
 	int nvt, nar;
 
-	int inv(int a) { return a ^ 0x1; } // Apenas para Fluxos e PP.
+	int inv(int a) { return a ^ 0x1; }
 
-	//////////////////////////////////////////////////////////////////////////////
-	// Definições específicas para Fluxos.
-	//
 
-	vector<int> cap, fluxo;
-	int ent[VT];
-
-	int orig(int a) { return dest[inv(a)]; }
-	int capres(int a) { return cap[a] - fluxo[a]; }
-
-	//////////////////////////////////////////////////////////////////////////////
-	// Definições específicas para Fluxo Máximo.
-	//
-
-	int padj[VT], lim[VT], nivel[VT], qtd[VT];
-
-	//////////////////////////////////////////////////////////////////////////////
-	// Definições específicas para Fluxo a Custo Mínimo.
-	//
-
-	int imb[VT], marc[VT], delta;
-	double pot[VT], dist[VT];
-	vector<double> custo;
-
-	double custores(int a) {
-		return custo[a] - pot[orig(a)] + pot[dest[a]];
-	}
-
-	//////////////////////////////////////////////////////////////////////////////
-	// Definição específica para Conexidade.
-	//
-
-	int prof[VT];
-
-	//////////////////////////////////////////////////////////////////////////////
-	// Definições específicas para Pontos de Articulação e Pontes.
-	//
-
-	char part[VT];
-	char ponte[AR];
-	int menor[VT], npart, nponte;
-
-	//////////////////////////////////////////////////////////////////////////////
-	// Definições específicas para Componentes Fortemente Conexas.
-	//
-
-	int ord[VT], comp[VT], repcomp[VT], nord, ncomp;
-
-	int transp(int a) { return (a & 0x1); }
-
-	//////////////////////////////////////////////////////////////////////////////
-	// Definições específicas para 2 SAT.
-	//
-
-	int verd(int v) { return 2 * v + 1; }
-	int falso(int v) { return 2 * v; }
-
-	//////////////////////////////////////////////////////////////////////////////
-	// Funções compartilhadas.
-	//
-
-	//////////////////////////////////////////////////////////////////////////////
-	// Inicializa o grafo.
-	//
-
-	void inic(int n = 0) {
+	// Initializes the graph
+	void init(int n) {
 		nvt = n;
 		nar = 0;
 		fu(i, VT) adj[i].clear();
-		memset(imb, 0, sizeof(imb)); // Apenas para FCM
-		dest.clear(); cap.clear(); fluxo.clear(); custo.clear();
+		memset(imb, 0, sizeof(imb)); // Only for min-cost-flow
+		dest.clear(); cap.clear(); flow.clear(); cost.clear();
 	}
 	
-	//////////////////////////////////////////////////////////////////////////////
-	// Adiciona uma aresta ao grafo.
-	//
-	// "int u" apenas para Fluxos; "double c" apenas para FCM.
-	//
-
-	int aresta(int i, int j, int u = 0, double c = 0) {
+	// Adds an arc to the graph. u is capacity, c is cost.
+	// u is only needed on flows, and c only on min-cost-flow
+	// Returns an identifier to the edge.
+	int arc(int i, int j, int u = 0, double c = 0) {
 		int ar = nar;
-	
-		custo.pb(c);
+		cost.pb(c);
 		cap.pb(u);
 		dest.pb(j);
 		adj[i].pb(nar++);
 
-		custo.pb(-c);
+		cost.pb(-c);
 		cap.pb(0);
 		dest.pb(i);
 		adj[j].pb(nar++);
@@ -110,78 +40,78 @@ struct grafo {
 	}
 
 	//////////////////////////////////////////////////////////////////////////////
-	// Funções específicas para Fluxo Máximo.
+	// For both flows!!
 	//
 
-	void revbfs(int ini, int fim) {
-		int i, no, viz, ar;
+	vector<int> cap, flow;
+	int ent[VT];
 
-		queue<int> fila;
-		memset(nivel, -1, sizeof(nivel));
-		memset(qtd, 0, sizeof(qtd));
+	int orig(int a) { return dest[inv(a)]; }
+	int capres(int a) { return cap[a] - flow[a]; }
 
-		nivel[fim] = 0; fila.push(fim);
+	//////////////////////////////////////////////////////////////////////////////
+	// Max Flow!
+	//
 
-		while (!fila.empty()) {
-			no = fila.front(); fila.pop();
-			qtd[nivel[no]]++;
+	int d[VT];
+	int curAdj[VT];
 
-			for (i = 0; i < adj[no].size(); i++) {
-				ar = adj[no][i]; viz = dest[ar];
-				if (cap[ar] == 0 && nivel[viz] == -1) {
-					nivel[viz] = nivel[no] + 1; fila.push(viz);
+	bool MFbfs(int s, int t) {
+		memset(d, INF, sizeof(d));
+		memset(curAdj, 0, sizeof(curAdj));
+		d[s] = 0;
+		queue<int> Q; Q.push(s);
+		while (!Q.empty()) {
+			int u = Q.front(); Q.pop();
+			forall(i, adj[u]) {
+				int v = dest[*i];
+				if (cap[*i] > 0 && d[v] == INF) {
+					d[v] = d[u] + 1; Q.push(v);
 				}
 			}
 		}
+		return d[t] != INF;
 	}
 
-	int admissivel(int no) {
-		while (padj[no] < adj[no].size()) {
-			int ar = adj[no][padj[no]];
-			if (nivel[no] == nivel[dest[ar]] + 1 && capres(ar) > 0) return ar;
-			padj[no]++;
+	int MFdfs(int u, int t, int f) {
+		if (u == t) return f;
+		for(int &i = curAdj[u]; i < adj[u].size(); ++i) {
+			int ar = adj[u][i], v = dest[ar];
+			if (d[v] != d[u]+1 || cap[ar] == 0) continue;
+			int tmpF = MFdfs(v, t, min(f, cap[ar]));
+			if (tmpF) {
+				cap[ar] -= tmpF;
+				cap[inv(ar)] += tmpF;
+				flow[ar] += tmpF;
+				flow[inv(ar)] -= tmpF;
+				return tmpF;
+			}
 		}
-		padj[no] = 0;
-		return -1;
+		return 0;
 	}
 
-	int retrocede(int no) {
-		int i, ar, viz, menor = -1;
-		if (--qtd[nivel[no]] == 0) return -1;
-
-		for (i = 0; i < adj[no].size(); i++) {
-			ar = adj[no][i]; viz = dest[ar];
-			if (capres(ar) <= 0) continue;
-			if (menor == -1 || nivel[viz] < nivel[menor]) menor = viz;
+	int maxflow(int ini, int end) {
+		int maxFlow = 0;
+		flow.resize(nar, 0);
+		while (MFbfs(ini, end)) {
+			int flow = 0;
+			while ((flow=MFdfs(ini, end, INF))) maxFlow += flow;
 		}
-
-		if (menor != -1) nivel[no] = nivel[menor];
-		qtd[++nivel[no]]++;
-		return ((ent[no] == -1) ? no : orig(ent[no]));
-	}
-
-	int avanca(int no, int ar) {
-		int viz = dest[ar];
-		ent[viz] = ar;
-		lim[viz] = min(lim[no], capres(ar));
-		return viz;
-	}
-
-	int aumenta(int ini, int fim) {
-		int ar, no = fim, fmax = lim[fim];
-		while (no != ini) {
-			fluxo[ar = ent[no]] += fmax;
-			fluxo[inv(ar)] -= fmax;
-			no = orig(ar);
-		}
-		return fmax;
+		return maxFlow;
 	}
 
 	//////////////////////////////////////////////////////////////////////////////
-	// Função específica para Fluxo a Custo Mínimo.
+	// Min Cost Flow! - O(m^2 * log n * log U)
 	//
-	// Algoritmo de Dijkstra: O(m * log n)
-	//
+	// Don't forget to specify the imb
+
+	int imb[VT], mark[VT], delta;
+	double pot[VT], dist[VT];
+	vector<double> cost;
+
+	double rescost(int a) {
+		return cost[a] - pot[orig(a)] + pot[dest[a]];
+	}
 
 	void dijkstra(int ini) {
 		int i, j, k, a;
@@ -189,16 +119,16 @@ struct grafo {
 
 		priority_queue<pair<double, int> > heap;
 		memset(ent, -1, sizeof(ent));
-		memset(marc, 0, sizeof(marc));
+		memset(mark, 0, sizeof(mark));
 
-		for (i = 0; i < nvt; i++) dist[i] = INFINITY;
+		fu(i, nvt) dist[i] = INFINITY;
 		heap.push(make_pair(dist[ini] = 0.0, ini));
 
 		while (!heap.empty()) {
 			i = heap.top().second; heap.pop();
-			if (marc[i]) continue; marc[i] = 1;
-			for (k = 0; k < adj[i].size(); k++) {
-				a = adj[i][k]; j = dest[a]; d = dist[i] + custores(a);
+			if (mark[i]) continue; mark[i] = 1;
+			forall(k, adj[i]) {
+				a = *k; j = dest[a]; d = dist[i] + rescost(a);
 				if (capres(a) >= delta && cmp(d, dist[j]) < 0) {
 					heap.push(make_pair( -(dist[j] = d), j));
 					ent[j] = a;
@@ -207,147 +137,38 @@ struct grafo {
 		}
 	}
 
-	//////////////////////////////////////////////////////////////////////////////
-	// Função específica para Pontos de Articulação e Pontes.
-	//
-
-	int dfs_partponte(int no, int ent) {
-		int i, ar, viz, nf = 0;
-
-		for (i = 0; i < adj[no].size(); i++) {
-			ar = adj[no][i]; viz = dest[ar];
-
-			if (prof[viz] == -1) {
-				menor[viz] = prof[viz] = prof[no] + 1;
-				dfs_partponte (viz, ar); nf++;
-
-				if (menor[viz] >= prof[no]) {
-					part[no] = 1;
-					if (menor[viz] == prof[viz]) ponte[ar] = ponte[inv(ar)] = 1;
-				}
-				else menor[no] = min(menor[no], menor[viz]);
-			}
-			else if (inv(ar) != ent) menor[no] = min(menor[no], prof[viz]);
-		}
-
-		return nf;
-	}
-
-	//////////////////////////////////////////////////////////////////////////////
-	// Funções específicas para Componentes Fortemente Conexas.
-	//
-	// Ordenação Topológica (duas primeiras funções).
-	//
-
-	void dfs_topsort(int no) {
-		for (int i = 0; i < adj[no].size(); i++) {
-			int ar = adj[no][i], viz = dest[ar];
-			if (!transp(ar) && prof[viz] == -1) {
-				prof[viz] = prof[no] + 1; dfs_topsort(viz);
-			}
-		}
-		ord[--nord] = no;
-	}
-
-	void topsort() {
-		memset(prof, -1, sizeof(prof));
-		nord = nvt;
-
-		for (int i = 0; i < nvt; i++)
-			if (prof[i] == -1) {
-				prof[i] = 0; dfs_topsort(i);
-			}
-	}
-
-	void dfs_compfortcon(int no) {
-		comp[no] = ncomp;
-		for (int i = 0; i < adj[no].size(); i++) {
-			int ar = adj[no][i], viz = dest[ar];
-			if (transp(ar) && comp[viz] == -1) dfs_compfortcon(viz);
-		}
-	}
-
-	//////////////////////////////////////////////////////////////////////////////
-	// Função específica para 2 SAT.
-	//
-	// Adiciona ao grafo as arestas correspondentes a clausula
-	// ((x = valx) ou (y = valy))
-	//
-
-	void clausula(int x, bool valx, int y, bool valy) {
-		int hipA, teseA, hipB, teseB;
-
-		if (valx) { hipA = falso(x); teseB = verd(x); }
-		else { hipA = verd(x); teseB = falso(x); }
-
-		if (valy) { hipB = falso(y); teseA = verd(y); }
-		else { hipB = verd(y); teseA = falso(y); }
-
-		aresta(hipA, teseA);
-		aresta(hipB, teseB);
-	}
-
-	//////////////////////////////////////////////////////////////////////////////
-	// Fluxo Máximo: O(n^2 * m)
-	//
-
-	int maxflow(int ini, int fim) {
-		int ar, no = ini, fmax = 0;
-
-		for (int i = 0; i < nar; i++)
-			fluxo.push_back(0);
-		memset(padj, 0, sizeof(padj));
-
-		revbfs(ini, fim);
-		lim[ini] = INF; ent[ini] = -1;
-
-		while (nivel[ini] < nvt && no != -1) {
-			if ((ar = admissivel(no)) == -1) no = retrocede(no);
-			else if ((no = avanca(no, ar)) == fim) {
-				fmax += aumenta(ini, fim);
-				no = ini;
-			}
-		}
-		return fmax;
-	}
-
-	//////////////////////////////////////////////////////////////////////////////
-	// Fluxo a Custo Mínimo: O(m^2 * log n * log U)
-	//
-	// Parametro global específico: imb
-	//
 
 	double mincostflow() {
-		int a, i, j, k, l, U = 0;
+		int k, l, U = 0;
 		double C = 0.;
 
 		memset(pot, 0, sizeof(pot));
 
-		for (a = 0; a < nar ; a++) {
-			if (cmp(custo[a]) > 0) C += custo[a];
+		fu(a, nar) {
+			if (cmp(cost[a]) > 0) C += cost[a];
 			U = max(cap[a], U);
 		}
-		for (i = 0; i < nvt; i++) U = max(imb[i], max(-imb[i], U));
+		fu(i, nvt) U = max(imb[i], max(-imb[i], U));
 		for (delta = 0x40000000; delta > U; delta /= 2);
 
 		imb[nvt] = 0 ; U *= 2 * nvt; C *= 2; adj[nvt].clear();
-		for (i = 0; i < nvt; i++) {
-			aresta(i, nvt, U, C);
-			aresta(nvt, i, U, C);
+		fu(i, nvt) {
+			arc(i, nvt, U, C);
+			arc(nvt, i, U, C);
 		}
 
-		fluxo.clear();
-		fu(i, nar) fluxo.pb(0);
+		flow.clear();
+		fu(i, nar) flow.pb(0);
 		nvt++;
 
 		while (delta >= 1) {
-			for (a = 0; a < nar ; a++) {
-				i = orig(a); j = dest[a];
+			fu(a, nar) {
+				int i = orig(a), j = dest[a];
 				if (delta <= capres(a) && capres(a) < 2 * delta &&
-				    cmp(custores(a)) < 0) {
-					fluxo[inv(a)] -= capres(a);
+				    cmp(rescost(a)) < 0) {
+					flow[inv(a)] -= capres(a);
 					imb[i] -= capres(a); imb[j] += capres(a);
-					fluxo[a] = cap[a];
+					flow[a] = cap[a];
 				}
 			}
 
@@ -357,9 +178,9 @@ struct grafo {
 				if (k == nvt || l < 0) break;
 
 				dijkstra(k);
-				for (i = 0 ; i < nvt ; i++) pot[i] -= dist[i];
-				for (a = ent[l]; a != -1; a = ent[orig(a)])  {
-					fluxo[a] += delta; fluxo[inv(a)] -= delta;
+				fu(i, nvt) pot[i] -= dist[i];
+				for (int a = ent[l]; a != -1; a = ent[orig(a)])  {
+					flow[a] += delta; flow[inv(a)] -= delta;
 				}
 				imb[k] -= delta; imb[l] += delta;
 			}
@@ -367,57 +188,132 @@ struct grafo {
 		}
 
 		C = 0.;
-		for (a = 0; a < nar; a++) if (fluxo[a] > 0) C += fluxo[a] * custo[a];
+		fu(a, nar) if (flow[a] > 0) C += flow[a] * cost[a];
 		return C;
 	}
 
+
 	//////////////////////////////////////////////////////////////////////////////
-	// Encontra os Pontos de Articulação e as Pontes.
+	// Both Bridges/Articulation points and to Strongly Connected Components
 	//
 
-	void partponte() {
-		memset(part, 0, sizeof(part));
-		memset(ponte, 0, sizeof(ponte));
-		memset(prof, -1, sizeof(prof));
-		memset(menor, -1, sizeof(menor));
-		npart = nponte = 0;
+	int depth[VT];
 
-		for (int i = 0; i < nvt; i++)
-			if (prof[i] == -1) {
-				menor[i] = prof[i] = 0;
-				if (dfs_partponte(i, -1) < 2) part[i] = 0;
+	//////////////////////////////////////////////////////////////////////////////
+	// Bridges and articulation points - O(n+m)
+	//
+
+	vector<bool> artp, bridge;
+	int least[VT], nartp, nbridge;
+
+	int dfs_artpbridge(int node, int ent) {
+		int i, ar, neigh, nf = 0;
+
+		forall(i, adj[node]) {
+			ar = *i; neigh = dest[ar];
+
+			if (depth[neigh] == -1) {
+				least[neigh] = depth[neigh] = depth[node] + 1;
+				dfs_artpbridge(neigh, ar); nf++;
+
+				if (least[neigh] >= depth[node]) {
+					artp[node] = true;
+					if (least[neigh] == depth[neigh]) bridge[ar] = bridge[inv(ar)] = 1;
+				}
+				else least[node] = min(least[node], least[neigh]);
 			}
-		for (int i = 0; i < nvt; i++) if (part[i]) npart++;
-		for (int i = 0; i < nar; i++) if (ponte[i]) nponte++;
-		nponte /= 2;
+			else if (inv(ar) != ent) least[node] = min(least[node], depth[neigh]);
+		}
+		return nf;
+	}
+
+	void partponte() {
+		artp.resize(nvt, false);
+		bridge.resize(nar, false);
+		memset(depth, -1, sizeof(depth));
+		memset(least, -1, sizeof(least));
+		nartp = nbridge = 0;
+
+		fu(i, nvt) if (depth[i] == -1) {
+				least[i] = depth[i] = 0;
+				if (dfs_artpbridge(i, -1) < 2) artp[i] = false;
+		}
+		nartp = count(all(artp), true);
+		nbridge = count(all(bridge), true)/2;
 	}
 
 	//////////////////////////////////////////////////////////////////////////////
-	// Encontra as Componentes Fortemente Conexas.
+	// Strongly Connected Components - O(n+m)
 	//
 
+	int ord[VT], comp[VT], repcomp[VT], nord, ncomp;
+
+	int transp(int a) { return (a & 0x1); }
+
+	void dfs_topsort(int node) {
+		forall(i, adj[node]) {
+			int ar = *i, neigh = dest[ar];
+			if (!transp(ar) && depth[neigh] == -1) {
+				depth[neigh] = depth[node] + 1; dfs_topsort(neigh);
+			}
+		}
+		ord[--nord] = node;
+	}
+
+	void topsort() {
+		memset(depth, -1, sizeof(depth));
+		nord = nvt;
+		fu(i, nvt) if (depth[i] == -1) {
+				depth[i] = 0; dfs_topsort(i);
+		}
+	}
+
+	void dfs_compfortcon(int node) {
+		comp[node] = ncomp;
+		forall(i, adj[node]) {
+			int ar = *i, neigh = dest[ar];
+			if (transp(ar) && comp[neigh] == -1) dfs_compfortcon(neigh);
+		}
+	}
+	
 	int compfortcon() {
 		memset(comp, -1, sizeof(comp));
 		ncomp = 0;
 		topsort();
 
-		for (int i = 0; i < nvt; i++)
-			if (comp[ord[i]] == -1) {
-				repcomp[ncomp] = ord[i];
-				dfs_compfortcon(ord[i]);
-				ncomp++;
-			}
-
+		fu(i, nvt) if (comp[ord[i]] == -1) {
+			repcomp[ncomp] = ord[i];
+			dfs_compfortcon(ord[i]);
+			ncomp++;
+		}
 		return ncomp;
 	}
+
 	//////////////////////////////////////////////////////////////////////////////
-	// Decide se a conjunção das cláusulas pode ser satisfeita.
+	// 2-Sat - O(n+m)
+	// Needs strongly connected components!
+	// Graph needs to be initialized with n = 2*number of vars
 	//
+
+	int tru(int v) { return 2 * v + 1; }
+	int fals(int v) { return 2 * v; }
+
+	void clause(int x, bool valx, int y, bool valy) {
+		int lhsA, rhsA, lhsB, rhsB;
+
+		if (valx) { lhsA = fals(x); rhsB = tru(x); }
+		else { lhsA = tru(x); rhsB = fals(x); }
+
+		if (valy) { lhsB = fals(y); rhsA = tru(y); }
+		else { lhsB = tru(y); rhsA = fals(y); }
+
+		arc(lhsA, rhsA);
+		arc(lhsB, rhsB);
+	}
 
 	bool twosat(int nvar) {
 		compfortcon();
-		for (int i = 0; i < nvar; i++)
-			if (comp[verd(i)] == comp[falso(i)]) return false;
+		fu(i, nvar) if (comp[tru(i)] == comp[fals(i)]) return false;
 		return true;
 	}
 };
