@@ -1,13 +1,11 @@
-const int VT = 410; // Max number of vertices
-
 struct graph {
 
   //////////////////////////////////////////////////////////////////////////////
   // Shared part. Also known as: You will need this!
   //
 
-  vector<int> dest;
-  vector<int> adj[VT];
+  vi dest;
+  vvi adj;
   int nvt, nar;
 
   int inv(int a) { return a ^ 0x1; }
@@ -17,8 +15,8 @@ struct graph {
   void init(int n) {
     nvt = n;
     nar = 0;
-    fu(i, VT) adj[i].clear();
-    memset(imb, 0, sizeof(imb)); // Only for min-cost-flow
+    adj = vvi(n);
+    imb = vi(n); // Only for min-cost-flow
     dest.clear(); cap.clear(); flow.clear(); cost.clear();
   }
 
@@ -43,8 +41,7 @@ struct graph {
   // For both flows!!
   //
 
-  vector<int> cap, flow;
-  int ent[VT];
+  vi cap, flow, ent;
 
   int orig(int a) { return dest[inv(a)]; }
   int capres(int a) { return cap[a] - flow[a]; }
@@ -53,12 +50,11 @@ struct graph {
   // Max Flow!
   //
 
-  int d[VT];
-  int curAdj[VT];
+  vi d, curAdj;
 
   bool MFbfs(int s, int t) {
-    memset(d, INF, sizeof(d));
-    memset(curAdj, 0, sizeof(curAdj));
+    d = vi(nvt, INF);
+    curAdj = vi(nvt);
     d[s] = 0;
     queue<int> Q; Q.push(s);
     while (!Q.empty()) {
@@ -92,7 +88,7 @@ struct graph {
 
   int maxflow(int ini, int end) {
     int maxFlow = 0;
-    flow.resize(nar, 0);
+    flow = vi(nar, 0);
     while (MFbfs(ini, end)) {
       int flow = 0;
       while ((flow=MFdfs(ini, end, INF))) maxFlow += flow;
@@ -105,8 +101,9 @@ struct graph {
   //
   // Don't forget to specify the imb
 
-  int imb[VT], mark[VT], delta;
-  double pot[VT], dist[VT];
+  vi imb, mark;
+  int delta;
+  vector<double> pot, dist;
   vector<double> cost;
 
   double rescost(int a) {
@@ -118,10 +115,9 @@ struct graph {
     double d;
 
     priority_queue<pair<double, int> > heap;
-    memset(ent, -1, sizeof(ent));
-    memset(mark, 0, sizeof(mark));
-
-    fu(i, nvt) dist[i] = INFINITY;
+    ent = vi(nvt, -1);
+    mark = vi(nvt);
+    dist = vector<double>(nvt, INFINITY);
     heap.push(make_pair(dist[ini] = 0.0, ini));
 
     while (!heap.empty()) {
@@ -142,7 +138,7 @@ struct graph {
     int k, l, U = 0;
     double C = 0.;
 
-    memset(pot, 0, sizeof(pot));
+    pot = vector<double>(nvt);
 
     fu(a, nar) {
       if (cmp(cost[a]) > 0) C += cost[a];
@@ -151,6 +147,8 @@ struct graph {
     fu(i, nvt) U = max(imb[i], max(-imb[i], U));
     for (delta = 0x40000000; delta > U; delta /= 2);
 
+    imb.resize(nvt + 1);
+    adj.resize(nvt + 1);
     imb[nvt] = 0 ; U *= 2 * nvt; C *= 2; adj[nvt].clear();
     fu(i, nvt) {
       arc(i, nvt, U, C);
@@ -197,14 +195,15 @@ struct graph {
   // Both Bridges/Articulation points and to Strongly Connected Components
   //
 
-  int depth[VT];
+  vi depth;
 
   //////////////////////////////////////////////////////////////////////////////
   // Bridges and articulation points - O(n+m)
   //
 
   vector<bool> artp, bridge;
-  int least[VT], nartp, nbridge;
+  vi least;
+  int nartp, nbridge;
 
   int dfs_artpbridge(int node, int ent) {
     int i, ar, neigh, nf = 0;
@@ -230,8 +229,8 @@ struct graph {
   void partponte() {
     artp.resize(nvt, false);
     bridge.resize(nar, false);
-    memset(depth, -1, sizeof(depth));
-    memset(least, -1, sizeof(least));
+    depth = vi(nvt, -1);
+    least = vi(nvt, -1);
     nartp = nbridge = 0;
 
     fu(i, nvt) if (depth[i] == -1) {
@@ -246,7 +245,8 @@ struct graph {
   // Strongly Connected Components - O(n+m)
   //
 
-  int ord[VT], comp[VT], repcomp[VT], nord, ncomp;
+  vi ord, comp, repcomp;
+  int nord, ncomp;
 
   int transp(int a) { return (a & 0x1); }
 
@@ -261,7 +261,8 @@ struct graph {
   }
 
   void topsort() {
-    memset(depth, -1, sizeof(depth));
+    depth = vi(nvt, -1);
+    ord = vi(nvt);
     nord = nvt;
     fu(i, nvt) if (depth[i] == -1) {
         depth[i] = 0; dfs_topsort(i);
@@ -277,7 +278,8 @@ struct graph {
   }
 
   int compfortcon() {
-    memset(comp, -1, sizeof(comp));
+    comp = vi(nvt, -1);
+    repcomp = vi(nvt);
     ncomp = 0;
     topsort();
 
