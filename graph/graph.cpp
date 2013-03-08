@@ -4,39 +4,38 @@ struct graph {
   // Shared part. Also known as: You will need this!
   //
 
-  vi dest;
-  vvi adj;
-  int nvt, nar;
+  vi dest;  // use sz(dest) as nar
+  vvi adj;  // use sz(adj) as nvt
 
   int inv(int a) { return a ^ 0x1; }
 
-
-  // Initializes the graph
-  void init(int n) {
-    nvt = n;
-    nar = 0;
-    adj = vvi(n);
-    imb = vi(n); // Only for min-cost-flow
-    dest.clear(); cap.clear(); flow.clear(); cost.clear();
-  }
+  // no need to init graph, vertices are added on the fly
+  // if need to clear graph, just build a new one
 
   // Adds an arc to the graph. u is capacity, c is cost.
   // u is only needed on flows, and c only on min-cost-flow
-  // Returns an identifier to the edge.
+  // delete u or c in signature if necessary
   int arc(int i, int j, int u = 0, double c = 0) {
-    int ar = nar;
-    cost.pb(c);
-    cap.pb(u);
+    adj.resize(max(max(i+1, j+1), sz(adj)));
     dest.pb(j);
-    adj[i].pb(nar++);
-
-    cost.pb(-c);
-    cap.pb(0);
+    adj[i].pb(sz(dest)-1);
     dest.pb(i);
-    adj[j].pb(nar++);
-    return ar;
+    adj[j].pb(sz(dest)-1);
+
+    // For both flows
+    cap.pb(u);
+    cap.pb(0);
+    // Only for min cost flow
+    cost.pb(c);
+    cost.pb(-c);
+    imb.resize(sz(adj));
+
+    return sz(dest)-2;
   }
 
+  vi cap, imb;
+  vector<double> cost;
+  /*
   //////////////////////////////////////////////////////////////////////////////
   // For both flows!!
   //
@@ -318,4 +317,5 @@ struct graph {
     fu(i, nvar) if (comp[tru(i)] == comp[fals(i)]) return false;
     return true;
   }
+  */
 };
