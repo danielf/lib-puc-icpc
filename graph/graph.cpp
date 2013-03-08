@@ -4,64 +4,61 @@ struct graph {
   // Shared part. Also known as: You will need this!
   //
 
-  vi dest;
-  vvi adj;
-  int nvt, nar;
+  vi dest;  // use sz(dest) as nar
+  vvi adj;  // use sz(adj) as nvt
 
   int inv(int a) { return a ^ 0x1; }
 
-
-  // Initializes the graph
-  void init(int n) {
-    nvt = n;
-    nar = 0;
-    adj = vvi(n);
-    imb = vi(n); // Only for min-cost-flow
-    dest.clear(); cap.clear(); flow.clear(); cost.clear();
-  }
+  // no need to init graph, vertices are added on the fly
+  // if need to clear graph, just build a new one
 
   // Adds an arc to the graph. u is capacity, c is cost.
   // u is only needed on flows, and c only on min-cost-flow
-  // Returns an identifier to the edge.
+  // delete u or c in signature if necessary
   int arc(int i, int j, int u = 0, double c = 0) {
-    int ar = nar;
-    cost.pb(c);
-    cap.pb(u);
+    adj.resize(max(max(i+1, j+1), sz(adj)));
     dest.pb(j);
-    adj[i].pb(nar++);
-
-    cost.pb(-c);
-    cap.pb(0);
+    adj[i].pb(sz(dest)-1);
     dest.pb(i);
-    adj[j].pb(nar++);
-    return ar;
+    adj[j].pb(sz(dest)-1);
+
+    // For both flows
+    cap.pb(u);
+    cap.pb(0);
+    // Only for min cost flow
+    cost.pb(c);
+    cost.pb(-c);
+    imb.resize(sz(adj));
+
+    return sz(dest)-2;
   }
 
   //////////////////////////////////////////////////////////////////////////////
   // For both flows!!
   //
 
-  vi cap, flow, ent;
+  vi cap, flow;
+  int _ini, _end;   // ini, end of last maxflow or mincostflow run
 
   int orig(int a) { return dest[inv(a)]; }
   int capres(int a) { return cap[a] - flow[a]; }
 
   //////////////////////////////////////////////////////////////////////////////
-  // Max Flow!
-  //
+  // Max Flow! - Dinic O(n^2 * m)
+  // RI: flow is always feasible
 
   vi d, curAdj;
 
   bool MFbfs(int s, int t) {
-    d = vi(nvt, INF);
-    curAdj = vi(nvt);
+    d = vi(sz(adj), INF);
+    curAdj = vi(sz(adj), 0);
     d[s] = 0;
     queue<int> Q; Q.push(s);
     while (!Q.empty()) {
       int u = Q.front(); Q.pop();
       forall(i, adj[u]) {
         int v = dest[*i];
-        if (cap[*i] > 0 && d[v] == INF) {
+        if (capres(*i) > 0 && d[v] == INF) {
           d[v] = d[u] + 1; Q.push(v);
         }
       }
@@ -73,11 +70,9 @@ struct graph {
     if (u == t) return f;
     for(int &i = curAdj[u]; i < adj[u].size(); ++i) {
       int ar = adj[u][i], v = dest[ar];
-      if (d[v] != d[u]+1 || cap[ar] == 0) continue;
-      int tmpF = MFdfs(v, t, min(f, cap[ar]));
+      if (d[v] != d[u]+1 || capres(ar) == 0) continue;
+      int tmpF = MFdfs(v, t, min(f, capres(ar)));
       if (tmpF) {
-        cap[ar] -= tmpF;
-        cap[inv(ar)] += tmpF;
         flow[ar] += tmpF;
         flow[inv(ar)] -= tmpF;
         return tmpF;
@@ -86,25 +81,33 @@ struct graph {
     return 0;
   }
 
+  // don't call maxflow with ini == end
   int maxflow(int ini, int end) {
-    int maxFlow = 0;
-    flow = vi(nar, 0);
-    while (MFbfs(ini, end)) {
-      int flow = 0;
-      while ((flow=MFdfs(ini, end, INF))) maxFlow += flow;
+    if (_ini != ini || _end != end) {
+      flow = vi(sz(dest), 0);
+      _ini = ini;
+      _end = end;
     }
+    while (MFbfs(ini, end))
+      while (MFdfs(ini, end, INF));
+    int maxFlow = 0;
+    forall(a, adj[ini]) maxFlow += flow[*a];
     return maxFlow;
   }
 
+
   //////////////////////////////////////////////////////////////////////////////
-  // Min Cost Flow! - O(m^2 * log n * log U)
+  // Min Cost Flow! - Capacity Scaling O(m^2 * log n * log U)
   //
   // Don't forget to specify the imb
 
-  vi imb, mark;
+  vector<double> cost;
+  vi imb;
+  // UPDATED UNTIL HERE
+  /*
+  vi imb, mark, ent;
   int delta;
   vector<double> pot, dist;
-  vector<double> cost;
 
   double rescost(int a) {
     return cost[a] - pot[orig(a)] + pot[dest[a]];
@@ -227,8 +230,8 @@ struct graph {
   }
 
   void partponte() {
-    artp.resize(nvt, false);
-    bridge.resize(nar, false);
+    artp = vi(nvt, false);
+    bridge = vi(nar, false);
     depth = vi(nvt, -1);
     least = vi(nvt, -1);
     nartp = nbridge = 0;
@@ -318,4 +321,5 @@ struct graph {
     fu(i, nvar) if (comp[tru(i)] == comp[fals(i)]) return false;
     return true;
   }
+  */
 };
