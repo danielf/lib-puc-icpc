@@ -33,34 +33,32 @@ struct graph {
     return sz(dest)-2;
   }
 
-  vi cap, imb;
-  vector<double> cost;
-  /*
   //////////////////////////////////////////////////////////////////////////////
   // For both flows!!
   //
 
-  vi cap, flow, ent;
+  vi cap, flow;
+  int _ini, _end;   // ini, end of last maxflow or mincostflow run
 
   int orig(int a) { return dest[inv(a)]; }
   int capres(int a) { return cap[a] - flow[a]; }
 
   //////////////////////////////////////////////////////////////////////////////
-  // Max Flow!
-  //
+  // Max Flow! - Dinic O(n^2 * m)
+  // RI: flow is always feasible
 
   vi d, curAdj;
 
   bool MFbfs(int s, int t) {
-    d = vi(nvt, INF);
-    curAdj = vi(nvt);
+    d = vi(sz(adj), INF);
+    curAdj = vi(sz(adj));
     d[s] = 0;
     queue<int> Q; Q.push(s);
     while (!Q.empty()) {
       int u = Q.front(); Q.pop();
       forall(i, adj[u]) {
         int v = dest[*i];
-        if (cap[*i] > 0 && d[v] == INF) {
+        if (capres(*i) > 0 && d[v] == INF) {
           d[v] = d[u] + 1; Q.push(v);
         }
       }
@@ -72,11 +70,9 @@ struct graph {
     if (u == t) return f;
     for(int &i = curAdj[u]; i < adj[u].size(); ++i) {
       int ar = adj[u][i], v = dest[ar];
-      if (d[v] != d[u]+1 || cap[ar] == 0) continue;
-      int tmpF = MFdfs(v, t, min(f, cap[ar]));
+      if (d[v] != d[u]+1 || capres(ar) == 0) continue;
+      int tmpF = MFdfs(v, t, min(f, capres(ar)));
       if (tmpF) {
-        cap[ar] -= tmpF;
-        cap[inv(ar)] += tmpF;
         flow[ar] += tmpF;
         flow[inv(ar)] -= tmpF;
         return tmpF;
@@ -85,16 +81,24 @@ struct graph {
     return 0;
   }
 
+  // don't call maxflow with ini == end
   int maxflow(int ini, int end) {
-    int maxFlow = 0;
-    flow = vi(nar, 0);
-    while (MFbfs(ini, end)) {
-      int flow = 0;
-      while ((flow=MFdfs(ini, end, INF))) maxFlow += flow;
+    if (_ini != ini || _end != end) {
+      flow = vi(sz(dest));
+      _ini = ini;
+      _end = end;
     }
+    while (MFbfs(ini, end))
+      while (MFdfs(ini, end, INF));
+    int maxFlow = 0;
+    forall(a, adj[ini]) maxFlow += flow[*a];
     return maxFlow;
   }
 
+
+  vi imb;
+  vector<double> cost;
+/*
   //////////////////////////////////////////////////////////////////////////////
   // Min Cost Flow! - O(m^2 * log n * log U)
   //
