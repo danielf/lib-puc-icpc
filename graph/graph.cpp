@@ -38,6 +38,7 @@ struct graph {
   //
 
   vi cap, flow;
+  int _ini, _end;   // ini, end of last maxflow or mincostflow run
 
   int orig(int a) { return dest[inv(a)]; }
   int capres(int a) { return cap[a] - flow[a]; }
@@ -82,12 +83,15 @@ struct graph {
 
   // don't call maxflow with ini == end
   int maxflow(int ini, int end) {
-    int maxFlow = 0;
-    flow = vi(sz(dest), 0);
-    while (MFbfs(ini, end)) {
-      int flow = 0;
-      while ((flow=MFdfs(ini, end, INF))) maxFlow += flow;
+    if (_ini != ini || _end != end) {
+      flow = vi(sz(dest));
+      _ini = ini;
+      _end = end;
     }
+    while (MFbfs(ini, end))
+      while (MFdfs(ini, end, INF));
+    int maxFlow = 0;
+    forall(a, adj[ini]) maxFlow += flow[*a];
     return maxFlow;
   }
 
