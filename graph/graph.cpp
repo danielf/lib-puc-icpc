@@ -4,64 +4,61 @@ struct graph {
   // Shared part. Also known as: You will need this!
   //
 
-  vi dest;
-  vvi adj;
-  int nvt, nar;
+  vi dest;  // use sz(dest) as nar
+  vvi adj;  // use sz(adj) as sz(adj)
 
   int inv(int a) { return a ^ 0x1; }
 
-
-  // Initializes the graph
-  void init(int n) {
-    nvt = n;
-    nar = 0;
-    adj = vvi(n);
-    imb = vi(n); // Only for min-cost-flow
-    dest.clear(); cap.clear(); flow.clear(); cost.clear();
+  graph(int n = 0) {
+    adj.resize(n);
+    imb.resize(n);
   }
 
   // Adds an arc to the graph. u is capacity, c is cost.
   // u is only needed on flows, and c only on min-cost-flow
-  // Returns an identifier to the edge.
   int arc(int i, int j, int u = 0, double c = 0) {
-    int ar = nar;
-    cost.pb(c);
-    cap.pb(u);
     dest.pb(j);
-    adj[i].pb(nar++);
-
-    cost.pb(-c);
-    cap.pb(0);
+    adj[i].pb(sz(dest)-1);
     dest.pb(i);
-    adj[j].pb(nar++);
-    return ar;
+    adj[j].pb(sz(dest)-1);
+
+    // For both flows
+    cap.pb(u);
+    cap.pb(0);
+    // Only for min cost flow
+    cost.pb(c);
+    cost.pb(-c);
+
+    return sz(dest)-2;
   }
 
   //////////////////////////////////////////////////////////////////////////////
   // For both flows!!
   //
 
-  vi cap, flow, ent;
+  vi cap, flow;
+  int _ini, _end;   // ini, end of last maxflow
 
   int orig(int a) { return dest[inv(a)]; }
   int capres(int a) { return cap[a] - flow[a]; }
 
   //////////////////////////////////////////////////////////////////////////////
-  // Max Flow!
+  // Max Flow! - Dinic O(n^2 * m) incremental
+  // don't call maxflow with ini == end
   //
 
   vi d, curAdj;
 
   bool MFbfs(int s, int t) {
-    d = vi(nvt, INF);
-    curAdj = vi(nvt);
+    d = vi(sz(adj), INF);
+    curAdj = vi(sz(adj));
     d[s] = 0;
     queue<int> Q; Q.push(s);
     while (!Q.empty()) {
       int u = Q.front(); Q.pop();
       forall(i, adj[u]) {
         int v = dest[*i];
-        if (cap[*i] > 0 && d[v] == INF) {
+        if (capres(*i) > 0 && d[v] == INF) {
           d[v] = d[u] + 1; Q.push(v);
         }
       }
@@ -73,11 +70,9 @@ struct graph {
     if (u == t) return f;
     for(int &i = curAdj[u]; i < adj[u].size(); ++i) {
       int ar = adj[u][i], v = dest[ar];
-      if (d[v] != d[u]+1 || cap[ar] == 0) continue;
-      int tmpF = MFdfs(v, t, min(f, cap[ar]));
+      if (d[v] != d[u]+1 || capres(ar) == 0) continue;
+      int tmpF = MFdfs(v, t, min(f, capres(ar)));
       if (tmpF) {
-        cap[ar] -= tmpF;
-        cap[inv(ar)] += tmpF;
         flow[ar] += tmpF;
         flow[inv(ar)] -= tmpF;
         return tmpF;
@@ -87,106 +82,78 @@ struct graph {
   }
 
   int maxflow(int ini, int end) {
-    int maxFlow = 0;
-    flow = vi(nar, 0);
-    while (MFbfs(ini, end)) {
-      int flow = 0;
-      while ((flow=MFdfs(ini, end, INF))) maxFlow += flow;
+    if (_ini != ini || _end != end) {
+      flow = vi(sz(dest));
+      _ini = ini;
+      _end = end;
     }
-    return maxFlow;
+    while (MFbfs(ini, end))
+      while (MFdfs(ini, end, INF));
+    int F = 0;
+    forall(a, adj[ini]) F += flow[*a];
+    return F;
   }
+
 
   //////////////////////////////////////////////////////////////////////////////
-  // Min Cost Flow! - O(m^2 * log n * log U)
+  // Min Cost Flow! - O(m^2 * log n * log U) incremental
+  // Don't forget to specify the [imb]
+  // look at [imb] for feasibility
   //
-  // Don't forget to specify the imb
 
-  vi imb, mark;
+  vi imb;
+  vd cost, pot;
   int delta;
-  vector<double> pot, dist;
-  vector<double> cost;
 
   double rescost(int a) {
-    return cost[a] - pot[orig(a)] + pot[dest[a]];
+    return cost[a] + pot[orig(a)] - pot[dest[a]];
   }
 
-  void dijkstra(int ini) {
-    int i, j, k, a;
-    double d;
+  bool dijkstra() {
+    priority_queue<pair<double, pair<int, int> > > q;
+    vi ent(sz(adj), -2);
+    vd dist(sz(adj), inf);
+    fu(u, sz(adj)) if (imb[u] >= delta)
+      q.push(make_pair(0.0, make_pair(u, -1)));
 
-    priority_queue<pair<double, int> > heap;
-    ent = vi(nvt, -1);
-    mark = vi(nvt);
-    dist = vector<double>(nvt, INFINITY);
-    heap.push(make_pair(dist[ini] = 0.0, ini));
-
-    while (!heap.empty()) {
-      i = heap.top().second; heap.pop();
-      if (mark[i]) continue; mark[i] = 1;
-      forall(k, adj[i]) {
-        a = *k; j = dest[a]; d = dist[i] + rescost(a);
-        if (capres(a) >= delta && cmp(d, dist[j]) < 0) {
-          heap.push(make_pair( -(dist[j] = d), j));
-          ent[j] = a;
-        }
-      }
+    while (!q.empty()) {
+      int u = q.top().second.first, f = q.top().second.second;
+      double d = -q.top().first; q.pop();
+      if (ent[u] != -2) continue; dist[u] = d; ent[u] = f;
+      forall(a, adj[u]) if (capres(*a) >= delta)
+        q.push(make_pair(-(dist[u] + rescost(*a)), make_pair(dest[*a], *a)));
     }
-  }
 
+    fu(u, sz(adj)) if (ent[u] != -2 && imb[u] <= -delta) {
+      fu(v, sz(adj)) pot[v] += dist[v];
+      for (int a = ent[u]; a != -1; a = ent[orig(a)]) {
+        flow[a] += delta;
+        flow[inv(a)] -= delta;
+        imb[dest[a]] += delta;
+        imb[orig(a)] -= delta;
+      }
+      return true;
+    }
+    return false;
+  }
 
   double mincostflow() {
-    int k, l, U = 0;
-    double C = 0.;
-
-    pot = vector<double>(nvt);
-
-    fu(a, nar) {
-      if (cmp(cost[a]) > 0) C += cost[a];
-      U = max(cap[a], U);
-    }
-    fu(i, nvt) U = max(imb[i], max(-imb[i], U));
-    for (delta = 0x40000000; delta > U; delta /= 2);
-
-    imb.resize(nvt + 1);
-    adj.resize(nvt + 1);
-    imb[nvt] = 0 ; U *= 2 * nvt; C *= 2; adj[nvt].clear();
-    fu(i, nvt) {
-      arc(i, nvt, U, C);
-      arc(nvt, i, U, C);
-    }
-
-    flow.clear();
-    fu(i, nar) flow.pb(0);
-    nvt++;
-
-    while (delta >= 1) {
-      fu(a, nar) {
-        int i = orig(a), j = dest[a];
-        if (delta <= capres(a) && capres(a) < 2 * delta &&
-            cmp(rescost(a)) < 0) {
+    pot.resize(sz(adj));
+    flow.resize(sz(dest));
+    for (delta = 0x40000000; delta > 0; delta /= 2) {
+      fu(a, sz(dest)) {
+        int u = orig(a), v = dest[a];
+        if (capres(a) >= delta && cmp(rescost(a)) < 0) {
+          imb[u] -= capres(a);
+          imb[v] += capres(a);
           flow[inv(a)] -= capres(a);
-          imb[i] -= capres(a); imb[j] += capres(a);
-          flow[a] = cap[a];
+          flow[a] += capres(a);
         }
       }
-
-      while (true) {
-        for (k = 0 ; k < nvt && imb[k] < delta; k++);
-        for (l = nvt - 1 ; l >= 0 && imb[l] > -delta; l--);
-        if (k == nvt || l < 0) break;
-
-        dijkstra(k);
-        fu(i, nvt) pot[i] -= dist[i];
-        for (int a = ent[l]; a != -1; a = ent[orig(a)])  {
-          flow[a] += delta; flow[inv(a)] -= delta;
-        }
-        imb[k] -= delta; imb[l] += delta;
-      }
-      delta /= 2;
+      while (dijkstra());
     }
-
-    C = 0.;
-    fu(a, nar) if (flow[a] > 0) C += flow[a] * cost[a];
+    double C = 0.0;
+    fu(a, sz(dest)) if (flow[a] > 0) C += flow[a] * cost[a];
     return C;
   }
 
@@ -203,119 +170,74 @@ struct graph {
 
   vector<bool> artp, bridge;
   vi least;
-  int nartp, nbridge;
 
-  int dfs_artpbridge(int node, int ent) {
-    int i, ar, neigh, nf = 0;
+  int dfs_artpbridge(int u, int ent) {
+    int nf = 0;
+    forall(a, adj[u]) {
+      int v = dest[*a];
+      if (depth[v] == -1) {
+        least[v] = depth[v] = depth[u] + 1;
+        dfs_artpbridge(v, *a); nf++;
 
-    forall(i, adj[node]) {
-      ar = *i; neigh = dest[ar];
-
-      if (depth[neigh] == -1) {
-        least[neigh] = depth[neigh] = depth[node] + 1;
-        dfs_artpbridge(neigh, ar); nf++;
-
-        if (least[neigh] >= depth[node]) {
-          artp[node] = true;
-          if (least[neigh] == depth[neigh]) bridge[ar] = bridge[inv(ar)] = 1;
-        }
-        else least[node] = min(least[node], least[neigh]);
+        if (least[v] >= depth[u]) {
+          artp[u] = true;
+          if (least[v] == depth[v]) bridge[*a] = bridge[inv(*a)] = true;
+        } else least[u] = min(least[u], least[v]);
       }
-      else if (inv(ar) != ent) least[node] = min(least[node], depth[neigh]);
+      else if (inv(*a) != ent) least[u] = min(least[u], depth[v]);
     }
     return nf;
   }
 
   void partponte() {
-    artp.resize(nvt, false);
-    bridge.resize(nar, false);
-    depth = vi(nvt, -1);
-    least = vi(nvt, -1);
-    nartp = nbridge = 0;
-
-    fu(i, nvt) if (depth[i] == -1) {
+    artp = vector<bool>(sz(adj), false);
+    bridge = vector<bool>(sz(dest), false);
+    depth = vi(sz(adj), -1);
+    least = vi(sz(adj), -1);
+    fu(i, sz(adj)) if (depth[i] == -1) {
         least[i] = depth[i] = 0;
         if (dfs_artpbridge(i, -1) < 2) artp[i] = false;
     }
-    nartp = count(all(artp), true);
-    nbridge = count(all(bridge), true)/2;
   }
 
   //////////////////////////////////////////////////////////////////////////////
   // Strongly Connected Components - O(n+m)
+  // see [rep] for results
   //
 
-  vi ord, comp, repcomp;
-  int nord, ncomp;
+  vi ord, rep;
 
   int transp(int a) { return (a & 0x1); }
 
-  void dfs_topsort(int node) {
-    forall(i, adj[node]) {
-      int ar = *i, neigh = dest[ar];
-      if (!transp(ar) && depth[neigh] == -1) {
-        depth[neigh] = depth[node] + 1; dfs_topsort(neigh);
+  void dfs_topsort(int u) {
+    forall(a, adj[u]) {
+      int v = dest[*a];
+      if (!transp(*a) && depth[v] == -1) {
+        depth[v] = depth[u] + 1;
+        dfs_topsort(v);
       }
     }
-    ord[--nord] = node;
+    ord.pb(u);
   }
 
-  void topsort() {
-    depth = vi(nvt, -1);
-    ord = vi(nvt);
-    nord = nvt;
-    fu(i, nvt) if (depth[i] == -1) {
-        depth[i] = 0; dfs_topsort(i);
+  void dfs_compfortcon(int u, int ent) {
+    rep[u] = ent;
+    forall(a, adj[u]) {
+      int v = dest[*a];
+      if (transp(*a) && rep[v] == -1) dfs_compfortcon(v, ent);
     }
   }
 
-  void dfs_compfortcon(int node) {
-    comp[node] = ncomp;
-    forall(i, adj[node]) {
-      int ar = *i, neigh = dest[ar];
-      if (transp(ar) && comp[neigh] == -1) dfs_compfortcon(neigh);
+  void compfortcon() {
+    depth = vi(sz(adj), -1);
+    ord.clear();
+    fu(u, sz(adj)) if (depth[u] == -1) {
+        depth[u] = 0;
+        dfs_topsort(u);
     }
-  }
 
-  int compfortcon() {
-    comp = vi(nvt, -1);
-    repcomp = vi(nvt);
-    ncomp = 0;
-    topsort();
-
-    fu(i, nvt) if (comp[ord[i]] == -1) {
-      repcomp[ncomp] = ord[i];
-      dfs_compfortcon(ord[i]);
-      ncomp++;
-    }
-    return ncomp;
-  }
-
-  //////////////////////////////////////////////////////////////////////////////
-  // 2-Sat - O(n+m)
-  // Needs strongly connected components!
-  // Graph needs to be initialized with n = 2*number of vars
-  //
-
-  int tru(int v) { return 2 * v + 1; }
-  int fals(int v) { return 2 * v; }
-
-  void clause(int x, bool valx, int y, bool valy) {
-    int lhsA, rhsA, lhsB, rhsB;
-
-    if (valx) { lhsA = fals(x); rhsB = tru(x); }
-    else { lhsA = tru(x); rhsB = fals(x); }
-
-    if (valy) { lhsB = fals(y); rhsA = tru(y); }
-    else { lhsB = tru(y); rhsA = fals(y); }
-
-    arc(lhsA, rhsA);
-    arc(lhsB, rhsB);
-  }
-
-  bool twosat(int nvar) {
-    compfortcon();
-    fu(i, nvar) if (comp[tru(i)] == comp[fals(i)]) return false;
-    return true;
+    rep = vi(sz(adj), -1);
+    for (int i = sz(adj)-1; i >= 0; i--) if (rep[ord[i]] == -1)
+      dfs_compfortcon(ord[i], ord[i]);
   }
 };
