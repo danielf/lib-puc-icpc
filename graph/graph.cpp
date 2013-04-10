@@ -5,7 +5,7 @@ struct graph {
   //
 
   vi dest;  // use sz(dest) as nar
-  vvi adj;  // use sz(adj) as nvt
+  vvi adj;  // use sz(adj) as sz(adj)
 
   int inv(int a) { return a ^ 0x1; }
 
@@ -16,7 +16,6 @@ struct graph {
 
   // Adds an arc to the graph. u is capacity, c is cost.
   // u is only needed on flows, and c only on min-cost-flow
-  // delete u or c in signature if necessary
   int arc(int i, int j, int u = 0, double c = 0) {
     dest.pb(j);
     adj[i].pb(sz(dest)-1);
@@ -38,7 +37,7 @@ struct graph {
   //
 
   vi cap, flow;
-  int _ini, _end;   // ini, end of last maxflow or mincostflow run
+  int _ini, _end;   // ini, end of last maxflow
 
   int orig(int a) { return dest[inv(a)]; }
   int capres(int a) { return cap[a] - flow[a]; }
@@ -81,6 +80,7 @@ struct graph {
     return 0;
   }
 
+  // incremental
   // don't call maxflow with ini == end
   int maxflow(int ini, int end) {
     if (_ini != ini || _end != end) {
@@ -123,6 +123,7 @@ struct graph {
       forall(a, adj[u]) if (capres(*a) >= delta)
         q.push(make_pair(-(dist[u] + rescost(*a)), make_pair(dest[*a], *a)));
     }
+
     fu(u, sz(adj)) if (ent[u] != -2 && imb[u] <= -delta) {
       fu(v, sz(adj)) pot[v] += dist[v];
       for (int a = ent[u]; a != -1; a = ent[orig(a)]) {
@@ -136,6 +137,8 @@ struct graph {
     return false;
   }
 
+  // incremental
+  // look at [imb] for feasibility
   double mincostflow() {
     pot.resize(sz(adj));
     flow.resize(sz(dest));
@@ -157,7 +160,6 @@ struct graph {
   }
 
 
-  /*
   //////////////////////////////////////////////////////////////////////////////
   // Both Bridges/Articulation points and to Strongly Connected Components
   //
@@ -170,42 +172,35 @@ struct graph {
 
   vector<bool> artp, bridge;
   vi least;
-  int nartp, nbridge;
 
-  int dfs_artpbridge(int node, int ent) {
-    int i, ar, neigh, nf = 0;
+  int dfs_artpbridge(int u, int ent) {
+    int nf = 0;
+    forall(a, adj[u]) {
+      int v = dest[*a];
+      if (depth[v] == -1) {
+        least[v] = depth[v] = depth[u] + 1;
+        dfs_artpbridge(v, *a); nf++;
 
-    forall(i, adj[node]) {
-      ar = *i; neigh = dest[ar];
-
-      if (depth[neigh] == -1) {
-        least[neigh] = depth[neigh] = depth[node] + 1;
-        dfs_artpbridge(neigh, ar); nf++;
-
-        if (least[neigh] >= depth[node]) {
-          artp[node] = true;
-          if (least[neigh] == depth[neigh]) bridge[ar] = bridge[inv(ar)] = 1;
-        }
-        else least[node] = min(least[node], least[neigh]);
+        if (least[v] >= depth[u]) {
+          artp[u] = true;
+          if (least[v] == depth[v]) bridge[*a] = bridge[inv(*a)] = true;
+        } else least[u] = min(least[u], least[v]);
       }
-      else if (inv(ar) != ent) least[node] = min(least[node], depth[neigh]);
+      else if (inv(*a) != ent) least[u] = min(least[u], depth[v]);
     }
     return nf;
   }
 
+  // will clear old info and do a new computation
   void partponte() {
-    artp.resize(nvt, false);
-    bridge.resize(nar, false);
-    depth = vi(nvt, -1);
-    least = vi(nvt, -1);
-    nartp = nbridge = 0;
-
-    fu(i, nvt) if (depth[i] == -1) {
+    artp = vector<bool>(sz(adj), false);
+    bridge = vector<bool>(sz(dest), false);
+    depth = vi(sz(adj), -1);
+    least = vi(sz(adj), -1);
+    fu(i, sz(adj)) if (depth[i] == -1) {
         least[i] = depth[i] = 0;
         if (dfs_artpbridge(i, -1) < 2) artp[i] = false;
     }
-    nartp = count(all(artp), true);
-    nbridge = count(all(bridge), true)/2;
   }
 
   //////////////////////////////////////////////////////////////////////////////
@@ -228,10 +223,10 @@ struct graph {
   }
 
   void topsort() {
-    depth = vi(nvt, -1);
-    ord = vi(nvt);
-    nord = nvt;
-    fu(i, nvt) if (depth[i] == -1) {
+    depth = vi(sz(adj), -1);
+    ord = vi(sz(adj));
+    nord = sz(adj);
+    fu(i, sz(adj)) if (depth[i] == -1) {
         depth[i] = 0; dfs_topsort(i);
     }
   }
@@ -245,12 +240,12 @@ struct graph {
   }
 
   int compfortcon() {
-    comp = vi(nvt, -1);
-    repcomp = vi(nvt);
+    comp = vi(sz(adj), -1);
+    repcomp = vi(sz(adj));
     ncomp = 0;
     topsort();
 
-    fu(i, nvt) if (comp[ord[i]] == -1) {
+    fu(i, sz(adj)) if (comp[ord[i]] == -1) {
       repcomp[ncomp] = ord[i];
       dfs_compfortcon(ord[i]);
       ncomp++;
@@ -285,5 +280,4 @@ struct graph {
     fu(i, nvar) if (comp[tru(i)] == comp[fals(i)]) return false;
     return true;
   }
-  */
 };
