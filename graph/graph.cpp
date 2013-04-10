@@ -10,6 +10,7 @@ struct graph {
   int inv(int a) { return a ^ 0x1; }
 
   void init(int n) {
+    *this = graph();
     adj.resize(n);
     imb.resize(n);
   }

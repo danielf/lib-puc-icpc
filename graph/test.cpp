@@ -1,8 +1,10 @@
 #include "../header.cpp"
 #include "graph.cpp"
+#define TRACE(x...) x
 
 int main() {
   graph g;
+  g.init(3);
   g.arc(0, 2, 12);
   g.arc(0, 1, 30);
   g.arc(1, 2, 10);
