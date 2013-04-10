@@ -240,25 +240,4 @@ struct graph {
     for (int i = sz(adj)-1; i >= 0; i--) if (rep[ord[i]] == -1)
       dfs_compfortcon(ord[i], ord[i]);
   }
-
-  //////////////////////////////////////////////////////////////////////////////
-  // 2-Sat - O(n+m)
-  // Needs strongly connected components!
-  // Graph needs to be initialized with n = 2*number of vars
-  // ex: g.clause(g.fals(1), g.tru(2))
-  //
-
-  int tru(int i) { return 2 * i + 1; }
-  int fals(int i) { return 2 * i; }
-
-  void clause(int u, int v) {
-    arc(u^0x1, v);
-    arc(v^0x1, u);
-  }
-
-  bool twosat() {
-    compfortcon();
-    fu(i, sz(adj)/2) if (rep[tru(i)] == rep[fals(i)]) return false;
-    return true;
-  }
 };
