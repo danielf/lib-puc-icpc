@@ -5,7 +5,7 @@ struct graph {
   //
 
   vi dest;  // use sz(dest) as nar
-  vvi adj;  // use sz(adj) as nvt
+  vvi adj;  // use sz(adj) as sz(adj)
 
   int inv(int a) { return a ^ 0x1; }
 
@@ -16,7 +16,6 @@ struct graph {
 
   // Adds an arc to the graph. u is capacity, c is cost.
   // u is only needed on flows, and c only on min-cost-flow
-  // delete u or c in signature if necessary
   int arc(int i, int j, int u = 0, double c = 0) {
     dest.pb(j);
     adj[i].pb(sz(dest)-1);
@@ -38,14 +37,15 @@ struct graph {
   //
 
   vi cap, flow;
-  int _ini, _end;   // ini, end of last maxflow or mincostflow run
+  int _ini, _end;   // ini, end of last maxflow
 
   int orig(int a) { return dest[inv(a)]; }
   int capres(int a) { return cap[a] - flow[a]; }
 
   //////////////////////////////////////////////////////////////////////////////
-  // Max Flow! - Dinic O(n^2 * m)
-  // RI: flow is always feasible
+  // Max Flow! - Dinic O(n^2 * m) incremental
+  // don't call maxflow with ini == end
+  //
 
   vi d, curAdj;
 
@@ -81,7 +81,6 @@ struct graph {
     return 0;
   }
 
-  // don't call maxflow with ini == end
   int maxflow(int ini, int end) {
     if (_ini != ini || _end != end) {
       flow = vi(sz(dest));
@@ -97,9 +96,10 @@ struct graph {
 
 
   //////////////////////////////////////////////////////////////////////////////
-  // Min Cost Flow! - O(m^2 * log n * log U)
+  // Min Cost Flow! - O(m^2 * log n * log U) incremental
+  // Don't forget to specify the [imb]
+  // look at [imb] for feasibility
   //
-  // Don't forget to specify the imb
 
   vi imb;
   vd cost, pot;
@@ -123,6 +123,7 @@ struct graph {
       forall(a, adj[u]) if (capres(*a) >= delta)
         q.push(make_pair(-(dist[u] + rescost(*a)), make_pair(dest[*a], *a)));
     }
+
     fu(u, sz(adj)) if (ent[u] != -2 && imb[u] <= -delta) {
       fu(v, sz(adj)) pot[v] += dist[v];
       for (int a = ent[u]; a != -1; a = ent[orig(a)]) {
@@ -157,7 +158,6 @@ struct graph {
   }
 
 
-  /*
   //////////////////////////////////////////////////////////////////////////////
   // Both Bridges/Articulation points and to Strongly Connected Components
   //
@@ -170,120 +170,74 @@ struct graph {
 
   vector<bool> artp, bridge;
   vi least;
-  int nartp, nbridge;
 
-  int dfs_artpbridge(int node, int ent) {
-    int i, ar, neigh, nf = 0;
+  int dfs_artpbridge(int u, int ent) {
+    int nf = 0;
+    forall(a, adj[u]) {
+      int v = dest[*a];
+      if (depth[v] == -1) {
+        least[v] = depth[v] = depth[u] + 1;
+        dfs_artpbridge(v, *a); nf++;
 
-    forall(i, adj[node]) {
-      ar = *i; neigh = dest[ar];
-
-      if (depth[neigh] == -1) {
-        least[neigh] = depth[neigh] = depth[node] + 1;
-        dfs_artpbridge(neigh, ar); nf++;
-
-        if (least[neigh] >= depth[node]) {
-          artp[node] = true;
-          if (least[neigh] == depth[neigh]) bridge[ar] = bridge[inv(ar)] = 1;
-        }
-        else least[node] = min(least[node], least[neigh]);
+        if (least[v] >= depth[u]) {
+          artp[u] = true;
+          if (least[v] == depth[v]) bridge[*a] = bridge[inv(*a)] = true;
+        } else least[u] = min(least[u], least[v]);
       }
-      else if (inv(ar) != ent) least[node] = min(least[node], depth[neigh]);
+      else if (inv(*a) != ent) least[u] = min(least[u], depth[v]);
     }
     return nf;
   }
 
   void partponte() {
-    artp.resize(nvt, false);
-    bridge.resize(nar, false);
-    depth = vi(nvt, -1);
-    least = vi(nvt, -1);
-    nartp = nbridge = 0;
-
-    fu(i, nvt) if (depth[i] == -1) {
+    artp = vector<bool>(sz(adj), false);
+    bridge = vector<bool>(sz(dest), false);
+    depth = vi(sz(adj), -1);
+    least = vi(sz(adj), -1);
+    fu(i, sz(adj)) if (depth[i] == -1) {
         least[i] = depth[i] = 0;
         if (dfs_artpbridge(i, -1) < 2) artp[i] = false;
     }
-    nartp = count(all(artp), true);
-    nbridge = count(all(bridge), true)/2;
   }
 
   //////////////////////////////////////////////////////////////////////////////
   // Strongly Connected Components - O(n+m)
+  // see [rep] for results
   //
 
-  vi ord, comp, repcomp;
-  int nord, ncomp;
+  vi ord, rep;
 
   int transp(int a) { return (a & 0x1); }
 
-  void dfs_topsort(int node) {
-    forall(i, adj[node]) {
-      int ar = *i, neigh = dest[ar];
-      if (!transp(ar) && depth[neigh] == -1) {
-        depth[neigh] = depth[node] + 1; dfs_topsort(neigh);
+  void dfs_topsort(int u) {
+    forall(a, adj[u]) {
+      int v = dest[*a];
+      if (!transp(*a) && depth[v] == -1) {
+        depth[v] = depth[u] + 1;
+        dfs_topsort(v);
       }
     }
-    ord[--nord] = node;
+    ord.pb(u);
   }
 
-  void topsort() {
-    depth = vi(nvt, -1);
-    ord = vi(nvt);
-    nord = nvt;
-    fu(i, nvt) if (depth[i] == -1) {
-        depth[i] = 0; dfs_topsort(i);
+  void dfs_compfortcon(int u, int ent) {
+    rep[u] = ent;
+    forall(a, adj[u]) {
+      int v = dest[*a];
+      if (transp(*a) && rep[v] == -1) dfs_compfortcon(v, ent);
     }
   }
 
-  void dfs_compfortcon(int node) {
-    comp[node] = ncomp;
-    forall(i, adj[node]) {
-      int ar = *i, neigh = dest[ar];
-      if (transp(ar) && comp[neigh] == -1) dfs_compfortcon(neigh);
+  void compfortcon() {
+    depth = vi(sz(adj), -1);
+    ord.clear();
+    fu(u, sz(adj)) if (depth[u] == -1) {
+        depth[u] = 0;
+        dfs_topsort(u);
     }
+
+    rep = vi(sz(adj), -1);
+    for (int i = sz(adj)-1; i >= 0; i--) if (rep[ord[i]] == -1)
+      dfs_compfortcon(ord[i], ord[i]);
   }
-
-  int compfortcon() {
-    comp = vi(nvt, -1);
-    repcomp = vi(nvt);
-    ncomp = 0;
-    topsort();
-
-    fu(i, nvt) if (comp[ord[i]] == -1) {
-      repcomp[ncomp] = ord[i];
-      dfs_compfortcon(ord[i]);
-      ncomp++;
-    }
-    return ncomp;
-  }
-
-  //////////////////////////////////////////////////////////////////////////////
-  // 2-Sat - O(n+m)
-  // Needs strongly connected components!
-  // Graph needs to be initialized with n = 2*number of vars
-  //
-
-  int tru(int v) { return 2 * v + 1; }
-  int fals(int v) { return 2 * v; }
-
-  void clause(int x, bool valx, int y, bool valy) {
-    int lhsA, rhsA, lhsB, rhsB;
-
-    if (valx) { lhsA = fals(x); rhsB = tru(x); }
-    else { lhsA = tru(x); rhsB = fals(x); }
-
-    if (valy) { lhsB = fals(y); rhsA = tru(y); }
-    else { lhsB = tru(y); rhsA = fals(y); }
-
-    arc(lhsA, rhsA);
-    arc(lhsB, rhsB);
-  }
-
-  bool twosat(int nvar) {
-    compfortcon();
-    fu(i, nvar) if (comp[tru(i)] == comp[fals(i)]) return false;
-    return true;
-  }
-  */
 };
