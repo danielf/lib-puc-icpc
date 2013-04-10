@@ -9,7 +9,7 @@ struct graph {
 
   int inv(int a) { return a ^ 0x1; }
 
-  graph(int n) {
+  graph(int n = 0) {
     adj.resize(n);
     imb.resize(n);
   }
