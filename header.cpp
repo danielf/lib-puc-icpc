@@ -13,8 +13,9 @@
 using namespace std;
 typedef vector<int> vi;
 typedef vector<vi> vvi;
+typedef vector<double> vd;
 
-#define TRACE(x...)
+#define TRACE(x...) x
 #define PRINT(x...) TRACE(printf(x))
 #define WATCH(x) TRACE(cout << #x << " = " << x << endl)
 
@@ -33,6 +34,7 @@ typedef vector<vi> vvi;
 
 const int INF = 0x3F3F3F3F; const int NEGINF = 0xC0C0C0C0;
 const int NULO = -1; const double EPS = 1e-10;
+const double inf = 1e9;
 
 inline int cmp(double x, double y = 0, double tol = EPS) {
   return (x <= y + tol) ? (x + tol < y) ? -1 : 0 : 1;
