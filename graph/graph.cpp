@@ -110,8 +110,6 @@ struct graph {
   }
 
   bool dijkstra() {
-    PRINT("imb:"); fu(i, sz(adj)) PRINT(" %d", imb[i]); PRINT("\n");
-    PRINT("pot:"); fu(i, sz(adj)) PRINT(" %.2f", pot[i]); PRINT("\n");
     priority_queue<pair<double, pair<int, int> > > q;
     vi ent(sz(adj));
     vd dist(sz(adj), inf);
@@ -127,15 +125,12 @@ struct graph {
     }
     fu(u, sz(adj)) if (cmp(dist[u], inf) != 0 && imb[u] <= -delta) {
       fu(v, sz(adj)) pot[v] += dist[v];
-      PRINT("push:");
       for (int a = ent[u]; a != -1; a = ent[orig(a)]) {
-        PRINT(" (%d,%d)", orig(a), dest[a]);
         flow[a] += delta;
         flow[inv(a)] -= delta;
         imb[dest[a]] += delta;
         imb[orig(a)] -= delta;
       }
-      PRINT("\n");
       return true;
     }
     return false;
@@ -145,11 +140,9 @@ struct graph {
     pot.resize(sz(adj));
     flow.resize(sz(dest));
     for (delta = 0x40000000; delta > 0; delta /= 2) {
-      PRINT("\nPhase delta = %d\n", delta);
       fu(a, sz(dest)) {
         int u = orig(a), v = dest[a];
         if (capres(a) >= delta && cmp(rescost(a)) < 0) {
-          PRINT("Saturated f(%d, %d) = %d\n", u, v, cap[a]);
           imb[u] -= capres(a);
           imb[v] += capres(a);
           flow[inv(a)] -= capres(a);
