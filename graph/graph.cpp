@@ -241,33 +241,24 @@ struct graph {
       dfs_compfortcon(ord[i], ord[i]);
   }
 
-  /*
   //////////////////////////////////////////////////////////////////////////////
   // 2-Sat - O(n+m)
   // Needs strongly connected components!
   // Graph needs to be initialized with n = 2*number of vars
+  // ex: g.clause(g.fals(1), g.tru(2))
   //
 
-  int tru(int v) { return 2 * v + 1; }
-  int fals(int v) { return 2 * v; }
+  int tru(int i) { return 2 * i + 1; }
+  int fals(int i) { return 2 * i; }
 
-  void clause(int x, bool valx, int y, bool valy) {
-    int lhsA, rhsA, lhsB, rhsB;
-
-    if (valx) { lhsA = fals(x); rhsB = tru(x); }
-    else { lhsA = tru(x); rhsB = fals(x); }
-
-    if (valy) { lhsB = fals(y); rhsA = tru(y); }
-    else { lhsB = tru(y); rhsA = fals(y); }
-
-    arc(lhsA, rhsA);
-    arc(lhsB, rhsB);
+  void clause(int u, int v) {
+    arc(u^0x1, v);
+    arc(v^0x1, u);
   }
 
-  bool twosat(int nvar) {
+  bool twosat() {
     compfortcon();
-    fu(i, nvar) if (comp[tru(i)] == comp[fals(i)]) return false;
+    fu(i, sz(adj)/2) if (rep[tru(i)] == rep[fals(i)]) return false;
     return true;
   }
-  */
 };

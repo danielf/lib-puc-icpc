@@ -43,6 +43,13 @@ void test_scc() {
     printf("node %d with rep %d\n", u, g.rep[u]);
 }
 
+void test_2sat() {
+  graph g(4);
+  g.clause(g.fals(0), g.fals(0));
+  g.clause(g.tru(0), g.tru(0));
+  WATCH(g.twosat());
+}
+
 int main() {
-  test_scc();
+  test_2sat();
 }
