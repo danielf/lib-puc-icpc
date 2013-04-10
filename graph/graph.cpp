@@ -9,14 +9,15 @@ struct graph {
 
   int inv(int a) { return a ^ 0x1; }
 
-  // no need to init graph, vertices are added on the fly
-  // if need to clear graph, just build a new one
+  void init(int n) {
+    adj.resize(n);
+    imb.resize(n);
+  }
 
   // Adds an arc to the graph. u is capacity, c is cost.
   // u is only needed on flows, and c only on min-cost-flow
   // delete u or c in signature if necessary
   int arc(int i, int j, int u = 0, double c = 0) {
-    adj.resize(max(max(i+1, j+1), sz(adj)));
     dest.pb(j);
     adj[i].pb(sz(dest)-1);
     dest.pb(i);
@@ -28,7 +29,6 @@ struct graph {
     // Only for min cost flow
     cost.pb(c);
     cost.pb(-c);
-    imb.resize(sz(adj));
 
     return sz(dest)-2;
   }
