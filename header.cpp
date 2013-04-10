@@ -13,6 +13,7 @@
 using namespace std;
 typedef vector<int> vi;
 typedef vector<vi> vvi;
+typedef vector<double> vd;
 
 #define TRACE(x...)
 #define PRINT(x...) TRACE(printf(x))
