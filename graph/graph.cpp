@@ -90,110 +90,81 @@ struct graph {
     }
     while (MFbfs(ini, end))
       while (MFdfs(ini, end, INF));
-    int maxFlow = 0;
-    forall(a, adj[ini]) maxFlow += flow[*a];
-    return maxFlow;
+    int F = 0;
+    forall(a, adj[ini]) F += flow[*a];
+    return F;
   }
 
 
-  vi imb;
-  vector<double> cost;
-/*
   //////////////////////////////////////////////////////////////////////////////
   // Min Cost Flow! - O(m^2 * log n * log U)
   //
   // Don't forget to specify the imb
 
-  vi imb, mark;
+  vi imb;
+  vd cost, pot;
   int delta;
-  vector<double> pot, dist;
-  vector<double> cost;
 
   double rescost(int a) {
-    return cost[a] - pot[orig(a)] + pot[dest[a]];
+    return cost[a] + pot[orig(a)] - pot[dest[a]];
   }
 
-  void dijkstra(int ini) {
-    int i, j, k, a;
-    double d;
+  bool dijkstra() {
+    PRINT("imb:"); fu(i, sz(adj)) PRINT(" %d", imb[i]); PRINT("\n");
+    PRINT("pot:"); fu(i, sz(adj)) PRINT(" %.2f", pot[i]); PRINT("\n");
+    priority_queue<pair<double, pair<int, int> > > q;
+    vi ent(sz(adj));
+    vd dist(sz(adj), inf);
+    fu(u, sz(adj)) if (imb[u] >= delta)
+      q.push(make_pair(0.0, make_pair(u, -1)));
 
-    priority_queue<pair<double, int> > heap;
-    ent = vi(nvt, -1);
-    mark = vi(nvt);
-    dist = vector<double>(nvt, INFINITY);
-    heap.push(make_pair(dist[ini] = 0.0, ini));
-
-    while (!heap.empty()) {
-      i = heap.top().second; heap.pop();
-      if (mark[i]) continue; mark[i] = 1;
-      forall(k, adj[i]) {
-        a = *k; j = dest[a]; d = dist[i] + rescost(a);
-        if (capres(a) >= delta && cmp(d, dist[j]) < 0) {
-          heap.push(make_pair( -(dist[j] = d), j));
-          ent[j] = a;
-        }
-      }
+    while (!q.empty()) {
+      int u = q.top().second.first, f = q.top().second.second;
+      double d = -q.top().first; q.pop();
+      if (cmp(dist[u], inf) != 0) continue; dist[u] = d; ent[u] = f;
+      forall(a, adj[u]) if (capres(*a) >= delta)
+        q.push(make_pair(-(dist[u] + rescost(*a)), make_pair(dest[*a], *a)));
     }
+    fu(u, sz(adj)) if (cmp(dist[u], inf) != 0 && imb[u] <= -delta) {
+      fu(v, sz(adj)) pot[v] += dist[v];
+      PRINT("push:");
+      for (int a = ent[u]; a != -1; a = ent[orig(a)]) {
+        PRINT(" (%d,%d)", orig(a), dest[a]);
+        flow[a] += delta;
+        flow[inv(a)] -= delta;
+        imb[dest[a]] += delta;
+        imb[orig(a)] -= delta;
+      }
+      PRINT("\n");
+      return true;
+    }
+    return false;
   }
-
 
   double mincostflow() {
-    int k, l, U = 0;
-    double C = 0.;
-
-    pot = vector<double>(nvt);
-
-    fu(a, nar) {
-      if (cmp(cost[a]) > 0) C += cost[a];
-      U = max(cap[a], U);
-    }
-    fu(i, nvt) U = max(imb[i], max(-imb[i], U));
-    for (delta = 0x40000000; delta > U; delta /= 2);
-
-    imb.resize(nvt + 1);
-    adj.resize(nvt + 1);
-    imb[nvt] = 0 ; U *= 2 * nvt; C *= 2; adj[nvt].clear();
-    fu(i, nvt) {
-      arc(i, nvt, U, C);
-      arc(nvt, i, U, C);
-    }
-
-    flow.clear();
-    fu(i, nar) flow.pb(0);
-    nvt++;
-
-    while (delta >= 1) {
-      fu(a, nar) {
-        int i = orig(a), j = dest[a];
-        if (delta <= capres(a) && capres(a) < 2 * delta &&
-            cmp(rescost(a)) < 0) {
+    pot.resize(sz(adj));
+    flow.resize(sz(dest));
+    for (delta = 0x40000000; delta > 0; delta /= 2) {
+      PRINT("\nPhase delta = %d\n", delta);
+      fu(a, sz(dest)) {
+        int u = orig(a), v = dest[a];
+        if (capres(a) >= delta && cmp(rescost(a)) < 0) {
+          PRINT("Saturated f(%d, %d) = %d\n", u, v, cap[a]);
+          imb[u] -= capres(a);
+          imb[v] += capres(a);
           flow[inv(a)] -= capres(a);
-          imb[i] -= capres(a); imb[j] += capres(a);
-          flow[a] = cap[a];
+          flow[a] += capres(a);
         }
       }
-
-      while (true) {
-        for (k = 0 ; k < nvt && imb[k] < delta; k++);
-        for (l = nvt - 1 ; l >= 0 && imb[l] > -delta; l--);
-        if (k == nvt || l < 0) break;
-
-        dijkstra(k);
-        fu(i, nvt) pot[i] -= dist[i];
-        for (int a = ent[l]; a != -1; a = ent[orig(a)])  {
-          flow[a] += delta; flow[inv(a)] -= delta;
-        }
-        imb[k] -= delta; imb[l] += delta;
-      }
-      delta /= 2;
+      while (dijkstra());
     }
-
-    C = 0.;
-    fu(a, nar) if (flow[a] > 0) C += flow[a] * cost[a];
+    double C = 0.0;
+    fu(a, sz(dest)) if (flow[a] > 0) C += flow[a] * cost[a];
     return C;
   }
 
 
+  /*
   //////////////////////////////////////////////////////////////////////////////
   // Both Bridges/Articulation points and to Strongly Connected Components
   //
