@@ -111,7 +111,7 @@ struct graph {
 
   bool dijkstra() {
     priority_queue<pair<double, pair<int, int> > > q;
-    vi ent(sz(adj));
+    vi ent(sz(adj), -2);
     vd dist(sz(adj), inf);
     fu(u, sz(adj)) if (imb[u] >= delta)
       q.push(make_pair(0.0, make_pair(u, -1)));
@@ -119,11 +119,11 @@ struct graph {
     while (!q.empty()) {
       int u = q.top().second.first, f = q.top().second.second;
       double d = -q.top().first; q.pop();
-      if (cmp(dist[u], inf) != 0) continue; dist[u] = d; ent[u] = f;
+      if (ent[u] != -2) continue; dist[u] = d; ent[u] = f;
       forall(a, adj[u]) if (capres(*a) >= delta)
         q.push(make_pair(-(dist[u] + rescost(*a)), make_pair(dest[*a], *a)));
     }
-    fu(u, sz(adj)) if (cmp(dist[u], inf) != 0 && imb[u] <= -delta) {
+    fu(u, sz(adj)) if (ent[u] != -2 && imb[u] <= -delta) {
       fu(v, sz(adj)) pot[v] += dist[v];
       for (int a = ent[u]; a != -1; a = ent[orig(a)]) {
         flow[a] += delta;
