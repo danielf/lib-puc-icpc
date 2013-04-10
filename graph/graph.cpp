@@ -43,8 +43,9 @@ struct graph {
   int capres(int a) { return cap[a] - flow[a]; }
 
   //////////////////////////////////////////////////////////////////////////////
-  // Max Flow! - Dinic O(n^2 * m)
-  // RI: flow is always feasible
+  // Max Flow! - Dinic O(n^2 * m) incremental
+  // don't call maxflow with ini == end
+  //
 
   vi d, curAdj;
 
@@ -80,8 +81,6 @@ struct graph {
     return 0;
   }
 
-  // incremental
-  // don't call maxflow with ini == end
   int maxflow(int ini, int end) {
     if (_ini != ini || _end != end) {
       flow = vi(sz(dest));
@@ -97,9 +96,10 @@ struct graph {
 
 
   //////////////////////////////////////////////////////////////////////////////
-  // Min Cost Flow! - O(m^2 * log n * log U)
+  // Min Cost Flow! - O(m^2 * log n * log U) incremental
+  // Don't forget to specify the [imb]
+  // look at [imb] for feasibility
   //
-  // Don't forget to specify the imb
 
   vi imb;
   vd cost, pot;
@@ -137,8 +137,6 @@ struct graph {
     return false;
   }
 
-  // incremental
-  // look at [imb] for feasibility
   double mincostflow() {
     pot.resize(sz(adj));
     flow.resize(sz(dest));
@@ -191,7 +189,6 @@ struct graph {
     return nf;
   }
 
-  // will clear old info and do a new computation
   void partponte() {
     artp = vector<bool>(sz(adj), false);
     bridge = vector<bool>(sz(dest), false);
@@ -205,54 +202,46 @@ struct graph {
 
   //////////////////////////////////////////////////////////////////////////////
   // Strongly Connected Components - O(n+m)
+  // see [rep] for results
   //
 
-  vi ord, comp, repcomp;
-  int nord, ncomp;
+  vi ord, rep;
 
   int transp(int a) { return (a & 0x1); }
 
-  void dfs_topsort(int node) {
-    forall(i, adj[node]) {
-      int ar = *i, neigh = dest[ar];
-      if (!transp(ar) && depth[neigh] == -1) {
-        depth[neigh] = depth[node] + 1; dfs_topsort(neigh);
+  void dfs_topsort(int u) {
+    forall(a, adj[u]) {
+      int v = dest[*a];
+      if (!transp(*a) && depth[v] == -1) {
+        depth[v] = depth[u] + 1;
+        dfs_topsort(v);
       }
     }
-    ord[--nord] = node;
+    ord.pb(u);
   }
 
-  void topsort() {
+  void dfs_compfortcon(int u, int ent) {
+    rep[u] = ent;
+    forall(a, adj[u]) {
+      int v = dest[*a];
+      if (transp(*a) && rep[v] == -1) dfs_compfortcon(v, ent);
+    }
+  }
+
+  void compfortcon() {
     depth = vi(sz(adj), -1);
-    ord = vi(sz(adj));
-    nord = sz(adj);
-    fu(i, sz(adj)) if (depth[i] == -1) {
-        depth[i] = 0; dfs_topsort(i);
+    ord.clear();
+    fu(u, sz(adj)) if (depth[u] == -1) {
+        depth[u] = 0;
+        dfs_topsort(u);
     }
+
+    rep = vi(sz(adj), -1);
+    for (int i = sz(adj)-1; i >= 0; i--) if (rep[ord[i]] == -1)
+      dfs_compfortcon(ord[i], ord[i]);
   }
 
-  void dfs_compfortcon(int node) {
-    comp[node] = ncomp;
-    forall(i, adj[node]) {
-      int ar = *i, neigh = dest[ar];
-      if (transp(ar) && comp[neigh] == -1) dfs_compfortcon(neigh);
-    }
-  }
-
-  int compfortcon() {
-    comp = vi(sz(adj), -1);
-    repcomp = vi(sz(adj));
-    ncomp = 0;
-    topsort();
-
-    fu(i, sz(adj)) if (comp[ord[i]] == -1) {
-      repcomp[ncomp] = ord[i];
-      dfs_compfortcon(ord[i]);
-      ncomp++;
-    }
-    return ncomp;
-  }
-
+  /*
   //////////////////////////////////////////////////////////////////////////////
   // 2-Sat - O(n+m)
   // Needs strongly connected components!
@@ -280,4 +269,5 @@ struct graph {
     fu(i, nvar) if (comp[tru(i)] == comp[fals(i)]) return false;
     return true;
   }
+  */
 };

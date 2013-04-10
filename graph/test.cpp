@@ -31,6 +31,18 @@ void test_artpbridge() {
     printf("arc (%d, %d) bridge: %s\n", g.orig(a), g.dest[a], g.bridge[a]?"yes":"no");
 }
 
+void test_scc() {
+  graph g(4);
+  g.arc(0, 3);
+  g.arc(3, 0);
+  g.arc(1, 2);
+  g.arc(2, 1);
+  g.arc(1, 0);
+  g.compfortcon();
+  fu(u, sz(g.rep))
+    printf("node %d with rep %d\n", u, g.rep[u]);
+}
+
 int main() {
-  test_artpbridge();
+  test_scc();
 }
