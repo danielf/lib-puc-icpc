@@ -1,15 +1,60 @@
+#include <stdio.h>
+#include <math.h>
+#include <assert.h>
+#include <string.h>
+#include <stdlib.h>
+#include <vector>
+#include <string>
+#include <queue>
+#include <algorithm>
+#include <iostream>
+#include <utility>
+using namespace std;
+
+#define TRACE(x...) x
+#define WATCH(x) TRACE(cout << #x << " = " << x << endl)
+#define PRINT(x...) TRACE(printf(x))
+
+#define all(v) (v).begin(), (v).end()
+#define rall(v) (v).rbegin(), (v).rend()
+
+#define _for(i, a, b) for (__typeof__(a) i = (a); i != (b); ++i)
+#define foreach(x...) _for(x)
+#define forall(i, v) foreach(i, all(v))
+#define FU(i, a, b) for(typeof(a) i = (a); i < (b); ++i)
+#define fu(i, n) FU(i, 0, n)
+
+#define mset(c, v) memset(c, v, sizeof(c))
+#define mod(a, b) ((((a)%(b))+(b))%(b))
+#define pb push_back
+#define sz(c) int((c).size())
+const int INF = 0x3F3F3F3F; const int NEGINF = 0xC0C0C0C0;
+const int NULO = -1; const double EPS = 1e-8;
+
+typedef vector<int> vi;
+typedef vector<double> vd;
+typedef vector<vi> vvi;
+
+int cmp(double x, double y = 0, double tol = EPS) {
+	return (x <= y + tol) ? (x + tol < y) ? -1 : 0 : 1;
+}
 struct graph {
+
   //////////////////////////////////////////////////////////////////////////////
   // Shared part. Also known as: You will need this!
   //
+
   vi dest;  // use sz(dest) as nar
   vvi adj;  // use sz(adj) as nvt
+
   int inv(int a) { return a ^ 0x1; }
+
   graph(int n = 0) {
-    _ini = _end = -1; // only for flows
+		_ini = _end = -1; // only for flows
     adj.resize(n);
     imb.resize(n);
   }
+
   // Adds an arc to the graph. u is capacity, c is cost.
   // u is only needed on flows, and c only on min-cost-flow
   int arc(int i, int j, int u = 0, double c = 0) {
@@ -17,12 +62,17 @@ struct graph {
     adj[i].pb(sz(dest)-1);
     dest.pb(i);
     adj[j].pb(sz(dest)-1);
-    cap.pb(u); // For both flows
+
+    // For both flows
+    cap.pb(u);
     cap.pb(0);
-    cost.pb(c); // Only for min cost flow
+    // Only for min cost flow
+    cost.pb(c);
     cost.pb(-c);
+
     return sz(dest)-2;
   }
+
   //////////////////////////////////////////////////////////////////////////////
   // For both flows!!
   //
@@ -235,30 +285,48 @@ struct graph {
   //////////////////////////////////////////////////////////////////////////////
   // Bipartite Matching
   // see [match] for results
-  // match[i] = matching of "i", -1 if unmatched
-  // left hand side = [0, k-1], and right hand side = [k, N-1]
-  
-  vi match;
-  int dfs_match(int node, int m) {
-    if (match[node] == m) return 0;
-    match[node] = m;
-    forall (it, adj[node]) {
-      int j = dest[*it];
-      if (match[j] == -1 || dfs_match(match[j], m)) {
-        match[j] = node;
-        return 1;
-      }
-    }
-    return 0;
-  }
+	// match[i] = matching of "i", -1 if unmatched
+	// left hand side = [0, k-1], and right hand side = [k, N-1]
+	
+	vi match;
+	int dfs_match(int node, int m) {
+		if (match[node] == m) return 0;
+		match[node] = m;
+		forall (it, adj[node]) {
+			int j = dest[*it];
+			if (match[j] == -1 || dfs_match(match[j], m)) {
+				match[j] = node;
+				return 1;
+			}
+		}
+		return 0;
+	}
 
-  int bipartite_match(int k) {
-    int N = sz(adj);
-    match = vi(N, -1); // during dfs, match for LHS acts as mark
-    int ans = 0;
-    fu(i, k) ans += dfs_match(i, i);
-		fu(i, k) match[i] = -1; // fix match for LHS
-    FU(i, k, N) if (match[i] != -1) match[match[i]] = i;
-    return ans;
-  }
+	int bipartite_match(int k) {
+		int N = sz(adj);
+		match = vi(N, -1); // during dfs, match for LHS acts as mark
+		int ans = 0;
+		fu(i, k) ans += dfs_match(i, i);
+		FU(i, k, N) if (match[i] != -1) match[match[i]] = i;
+		return ans;
+	}
 };
+
+int main() {
+	int n, m;
+	double s,v;
+	while (scanf("%d %d %lf %lf", &n, &m, &s, &v) != EOF) {
+		graph G(n+m);
+		vector<pair<double, double> > pos;
+		fu(i, n+m) {
+			double x,y;
+			scanf("%lf %lf", &x, &y);
+			pos.pb(make_pair(x,y));
+		}
+		fu(i, n) fu(j, m)
+			if (cmp(hypot(pos[i].second - pos[n+j].second, pos[i].first - pos[n+j].first), s*v) <= 0)
+				G.arc(i, n+j);
+		printf("%d\n", n - G.bipartite_match(n));
+	}
+	return 0;
+}

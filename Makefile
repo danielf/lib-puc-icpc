@@ -3,23 +3,20 @@
 clean:
 	rm -f modelo.cpp library.txt library.txt.tmp library.pdf
 
-modelo.cpp: header.cpp main.cpp
-	rm -f $@
-	touch $@
-	cat header.cpp >> $@
-	echo >> $@
-	cat main.cpp >> $@
+#template.cpp: header.cpp main.cpp
+#	rm -f $@
+#	touch $@
+#	cat header.cpp >> $@
+#	echo >> $@
+#	cat main.cpp >> $@
 
 library.txt: \
 		index.txt \
 		compila \
-		modelo.cpp \
+		template.cpp \
 		vimrc.txt \
 		hash.sh \
 		modelo.java \
-		roteiro/recomendacoes.txt \
-		roteiro/roteiro.txt \
-		roteiro/mandamentos.txt \
 		sizes.txt \
 		primes/primes.txt \
 		util/util.cpp \
@@ -41,66 +38,45 @@ library.txt: \
 		scheduling-notes.txt
 	rm -f $@ $@.tmp
 	touch $@.tmp
-	./make-header.py --no-line-break "Índice" >> $@.tmp
+	./make-header.py --no-line-break "Summary" >> $@.tmp
 	cat index.txt >> $@.tmp
-	./make-header.py "Script de compilação C++" >> $@.tmp
+	./make-header.py "C++ Compilation script" >> $@.tmp
 	cat compila >> $@.tmp
-	./make-header.py "Modelo Java" >> $@.tmp
+	./make-header.py "Java template" >> $@.tmp
 	cat modelo.java >> $@.tmp
-	./make-header.py --page-break "Modelo C++" >> $@.tmp
-	cat modelo.cpp >> $@.tmp
-	./make-header.py ".vimrc" >> $@.tmp
-	cat vimrc.txt >> $@.tmp
-	./make-header.py "hash.sh" >> $@.tmp
-	cat hash.sh >> $@.tmp
+	./make-header.py --page-break "C++ template" >> $@.tmp
+	cat template.cpp >> $@.tmp
 	
-	./make-header.py --page-break "Recomendações gerais" >> $@.tmp
-	cat roteiro/recomendacoes.txt >> $@.tmp
-	./make-header.py "Roteiro de prova" >> $@.tmp
-	cat roteiro/roteiro.txt >> $@.tmp
-	./make-header.py "Os 1010 Mandamentos" >> $@.tmp
-	cat roteiro/mandamentos.txt >> $@.tmp
-	echo '' >> $@.tmp
-	
+	./make-header.py --page-break "Some numbers to know" >> $@.tmp
 	cat sizes.txt >> $@.tmp
 	
-	./make-header.py --page-break "Primos até 10.000" >> $@.tmp
+	./make-header.py --page-break "Primes up to 10000" >> $@.tmp
 	cat primes/primes.txt >> $@.tmp
 	
-	./make-header.py --page-break "Utilidades do lar" >> $@.tmp
-	cat util/util.cpp >> $@.tmp
-	
-	./make-header.py "Geometria" >> $@.tmp
+	./make-header.py --page-break "Geometry" >> $@.tmp
 	cat geometry/geometry.cpp >> $@.tmp
 	
-	./make-header.py --page-break "Inteiros de precisão arbitrária" >> $@.tmp
-	cat bigint/bigint.cpp >> $@.tmp
-	
-	./make-header.py --page-break "Teoria dos números" >> $@.tmp
+	./make-header.py --page-break "Number Theory" >> $@.tmp
 	cat number_theory/number_theory.cpp >> $@.tmp
-	
-	./make-header.py --page-break "Álgebra Linear" >> $@.tmp
-	cat linear_algebra/linear_algebra.cpp >> $@.tmp
-	
-	./make-header.py --page-break "Simplex" >> $@.tmp
-	cat simplex/simplex.cpp >> $@.tmp
 	
 	./make-header.py --page-break "Poker" >> $@.tmp
 	cat poker/poker.cpp >> $@.tmp
 	
-	./make-header.py --page-break "Grafos" >> $@.tmp
+	./make-header.py --page-break "Graphs" >> $@.tmp
 	cat graph/graph.cpp >> $@.tmp
+	./make-header.py "Kruskal" >> $@.tmp
+	cat kruskal/kruskal.cpp >> $@.tmp
 	
 	./make-header.py --page-break "Aho-Corasick" >> $@.tmp
 	cat aho-corasick/aho-corasick.cpp >> $@.tmp
 	
-	./make-header.py --page-break "Árvore de Segmentos" >> $@.tmp
+	./make-header.py --page-break "Segment Tree" >> $@.tmp
 	cat segment_tree/segment_tree.cpp >> $@.tmp
 	
-	./make-header.py --page-break "Polinômios  (Nota: não é muito estável!)" >> $@.tmp
+	./make-header.py --page-break "Polynomials (not very stable!)" >> $@.tmp
 	cat polynomial/polynomial.cpp >> $@.tmp
 	
-	./make-header.py --page-break "Karatsuba (mult. polinomios)" >> $@.tmp
+	./make-header.py --page-break "Karatsuba (integer polynomials multiplication)" >> $@.tmp
 	cat karatsuba.cpp >> $@.tmp
 	
 	./make-header.py --page-break "RMQ (Range Minimum Query)" >> $@.tmp
@@ -109,14 +85,11 @@ library.txt: \
 	./make-header.py --page-break "BIT (Binary Index Tree)" >> $@.tmp
 	cat bit.cpp >> $@.tmp
 	
-	./make-header.py --page-break "Teorema do Resto Chinês (TRC)" >> $@.tmp
+	./make-header.py --page-break "Chinese Remainder Theorem" >> $@.tmp
 	cat resto_chines/trc.cpp >> $@.tmp
 	
-	./make-header.py --page-break "Rabin-Karp (String Matching aleatorizado)" >> $@.tmp
+	./make-header.py --page-break "Rabin-Karp (randomized String Matching)" >> $@.tmp
 	cat rabin-karp/rabin-karp.cpp >> $@.tmp
-	
-	./make-header.py --page-break "Notas sobre problemas clássicos de Scheduling" >> $@.tmp
-	cat scheduling-notes.txt >> $@.tmp
 	
 	echo '' >> $@.tmp
 	

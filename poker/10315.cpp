@@ -1,3 +1,43 @@
+#include <stdio.h>
+#include <math.h>
+#include <assert.h>
+#include <string.h>
+#include <stdlib.h>
+#include <vector>
+#include <string>
+#include <queue>
+#include <algorithm>
+#include <iostream>
+#include <utility>
+using namespace std;
+
+#define TRACE(x...) x
+#define WATCH(x) TRACE(cout << #x << " = " << x << endl)
+#define PRINT(x...) TRACE(printf(x))
+
+#define all(v) (v).begin(), (v).end()
+#define rall(v) (v).rbegin(), (v).rend()
+
+#define _for(i, a, b) for (__typeof__(a) i = (a); i != (b); ++i)
+#define foreach(x...) _for(x)
+#define forall(i, v) foreach(i, all(v))
+#define FU(i, a, b) for(typeof(a) i = (a); i < (b); ++i)
+#define fu(i, n) FU(i, 0, n)
+
+#define mset(c, v) memset(c, v, sizeof(c))
+#define mod(a, b) ((((a)%(b))+(b))%(b))
+#define pb push_back
+#define sz(c) int((c).size())
+const int INF = 0x3F3F3F3F; const int NEGINF = 0xC0C0C0C0;
+const int NULO = -1; const double EPS = 1e-8;
+
+typedef vector<int> vi;
+typedef vector<double> vd;
+typedef vector<vi> vvi;
+
+int cmp(double x, double y = 0, double tol = EPS) {
+	return (x <= y + tol) ? (x + tol < y) ? -1 : 0 : 1;
+}
 const char* rank_names = "**23456789TJQKA";
 const char* suit_names = "CDHS";
 struct card {
@@ -54,3 +94,15 @@ struct hand {
 		return false;
 	}
 };
+
+int main() {
+	hand black, white;
+	while (black.C[0].read()) {
+		fu(i, 4) black.C[i+1].read();
+		fu(i, 5) white.C[i].read();
+		if (white < black) printf("Black wins.\n");
+		else if (black < white) printf("White wins.\n");
+		else printf("Tie.\n");
+	}
+	return 0;
+}

@@ -1,19 +1,56 @@
+#include <stdio.h>
+#include <math.h>
+#include <assert.h>
+#include <string.h>
+#include <stdlib.h>
+#include <vector>
+#include <string>
+#include <queue>
+#include <algorithm>
+#include <iostream>
+#include <utility>
+using namespace std;
+
+#define TRACE(x...) x
+#define WATCH(x) TRACE(cout << #x << " = " << x << endl)
+#define PRINT(x...) TRACE(printf(x))
+
+#define all(v) (v).begin(), (v).end()
+#define rall(v) (v).rbegin(), (v).rend()
+
+#define _for(i, a, b) for (__typeof__(a) i = (a); i != (b); ++i)
+#define foreach(x...) _for(x)
+#define forall(i, v) foreach(i, all(v))
+#define FU(i, a, b) for(typeof(a) i = (a); i < (b); ++i)
+#define fu(i, n) FU(i, 0, n)
+
+#define mset(c, v) memset(c, v, sizeof(c))
+#define mod(a, b) ((((a)%(b))+(b))%(b))
+#define pb push_back
+#define sz(c) int((c).size())
+const int INF = 0x3F3F3F3F; const int NEGINF = 0xC0C0C0C0;
+const int NULO = -1; const double EPS = 1e-8;
+
+typedef vector<int> vi;
+typedef vector<double> vd;
+typedef vector<vi> vvi;
+
+int cmp(double x, double y = 0, double tol = EPS) {
+	return (x <= y + tol) ? (x + tol < y) ? -1 : 0 : 1;
+}
 #include <vector>
 
 struct point { 
 	double x, y;
 	point(double x = 0, double y = 0): x(x), y(y) {}
 
-	// Only type in the operators you actually need
 	point operator +(point q) const { return point(x + q.x, y + q.y); }
 	point operator -(point q) const { return point(x - q.x, y - q.y); }
 	point operator *(double t) const { return point(x * t, y * t); }
 	point operator /(double t) const { return point(x / t, y / t); }
-	// dot product
 	double operator *(point q) const { return x * q.x + y * q.y; }
-	// "cross" product (actually "signed area of the quadrilateral"
 	double operator %(point q) const { return x * q.y - y * q.x; }
-	// uses "cmp" from the template
+
 	int cmp(point q) const {
 		if (int t = ::cmp(x, q.x)) return t;
 		return ::cmp(y, q.y);
@@ -226,3 +263,31 @@ polygon poly_intersect(polygon& P, polygon& Q) {
 	return R;
 }
 
+int main() {
+	point P, Q, R;
+	while (scanf("%lf %lf %lf %lf %lf %lf", &P.x, &P.y, &Q.x, &Q.y, &R.x, &R.y) != EOF) {
+		point ans = circumcenter(P, Q, R);
+		double r = abs(ans - P);
+		// first line:
+		printf("(x ");
+		if (ans.x >= 0.0) printf("- ");
+		else printf("+ ");
+		printf("%.3f)^2 + (y ", fabs(ans.x));
+		if (ans.y >= 0.0) printf("- ");
+		else printf("+ ");
+		printf("%.3f)^2 = %.3f^2\n", fabs(ans.y), r);
+		// second line:
+		printf("x^2 + y^2 ");
+		if (ans.x >= 0.0) printf("- ");
+		else printf("+ ");
+		printf("%.3fx ", 2.*fabs(ans.x));
+		if (ans.y >= 0.0) printf("- ");
+		else printf("+ ");
+		printf("%.3fy ", 2*fabs(ans.y));
+		double last = ans*ans - r*r;
+		if (last >= 0) printf("+ ");
+		else printf("- ");
+		printf("%.3f = 0\n\n", fabs(last));
+	}
+	return 0;
+}

@@ -1,34 +1,47 @@
+#include <ctype.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <math.h>
-#include <inttypes.h>
-#include <ctype.h>
-
 #include <algorithm>
-#include <utility>
 #include <iostream>
-
+#include <map>
+#include <queue>
+#include <string>
+#include <utility>
+#include <vector>
 using namespace std;
+typedef vector<int> vi;
+typedef vector<vi> vvi;
+typedef vector<double> vd;
 
-#define TRACE(x...)
+#define TRACE(x...) x
 #define PRINT(x...) TRACE(printf(x))
-#define WATCH(x) TRACE(cout << #x" = " << x << "\n")
+#define WATCH(x) TRACE(cout << #x << " = " << x << endl)
 
-#define _inline(f...) f() __attribute__((always_inline)); f
-#define _foreach(it, b, e) for (typeof(b) it = (b); it != (e); it++)
-#define foreach(x...) _foreach(x)
 #define all(v) (v).begin(), (v).end()
 #define rall(v) (v).rbegin(), (v).rend()
 
-const double EPS = 1e-10;
+#define _FOR(it, b, e) for (typeof(b) it = (b); it != (e); ++it)
+#define foreach(x...) _FOR(x)
+#define fu(i, a) foreach(i, 0, a)
+#define forall(i, v) foreach(i, all(v))
 
-_inline(int cmp)(double x, double y = 0, double tol = EPS) {
-	return (x <= y + tol) ? (x + tol < y) ? -1 : 0 : 1;
+#define MSET(c, v) memset(c, v, sizeof(c)
+
+#define pb push_back
+#define sz(c) int((c).size())
+
+const int INF = 0x3F3F3F3F; const int NEGINF = 0xC0C0C0C0;
+const int NULO = -1; const double EPS = 1e-10;
+const double inf = 1e9;
+
+inline int cmp(double x, double y = 0, double tol = EPS) {
+  return (x <= y + tol) ? (x + tol < y) ? -1 : 0 : 1;
 }
 #include <vector>
 
-struct point {
+struct point { 
 	double x, y;
 	point(double x = 0, double y = 0): x(x), y(y) {}
 
@@ -51,36 +64,29 @@ struct point {
 		return o << "(" << p.x << ", " << p.y << ")";
 	}
 	
-	static point pivot;
+	static point pivot; // only needed for convex hull
 };
 
-point point::pivot;
+point point::pivot; // only needed for convex hull
 
 double abs(point p) { return hypot(p.x, p.y); }
 double arg(point p) { return atan2(p.y, p.x); }
 
 typedef vector<point> polygon;
 
-ostream& operator <<(ostream& o, polygon T) {
-	o << "polygon[";
-	for (unsigned i = 0; i < T.size(); i++) {
-		if (i) o << ", ";
-		o << T[i];
-	}
-	return o << "]";
-}
-
-_inline(int ccw)(point p, point q, point r) {
+// decides type of turn pqr. 1 if left, -1 if right, 0 if straight
+inline int ccw(point p, point q, point r) {
 	return cmp((p - r) % (q - r));
 }
 
-_inline(double angle)(point p, point q, point r) {
+// angle of turn pqr
+inline double angle(point p, point q, point r) {
 	point u = p - q, v = r - q;
 	return atan2(u % v, u * v);
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-// Decide se q está sobre o segmento fechado pr.
+// Is q inside [p,r]? (all segments are closed)
 // 
 
 bool between(point p, point q, point r) {
@@ -88,7 +94,7 @@ bool between(point p, point q, point r) {
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-// Decide se os segmentos fechados pq e rs têm pontos em comum.
+// Do segments [p,q] and [r,s] have an intersection?
 //
 
 bool seg_intersect(point p, point q, point r, point s) {
@@ -102,7 +108,7 @@ bool seg_intersect(point p, point q, point r, point s) {
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-// Calcula a distância do ponto r ao segmento pq.
+// Distance from r to [p,q]
 // 
 
 double seg_distance(point p, point q, point r) {
@@ -114,13 +120,12 @@ double seg_distance(point p, point q, point r) {
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-// Classifica o ponto p em relação ao polígono T.
+// Classifies p with respect of polygon T (not necessarily convex)
 // 
-// Retorna 0, -1 ou 1 dependendo se p está no exterior, na fronteira
-// ou no interior de T, respectivamente.
+// Returns -1 if on border, 0 if outside, 1 if inside
 // 
 
-int in_poly(point p, polygon& T) {
+int in_poly(point p, polygon& T) { 
 	double a = 0; int N = T.size();
 	for (int i = 0; i < N; i++) {
 		if (between(T[i], p, T[(i+1) % N])) return -1;
@@ -128,9 +133,8 @@ int in_poly(point p, polygon& T) {
 	}
 	return cmp(a) != 0;
 }
-
 ////////////////////////////////////////////////////////////////////////////////
-// Comparação radial.
+// Convex Hull! O(nlogn), *alters the input T*
 //
 
 bool radial_lt(point p, point q) {
@@ -139,23 +143,18 @@ bool radial_lt(point p, point q) {
 	if (cmp(R)) return R > 0;
 	return cmp(P * P, Q * Q) < 0;
 }
-
-////////////////////////////////////////////////////////////////////////////////
-// Determina o fecho convexo de um conjunto de pontos no plano.
-//
-// Destrói a lista de pontos T.
-// 
 
 polygon convex_hull(vector<point>& T) {
 	int j = 0, k, n = T.size(); polygon U(n);
 
 	point::pivot = *min_element(all(T));
 	sort(all(T), radial_lt);
-	for (k = n-2; k >= 0 && ccw(T[0], T[n-1], T[k]) == 0; k--);
-	reverse((k+1) + all(T));
+	// If colinear points are part of hull, insert next two lines
+	//for (k = n-2; k >= 0 && ccw(T[0], T[n-1], T[k]) == 0; k--);
+	//reverse((k+1) + all(T));
 
 	for (int i = 0; i < n; i++) {
-		// troque o >= por > para manter pontos colineares
+		// If colinear points are part, change >= to >
 		while (j > 1 && ccw(U[j-1], U[j-2], T[i]) >= 0) j--;
 		U[j++] = T[i];
 	}
@@ -164,7 +163,7 @@ polygon convex_hull(vector<point>& T) {
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-// Calcula a área orientada do polígono T.
+// Computes the (oriented) area of T. Positive if counterclockwise
 //
 
 double poly_area(polygon& T) {
@@ -175,24 +174,29 @@ double poly_area(polygon& T) {
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-// Encontra o ponto de interseção das retas pq e rs.
-//
+// Finds intersection between lines (p,q) and (r,s)
+// (Warning: Divides by zero if parallel! Will return NaN or INF in this case)
 
 point line_intersect(point p, point q, point r, point s) {
 	point a = q - p, b = s - r, c = point(p % q, r % s);
 	return point(point(a.x, b.x) % c, point(a.y, b.y) % c) / (a % b);
 }
 
+
+
+
+
 ////////////////////////////////////////////////////////////////////////////////
-// Encontra o menor círculo que contém todos os pontos dados.
+// Find the smallest circle containing all the points in expected time O(N)
 //
 
-typedef pair<point, double> circle;
+typedef pair<point, double> circle; // center, radius
 
-bool in_circle(circle C, point p){
-	return cmp(abs(p - C.first), C.second) <= 0;
+bool in_circle(circle C, point p) { // is point p in circle C?
+	return cmp((p - C.first)*(p - C.first), C.second*C.second) <= 0;
 }
 
+// Given three (not colinear) points, finds center of circle containing them
 point circumcenter(point p, point q, point r) {
 	point a = p - r, b = q - r, c = point(a * (p + r) / 2, b * (q + r) / 2);
 	return point(c % point(a.y, b.y), point(a.x, b.x) % c) / (a % b);
@@ -200,7 +204,7 @@ point circumcenter(point p, point q, point r) {
 
 circle spanning_circle(vector<point>& T) {
 	int n = T.size();
-	random_shuffle(all(T));
+	random_shuffle(all(T)); // Extremely important!
 	circle C(point(), -INFINITY);
 	for (int i = 0; i < n; i++) if (!in_circle(C, T[i])) {
 		C = circle(T[i], 0);
@@ -216,10 +220,9 @@ circle spanning_circle(vector<point>& T) {
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-// Determina o polígono interseção dos dois polígonos convexos P e Q.
+// Find the intersection of two CONVEX polygons in LINEAR TIME
 //
-// Tanto P quanto Q devem estar orientados positivamente.
-//
+// P and Q should be in counterclockwise order (their areas should be positive)
 
 polygon poly_intersect(polygon& P, polygon& Q) {
 	int m = Q.size(), n = P.size();
@@ -259,442 +262,364 @@ polygon poly_intersect(polygon& P, polygon& Q) {
 	if (R.size() > 1 && R.front() == R.back()) R.pop_back();
 	return R;
 }
-#include <queue>                        // apenas para fluxos
 
-const int VT = 1010;
-const int AR = VT * VT;
-const int NULO = -1;
-const int INF = 1000000000;             // apenas para fluxo máximo
+////////////////////////////////////////////////////////////////////////////////
+// Fields //////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 
-struct graph {
+#include <list>
+#include <set>
 
-	////////////////////////////////////////////////////////////////////////////
-	// Definições compartilhadas
-	//
+const int SIZE = 2000;
 
-	int dest[2 * AR];                   // "2 *" apenas para CFC
-	int adj[VT][2 * VT];                // "2 *" apenas para fluxos e CFC
-	int nadj[VT], nvt, nar;
+typedef pair<point, point> segment;
+typedef pair<int, int> barrier;
 
-	////////////////////////////////////////////////////////////////////////////
-	// Definições específicas para fluxos
-	//
+struct field {
+	int n, m;
+	point v[SIZE];
+	barrier b[SIZE];
+	list<int> e[SIZE];
 
-	int cap[AR], fluxo[AR], ent[VT];
+	field(): n(0), m(0) {}
 
-	_inline(int orig)(int a) {return dest[inv(a)]; }
-	_inline(int inv)(int a) { return a ^ 0x1; }
-	_inline(int capres)(int a) { return cap[a] - fluxo[a]; }
-
-	////////////////////////////////////////////////////////////////////////////
-	// Definições específicas para fluxo máximo
-	//
-
-	int padj[VT], lim[VT], nivel[VT], qtd[VT];
-
-	queue<int> fila;
-
-	////////////////////////////////////////////////////////////////////////////
-	// Definições específicas para fluxo a custo mínimo
-	//
-
-	int imb[VT], marc[VT], delta;
-	double custo[AR], pot[VT], dist[VT];
-
-	priority_queue< pair<double, int> > heap;
-
-	_inline(double custores)(int a) {
-		return custo[a] - pot[orig(a)] + pot[dest[a]];
+	void clear() {
+		for (int i = 0; i < n; i++) e[i].clear();
+		n = m = 0;
 	}
 
-	////////////////////////////////////////////////////////////////////////////
-	// Definição específica para conexidade
-	//
+	inline int ccw(int a, int b, int c) { return ::ccw(v[a], v[b], v[c]); }
 
-	int prof[VT];
-
-	////////////////////////////////////////////////////////////////////////////
-	// Definições específicas para pontos de articulação e pontes
-	//
-
-	char part[VT], ponte[AR];
-	int menor[VT], npart, nponte;
-
-	////////////////////////////////////////////////////////////////////////////
-	// Definições específicas para componentes fortemente conexas
-	//
-
-	int ord[VT], comp[VT], repcomp[VT], nord, ncomp;
-
-	_inline(int transp)(int a) { return (a & 0x1); }
-
-	////////////////////////////////////////////////////////////////////////////
-	// Definições específicas para 2 SAT
-	//
-
-	_inline(int verd)(int v) { return 2 * v + 1; }
-	_inline(int falso)(int v) { return 2 * v; }
-
-	////////////////////////////////////////////////////////////////////////////
-	// Funções compartilhadas
-	//
-
-	////////////////////////////////////////////////////////////////////////////
-	// Inicializa o grafo
-	//
-
-	void init(int n = 0) {
-		nvt = n;
-		nar = 0;
-		memset(nadj, 0, sizeof(nadj));
-		memset(imb, 0, sizeof(imb));    // apenas para FCM
+	void make_barrier(int i, int j) {
+		e[i].push_back(m); e[j].push_back(m);
+		b[m++] = barrier(i, j);
 	}
 
-	////////////////////////////////////////////////////////////////////////////
-	// Adiciona uma aresta ao grafo
-	//
-	// "int u" apenas para Fluxos; "double c" apenas para FCM
+	//////////////////////////////////////////////////////////////////////////////
+	// Removes degenerate cases
 	//
 
-	void aresta(int i, int j, int u = 0, double c = 0) {
-		custo[nar] = c;                 // Apenas para FCM
-		cap[nar] = u;                   // Apenas para fluxos
-		dest[nar] = j;
-		adj[i][nadj[i]++] = nar++;
-
-		custo[nar] = -c;                // Apenas para FCM
-		cap[nar] = 0;                   // Apenas para fluxos
-		dest[nar] = i;
-		adj[j][nadj[j]++] = nar++;
-	}
-
-	////////////////////////////////////////////////////////////////////////////
-	// Funções específicas para fluxo máximo
-	//
-
-	void revbfs(int ini, int fim) {
-		int i, no, viz, ar;
-
-		memset(nivel, NULO, sizeof(nivel));
-		memset(qtd, 0, sizeof(qtd));
-		while (!fila.empty()) fila.pop();
-
-		nivel[fim] = 0;
-		fila.push(fim);
-
-		while (!fila.empty()) {
-			no = fila.front(); fila.pop();
-			qtd[nivel[no]]++;
-
-			for (i = 0; i < nadj[no]; i++) {
-				ar = adj[no][i]; viz = dest[ar];
-				if (cap[ar] == 0 && nivel[viz] == NULO) {
-					nivel[viz] = nivel[no] + 1;
-					fila.push(viz);
+	void normalize() {
+		set<segment> T; set<point> U;
+		for (int i = 0; i < n; i++) make_barrier(i, i);
+		for (int i = 0; i < m; i++) {
+			point p = v[b[i].first], q = v[b[i].second];
+			set<point> S;
+			S.insert(p); S.insert(q);
+			for (int j = 0; j < m; j++) {
+				point r = v[b[j].first], s = v[b[j].second];
+				if (r == p || r == q || s == p || s == q) continue;
+				if (cmp((q - p) % (s - r)) == 0) {
+					if (between(p, r, q)) S.insert(r);
+					if (between(p, s, q)) S.insert(s);
+				} else if (seg_intersect(p, q, r, s)) {
+					S.insert(line_intersect(p, q, r, s));
 				}
 			}
-		}
-	}
-
-	int admissivel(int no) {
-		while (padj[no] < nadj[no]) {
-			int ar = adj[no][padj[no]];
-			if (nivel[no] == nivel[dest[ar]] + 1 && capres(ar) > 0) return ar;
-			padj[no]++;
-		}
-		padj[no] = 0;
-		return NULO;
-	}
-
-	int retrocede (int no) {
-		int i, ar, viz, menor = NULO;
-		if (--qtd[nivel[no]] == 0) return NULO;
-
-		for (i = 0; i < nadj[no]; i++) {
-			ar = adj[no][i]; viz = dest[ar];
-			if (capres(ar) <= 0) continue;
-			if (menor == NULO || nivel[viz] < nivel[menor]) menor = viz;
-		}
-
-		if (menor != NULO) nivel[no] = nivel[menor];
-		qtd[++nivel[no]]++;
-		return ((ent[no] == NULO) ? no : orig(ent[no]));
-	}
-
-	int avanca (int no, int ar) {
-		int viz = dest[ar];
-		ent[viz] = ar;
-		lim[viz] = min (lim[no], capres(ar));
-		return viz;
-	}
-
-	int aumenta (int ini, int fim) {
-		int ar, no = fim, fmax = lim[fim];
-		while (no != ini)       {
-			fluxo[ar = ent[no]] += fmax;
-			fluxo[inv(ar)] -= fmax;
-			no = orig(ar);
-		}
-		return fmax;
-	}
-
-	////////////////////////////////////////////////////////////////////////////
-	// Função específica para fluxo a custo mínimo
-	//
-	// Algoritmo de Dijkstra: O(m * log n)
-	//
-
-	void dijkstra(int ini) {
-		int i, j, k, a;
-		double d;
-
-		memset(ent, NULO, sizeof(ent));
-		memset(marc, 0, sizeof(marc));
-		while (!heap.empty()) heap.pop();
-
-		for (i = 0; i < nvt; i++) dist[i] = INFINITY;
-		heap.push(make_pair( -(dist[ini] = 0.0), ini));
-
-		while (!heap.empty()) {
-			i = heap.top().second; heap.pop();
-			if (marc[i]) continue; marc[i] = 1;
-			for (k = 0; k < nadj[i]; k++) {
-				a = adj[i][k]; j = dest[a]; d = dist[i] + custores(a);
-				if (capres(a) >= delta && cmp(d, dist[j]) < 0) {
-					heap.push(make_pair( -(dist[j] = d), j));
-					ent[j] = a;
-				}
+			foreach (st, all(S)) {
+				if (st != S.begin()) T.insert(segment(p, *st));
+				U.insert(p = *st);
 			}
 		}
-	}
-
-	////////////////////////////////////////////////////////////////////////////
-	// Função específica para pontos de articulação e pontes
-	//
-
-	int dfs_partponte(int no, int pai) {
-		int i, ar, viz, nf = 0;
-
-		for (i = 0; i < nadj[no]; i++) {
-			ar = adj[no][i]; viz = dest[ar];
-
-			if (prof[viz] == NULO) {
-				menor[viz] = prof[viz] = prof[no] + 1;
-				dfs_partponte(viz, no); nf++;
-
-				if (menor[viz] >= prof[no]) {
-					part[no] = 1;
-					if (menor[viz] == prof[viz]) ponte[ar] = 1;
-				}
-				else menor[no] = min(menor[no], menor[viz]);
-			}
-			else if (viz != pai) menor[no] = min(menor[no], prof[viz]);
+		clear();
+		foreach (it, all(U)) v[n++] = *it;
+		foreach (it, all(T)) {
+			int i = lower_bound(v, v+n, it->first) - v;
+			int j = lower_bound(v, v+n, it->second) - v;
+			make_barrier(i, j);
 		}
-
-		return nf;
-	}
-
-	////////////////////////////////////////////////////////////////////////////
-	// Funções específicas para componentes fortemente conexas
-	//
-	// Ordenação Topológica (duas primeiras funções)
-	//
-
-	void dfs_topsort(int no) {
-		for (int i = 0; i < nadj[no]; i++) {
-			int ar = adj[no][i], viz = dest[ar];
-			if (!transp(ar) && prof[viz] == NULO) {
-				prof[viz] = prof[no] + 1; dfs_topsort(viz);
-			}
-		}
-		ord[--nord] = no;
-	}
-
-	void topsort() {
-		memset(prof, NULO, sizeof(prof));
-		nord = nvt;
-
-		for (int i = 0; i < nvt; i++) 
-			if (prof[i] == NULO) {
-				prof[i] = 0; dfs_topsort (i);
-			}
-	}
-
-	void dfs_compfortcon(int no) {
-		comp[no] = ncomp;
-		for (int i = 0; i < nadj[no]; i++) {
-			int ar = adj[no][i], viz = dest[ar];
-			if (transp(ar) && comp[viz] == NULO) dfs_compfortcon(viz);
-		}
-	}
-
-	////////////////////////////////////////////////////////////////////////////
-	// Função específica para 2 SAT
-	//
-	// Adiciona ao grafo as arestas correspondentes à cláusula
-	// ((x = valx) ou (y = valy))
-	//
-
-	void clausula(int x, bool valx, int y, bool valy) {
-		int hipA, teseA, hipB, teseB;
-
-		if (valx) {
-			hipA = falso(x);
-			teseB = verd(x);
-		} else {
-			hipA = verd(x);
-			teseB = falso(x);
-		}
-
-		if (valy) {
-			hipB = falso(y);
-			teseA = verd(y);
-		} else {
-			hipB = verd(y);
-			teseA = falso(y);
-		}
-
-		aresta(hipA, teseA);
-		aresta(hipB, teseB);
-	}
-
-	////////////////////////////////////////////////////////////////////////////
-	// Fluxo máximo: O(n^2 * m)
-	//
-
-	int maxflow(int ini, int fim) {
-		int ar, no = ini, fmax = 0;
-
-		memset(fluxo, 0, sizeof(fluxo));
-		memset(padj, 0, sizeof(padj));
-
-		revbfs(ini, fim);
-		lim[ini] = INF;
-		ent[ini] = NULO;
-
-		while (nivel[ini] < nvt && no != NULO) {
-			if ((ar = admissivel(no)) == NULO) no = retrocede(no);
-			else if ((no = avanca(no, ar)) == fim) {
-				fmax += aumenta(ini, fim);
-				no = ini;
-			}
-		}
-		return fmax;
-	}
-
-	////////////////////////////////////////////////////////////////////////////
-	// Fluxo a custo mínimo: O(m^2 * log n * log U)
-	//
-	// Parâmetros globais específicos: imb
-	//
-
-	double mincostflow() {
-		int a, i, j, k, l, U = 0;
-		double C = 0.0;
-
-		memset(pot, 0, sizeof(pot));
-		memset(fluxo, 0, sizeof(fluxo));
-
-		for (a = 0; a < nar; a++) {
-			if (cmp(custo[a]) > 0) C += custo[a];
-			U = max(cap[a], U);
-		}
-		for (i = 0; i < nvt; i++) U = max(imb[i], max(-imb[i], U));
-		for (delta = 0x40000000; delta > U; delta >>= 1);
-
-		imb[nvt] = nadj[nvt] = 0; U *= 2 * nvt; C *= 2;
-		for (i = 0; i < nvt; i++) {
-			aresta(i, nvt, U, C);
-			aresta(nvt, i, U, C);
-		}
-		nvt++;
-
-		while (delta >= 1) {
-			for (a = 0; a < nar ; a++) {
-				i = orig(a); j = dest[a];
-				if (delta <= capres(a) && capres(a) < 2 * delta &&
-						cmp(custores(a)) < 0) {
-					fluxo[inv(a)] -= capres(a);
-					imb[i] -= capres(a);
-					imb[j] += capres(a);
-					fluxo[a] = cap[a];
-				}
-			}
-
-			while (1) {
-				for (k = 0; k < nvt && imb[k] < delta; k++);
-				for (l = nvt - 1; l >= 0 && imb[l] > -delta; l--);
-				if (k == nvt || l < 0) break;
-
-				dijkstra(k);
-				for (i = 0; i < nvt; i++) pot[i] -= dist[i];
-				for (a = ent[l]; a != NULO; a = ent[orig(a)])  {
-					fluxo[a] += delta;
-					fluxo[inv(a)] -= delta;
-				}
-				imb[k] -= delta;
-				imb[l] += delta;
-			}
-			delta >>= 1;
-		}
-
-		C = 0.0;
-		for (a = 0; a < nar; a++) if (fluxo[a] > 0) C += fluxo[a] * custo[a];
-		return C;
-	}
-
-	////////////////////////////////////////////////////////////////////////////
-	// Encontra os pontos de articulação e as pontes
-	//
-
-	void partponte() {
-		memset(part, 0, sizeof(part));
-		memset(ponte, 0, sizeof(ponte));
-		memset(prof, NULO, sizeof(prof));
-		memset(menor, NULO, sizeof(menor));
-		npart = nponte = 0;
-
-		for (int i = 0; i < nvt; i++)
-			if (prof[i] == NULO) {
-				menor[i] = prof[i] = 0;
-				if (dfs_partponte(i, NULO) < 2) part[i] = 0;
-			}
-		for (int i = 0; i < nvt; i++) if (part[i]) npart++;
-		for (int i = 0; i < nar; i++) if (ponte[i]) nponte++;
-	}
-
-	////////////////////////////////////////////////////////////////////////////
-	// Encontra as componentes fortemente conexas
-	//
-
-	int compfortcon() {
-		memset(comp, NULO, sizeof(comp));
-		ncomp = 0;
-		topsort();
-
-		for (int i = 0; i < nvt; i++)
-			if (comp[ord[i]] == NULO) {
-				repcomp[ncomp] = ord[i];
-				dfs_compfortcon(ord[i]);
-				ncomp++;
-			}
-
-		return ncomp;
-	}
-
-	////////////////////////////////////////////////////////////////////////////
-	// Decide se a conjunção das cláusulas pode ser satisfeita.
-	//
-
-	int twosat(int nvar) {
-		compfortcon();
-		for (int i = 0; i < nvar; i++)
-			if (comp[verd(i)] == comp[falso(i)])
-				return 0;
-		return 1;
 	}
 };
 
+////////////////////////////////////////////////////////////////////////////////
+// Triangulation ///////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
+
+#include <map>
+
+typedef pair<int, int> edge;
+
+struct triangulation: public map<edge, int> {
+	edge sym(edge e)   { return edge(e.second, e.first); }
+	edge lnext(edge e) { return edge(e.second, (*this)[e]); }
+	edge lprev(edge e) { return edge((*this)[e], e.first); }
+	edge dnext(edge e) { return lprev(sym(lprev(e))); }
+	edge dprev(edge e) { return lnext(sym(lnext(e))); }
+
+	void new_tri(edge e, int r) { 
+		if (count(e)) { erase(lnext(e)); erase(lprev(e)); }
+		(*this)[e] = r; (*this)[lnext(e)] = e.first; (*this)[lprev(e)] = e.second;
+	}
+
+	void triangulate(field& F) {
+		int J[SIZE], i, k, topo = 0;
+		edge pilha[SIZE];
+		clear();
+		for (int i = 0; i < F.n; i++) J[i] = i;
+		sort(J, J + F.n, make_index_lt(F.v));
+		for (i = 2; i < F.n; i++) if (k = F.ccw(J[0], J[1], J[i])) break;
+		if (i >= F.n) return;
+		for (int j = 1; j < i; j++) {
+			edge e(J[j-1], J[j]);
+			new_tri(e, (k > 0) ? J[i] : -1);
+			new_tri(sym(e), (k > 0) ? -1 : J[i]);
+		}
+		edge lb(J[i], J[(k > 0) ? i-1 : 0]), ub(J[(k > 0) ? 0 : i-1], J[i]);
+		for (i++; i < F.n; i++) {
+			while (F.ccw(lb.first, lb.second, J[i]) >= 0) lb = dprev(lb);
+			while (F.ccw(ub.first, ub.second, J[i]) >= 0) ub = dnext(ub);
+			for (edge e = dnext(lb); e != ub; e = dnext(e)) pilha[topo++] = e;
+			while (topo > 0) new_tri(pilha[--topo], J[i]);
+			edge e(-1, J[i]);
+			new_tri(e, lb.first); new_tri(sym(e), ub.second);
+			lb = lnext(e); ub = dnext(lb);
+		}
+	}
+};
+struct graph {
+
+  //////////////////////////////////////////////////////////////////////////////
+  // Shared part. Also known as: You will need this!
+  //
+
+  vi dest;  // use sz(dest) as nar
+  vvi adj;  // use sz(adj) as sz(adj)
+
+  int inv(int a) { return a ^ 0x1; }
+
+  graph(int n = 0) {
+		_ini = _end = -1; // only for flows
+    adj.resize(n);
+    imb.resize(n);
+  }
+
+  // Adds an arc to the graph. u is capacity, c is cost.
+  // u is only needed on flows, and c only on min-cost-flow
+  int arc(int i, int j, int u = 0, double c = 0) {
+    dest.pb(j);
+    adj[i].pb(sz(dest)-1);
+    dest.pb(i);
+    adj[j].pb(sz(dest)-1);
+
+    // For both flows
+    cap.pb(u);
+    cap.pb(0);
+    // Only for min cost flow
+    cost.pb(c);
+    cost.pb(-c);
+
+    return sz(dest)-2;
+  }
+
+  //////////////////////////////////////////////////////////////////////////////
+  // For both flows!!
+  //
+
+  vi cap, flow;
+  int _ini, _end;   // ini, end of last maxflow
+
+  int orig(int a) { return dest[inv(a)]; }
+  int capres(int a) { return cap[a] - flow[a]; }
+
+  //////////////////////////////////////////////////////////////////////////////
+  // Max Flow! - Dinic O(n^2 * m) incremental
+  // don't call maxflow with ini == end
+  //
+
+  vi d, curAdj;
+
+  bool MFbfs(int s, int t) {
+    d = vi(sz(adj), INF);
+    curAdj = vi(sz(adj));
+    d[s] = 0;
+    queue<int> Q; Q.push(s);
+    while (!Q.empty()) {
+      int u = Q.front(); Q.pop();
+      forall(i, adj[u]) {
+        int v = dest[*i];
+        if (capres(*i) > 0 && d[v] == INF) {
+          d[v] = d[u] + 1; Q.push(v);
+        }
+      }
+    }
+    return d[t] != INF;
+  }
+
+  int MFdfs(int u, int t, int f) {
+    if (u == t) return f;
+    for(int &i = curAdj[u]; i < adj[u].size(); ++i) {
+      int ar = adj[u][i], v = dest[ar];
+      if (d[v] != d[u]+1 || capres(ar) == 0) continue;
+      int tmpF = MFdfs(v, t, min(f, capres(ar)));
+      if (tmpF) {
+        flow[ar] += tmpF;
+        flow[inv(ar)] -= tmpF;
+        return tmpF;
+      }
+    }
+    return 0;
+  }
+
+  int maxflow(int ini, int end) {
+    if (_ini != ini || _end != end) {
+      flow = vi(sz(dest));
+      _ini = ini;
+      _end = end;
+    }
+    while (MFbfs(ini, end))
+      while (MFdfs(ini, end, INF));
+    int F = 0;
+    forall(a, adj[ini]) F += flow[*a];
+    return F;
+  }
+
+
+  //////////////////////////////////////////////////////////////////////////////
+  // Min Cost Flow! - O(m^2 * log n * log U) incremental
+  // Don't forget to specify the [imb]
+  // look at [imb] for feasibility
+  //
+
+  vi imb;
+  vd cost, pot;
+  int delta;
+
+  double rescost(int a) {
+    return cost[a] + pot[orig(a)] - pot[dest[a]];
+  }
+
+  bool dijkstra() {
+    priority_queue<pair<double, pair<int, int> > > q;
+    vi ent(sz(adj), -2);
+    vd dist(sz(adj), INF);
+    fu(u, sz(adj)) if (imb[u] >= delta)
+      q.push(make_pair(0.0, make_pair(u, -1)));
+
+    while (!q.empty()) {
+      int u = q.top().second.first, f = q.top().second.second;
+      double d = -q.top().first; q.pop();
+      if (ent[u] != -2) continue; dist[u] = d; ent[u] = f;
+      forall(a, adj[u]) if (capres(*a) >= delta)
+        q.push(make_pair(-(dist[u] + rescost(*a)), make_pair(dest[*a], *a)));
+    }
+
+    fu(u, sz(adj)) if (ent[u] != -2 && imb[u] <= -delta) {
+      fu(v, sz(adj)) pot[v] += dist[v];
+      for (int a = ent[u]; a != -1; a = ent[orig(a)]) {
+        flow[a] += delta;
+        flow[inv(a)] -= delta;
+        imb[dest[a]] += delta;
+        imb[orig(a)] -= delta;
+      }
+      return true;
+    }
+    return false;
+  }
+
+  double mincostflow() {
+    pot.resize(sz(adj));
+    flow.resize(sz(dest));
+    for (delta = 0x40000000; delta > 0; delta /= 2) {
+      fu(a, sz(dest)) {
+        int u = orig(a), v = dest[a];
+        if (capres(a) >= delta && cmp(rescost(a)) < 0) {
+          imb[u] -= capres(a);
+          imb[v] += capres(a);
+          flow[inv(a)] -= capres(a);
+          flow[a] += capres(a);
+        }
+      }
+      while (dijkstra());
+    }
+    double C = 0.0;
+    fu(a, sz(dest)) if (flow[a] > 0) C += flow[a] * cost[a];
+    return C;
+  }
+
+
+  //////////////////////////////////////////////////////////////////////////////
+  // Both Bridges/Articulation points and to Strongly Connected Components
+  //
+
+  vi depth;
+
+  //////////////////////////////////////////////////////////////////////////////
+  // Bridges and articulation points - O(n+m)
+  //
+
+  vector<bool> artp, bridge;
+  vi least;
+
+  int dfs_artpbridge(int u, int ent) {
+    int nf = 0;
+    forall(a, adj[u]) {
+      int v = dest[*a];
+      if (depth[v] == -1) {
+        least[v] = depth[v] = depth[u] + 1;
+        dfs_artpbridge(v, *a); nf++;
+
+        if (least[v] >= depth[u]) {
+          artp[u] = true;
+          if (least[v] == depth[v]) bridge[*a] = bridge[inv(*a)] = true;
+        } else least[u] = min(least[u], least[v]);
+      }
+      else if (inv(*a) != ent) least[u] = min(least[u], depth[v]);
+    }
+    return nf;
+  }
+
+  void partponte() {
+    artp = vector<bool>(sz(adj), false);
+    bridge = vector<bool>(sz(dest), false);
+    depth = vi(sz(adj), -1);
+    least = vi(sz(adj), -1);
+    fu(i, sz(adj)) if (depth[i] == -1) {
+        least[i] = depth[i] = 0;
+        if (dfs_artpbridge(i, -1) < 2) artp[i] = false;
+    }
+  }
+
+  //////////////////////////////////////////////////////////////////////////////
+  // Strongly Connected Components - O(n+m)
+  // see [rep] for results
+  //
+
+  vi ord, rep;
+
+  int transp(int a) { return (a & 0x1); }
+
+  void dfs_topsort(int u) {
+    forall(a, adj[u]) {
+      int v = dest[*a];
+      if (!transp(*a) && depth[v] == -1) {
+        depth[v] = depth[u] + 1;
+        dfs_topsort(v);
+      }
+    }
+    ord.pb(u);
+  }
+
+  void dfs_compfortcon(int u, int ent) {
+    rep[u] = ent;
+    forall(a, adj[u]) {
+      int v = dest[*a];
+      if (transp(*a) && rep[v] == -1) dfs_compfortcon(v, ent);
+    }
+  }
+
+  void compfortcon() {
+    depth = vi(sz(adj), -1);
+    ord.clear();
+    fu(u, sz(adj)) if (depth[u] == -1) {
+        depth[u] = 0;
+        dfs_topsort(u);
+    }
+
+    rep = vi(sz(adj), -1);
+    for (int i = sz(adj)-1; i >= 0; i--) if (rep[ord[i]] == -1)
+      dfs_compfortcon(ord[i], ord[i]);
+  }
+};
 #include <list>
 #include <set>
 
@@ -716,7 +641,7 @@ struct field {
 		n = m = 0;
 	}
 	
-	_inline(int ccw)(int a, int b, int c) { return ::ccw(v[a], v[b], v[c]); }
+	inline int ccw(int a, int b, int c) { return ::ccw(v[a], v[b], v[c]); }
 
 	void make_barrier(int i, int j) {
 		e[i].push_back(m); e[j].push_back(m);
@@ -805,11 +730,14 @@ template <class T>
 struct index_lt {
 	T& v;
 	index_lt(T& v): v(v) {}
-	_inline(bool operator ())(int i, int j) {
+	inline bool operator ()(int i, int j) {
 		return (v[i] != v[j]) ? (v[i] < v[j]) : (i < j);
 	}
 };
 template <class T> index_lt<T> make_index_lt(T& v) { return index_lt<T>(v); }
+
+bool cmp_eq(double x, double y) { return cmp(x, y) == 0; }
+bool cmp_lt(double x, double y) { return cmp(x, y) < 0; }
 
 int safe_gets(char*& s) { // depois de usar, free(s);
 	return scanf("%a[^\r\n]%*[\r\n]", &s);

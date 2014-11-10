@@ -1,3 +1,43 @@
+#include <stdio.h>
+#include <math.h>
+#include <assert.h>
+#include <string.h>
+#include <stdlib.h>
+#include <vector>
+#include <string>
+#include <queue>
+#include <algorithm>
+#include <iostream>
+#include <utility>
+using namespace std;
+
+#define TRACE(x...) x
+#define WATCH(x) TRACE(cout << #x << " = " << x << endl)
+#define PRINT(x...) TRACE(printf(x))
+
+#define all(v) (v).begin(), (v).end()
+#define rall(v) (v).rbegin(), (v).rend()
+
+#define _for(i, a, b) for (__typeof__(a) i = (a); i != (b); ++i)
+#define foreach(x...) _for(x)
+#define forall(i, v) foreach(i, all(v))
+#define FU(i, a, b) for(typeof(a) i = (a); i < (b); ++i)
+#define fu(i, n) FU(i, 0, n)
+
+#define mset(c, v) memset(c, v, sizeof(c))
+#define mod(a, b) ((((a)%(b))+(b))%(b))
+#define pb push_back
+#define sz(c) int((c).size())
+const int INF = 0x3F3F3F3F; const int NEGINF = 0xC0C0C0C0;
+const int NULO = -1; const double EPS = 1e-8;
+
+typedef vector<int> vi;
+typedef vector<double> vd;
+typedef vector<vi> vvi;
+
+int cmp(double x, double y = 0, double tol = EPS) {
+	return (x <= y + tol) ? (x + tol < y) ? -1 : 0 : 1;
+}
 struct segtree {
 	vi C; // counts how many times the interval is in
 
@@ -23,16 +63,23 @@ struct segtree {
 		}
 		update(inx, B, E);
 	}
-	void insert(int b, int e) { ch(b, e, 0, N-1, 1); }
-	void erase(int b, int e) { ch(b, e, 0, N-1, -1); }
+	void insert(int b, int e) {
+		ch(b, e, 0, N-1, 1);
+	}
+	void erase(int b, int e) {
+		ch(b, e, 0, N-1, -1);
+	}
 	void update(int inx, int B, int E); // dependent on the algorithm
 };
+
 struct rect {
 	double x1, y1, x2, y2;
 	rect(double x1 = 0, double y1 = 0, double x2 = 0, double y2 = 0): \
 		x1(x1), y1(y1), x2(x2), y2(y2) {}
 };
+
 vd y;
+
 // both for area and perimeter
 void segtree::update(int inx, int B, int E) {
 	if (C[inx]) {
@@ -41,7 +88,7 @@ void segtree::update(int inx, int B, int E) {
 		lbd[inx] = rbd[inx] = 1;
 	} else {
 		len[inx] = len[2*inx] + len[2*inx + 1];
-		a[inx] = a[2*inx] + a[2*inx+1] - 2*rbd[2*inx]*lbd[2*inx+1];
+		a[inx] = a[2*inx] + a[2*inx+1] - 2*rbd[2*inx]*rbd[2*inx+1];
 		lbd[inx] = lbd[2*inx];
 		rbd[inx] = rbd[2*inx+1];
 	}
@@ -113,4 +160,15 @@ double union_perimeter(vector<rect>& R) {
 		last += dx;
 	}
 	return r;
+}
+
+int main() {
+	int N;
+	int _ = 1;
+	while (scanf("%d", &N) && N) {
+		vector<rect> V(N);
+		fu(i, N) scanf("%lf %lf %lf %lf", &V[i].x1, &V[i].y1, &V[i].x2, &V[i].y2);
+		printf("Test case #%d\nTotal explored area: %.2f\n\n", _++, union_area(V));
+	}
+	return 0;
 }

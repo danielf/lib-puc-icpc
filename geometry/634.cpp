@@ -1,19 +1,56 @@
+#include <stdio.h>
+#include <math.h>
+#include <assert.h>
+#include <string.h>
+#include <stdlib.h>
+#include <vector>
+#include <string>
+#include <queue>
+#include <algorithm>
+#include <iostream>
+#include <utility>
+using namespace std;
+
+#define TRACE(x...) x
+#define WATCH(x) TRACE(cout << #x << " = " << x << endl)
+#define PRINT(x...) TRACE(printf(x))
+
+#define all(v) (v).begin(), (v).end()
+#define rall(v) (v).rbegin(), (v).rend()
+
+#define _for(i, a, b) for (__typeof__(a) i = (a); i != (b); ++i)
+#define foreach(x...) _for(x)
+#define forall(i, v) foreach(i, all(v))
+#define FU(i, a, b) for(typeof(a) i = (a); i < (b); ++i)
+#define fu(i, n) FU(i, 0, n)
+
+#define mset(c, v) memset(c, v, sizeof(c))
+#define mod(a, b) ((((a)%(b))+(b))%(b))
+#define pb push_back
+#define sz(c) int((c).size())
+const int INF = 0x3F3F3F3F; const int NEGINF = 0xC0C0C0C0;
+const int NULO = -1; const double EPS = 1e-8;
+
+typedef vector<int> vi;
+typedef vector<double> vd;
+typedef vector<vi> vvi;
+
+int cmp(double x, double y = 0, double tol = EPS) {
+	return (x <= y + tol) ? (x + tol < y) ? -1 : 0 : 1;
+}
 #include <vector>
 
 struct point { 
 	double x, y;
 	point(double x = 0, double y = 0): x(x), y(y) {}
 
-	// Only type in the operators you actually need
-	point operator +(point q) const { return point(x + q.x, y + q.y); }
-	point operator -(point q) const { return point(x - q.x, y - q.y); }
-	point operator *(double t) const { return point(x * t, y * t); }
-	point operator /(double t) const { return point(x / t, y / t); }
-	// dot product
-	double operator *(point q) const { return x * q.x + y * q.y; }
-	// "cross" product (actually "signed area of the quadrilateral"
-	double operator %(point q) const { return x * q.y - y * q.x; }
-	// uses "cmp" from the template
+	point operator +(point q) { return point(x + q.x, y + q.y); }
+	point operator -(point q) { return point(x - q.x, y - q.y); }
+	point operator *(double t) { return point(x * t, y * t); }
+	point operator /(double t) { return point(x / t, y / t); }
+	double operator *(point q) { return x * q.x + y * q.y; }
+	double operator %(point q) { return x * q.y - y * q.x; }
+
 	int cmp(point q) const {
 		if (int t = ::cmp(x, q.x)) return t;
 		return ::cmp(y, q.y);
@@ -128,7 +165,7 @@ polygon convex_hull(vector<point>& T) {
 // Computes the (oriented) area of T. Positive if counterclockwise
 //
 
-double poly_area(const polygon& T) {
+double poly_area(polygon& T) {
 	double s = 0; int n = T.size();
 	for (int i = 0; i < n; i++)
 		s += T[i] % T[(i+1) % n];
@@ -188,7 +225,6 @@ circle spanning_circle(vector<point>& T) {
 
 polygon poly_intersect(polygon& P, polygon& Q) {
 	int m = Q.size(), n = P.size();
-	if (m == 0 || n == 0) return polygon();
 	int a = 0, b = 0, aa = 0, ba = 0, inflag = 0;
 	polygon R;
 	while ((aa < n || ba < m) && aa < 2*n && ba < 2*m) {
@@ -226,3 +262,19 @@ polygon poly_intersect(polygon& P, polygon& Q) {
 	return R;
 }
 
+
+int main() {
+	int n;
+	while (scanf("%d", &n) && n) {
+		int x,y;
+		polygon P;
+		fu(i, n) {
+			scanf("%d %d", &x, &y);
+			P.push_back(point(x,y));
+		}
+		scanf("%d %d", &x, &y);
+		point p(x,y);
+		printf("%s\n", in_poly(p, P)?"T":"F");
+	}
+	return 0;
+}

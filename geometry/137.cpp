@@ -1,19 +1,56 @@
+#include <stdio.h>
+#include <math.h>
+#include <assert.h>
+#include <string.h>
+#include <stdlib.h>
+#include <vector>
+#include <string>
+#include <queue>
+#include <algorithm>
+#include <iostream>
+#include <utility>
+using namespace std;
+
+#define TRACE(x...) x
+#define WATCH(x) TRACE(cout << #x << " = " << x << endl)
+#define PRINT(x...) TRACE(printf(x))
+
+#define all(v) (v).begin(), (v).end()
+#define rall(v) (v).rbegin(), (v).rend()
+
+#define _for(i, a, b) for (__typeof__(a) i = (a); i != (b); ++i)
+#define foreach(x...) _for(x)
+#define forall(i, v) foreach(i, all(v))
+#define FU(i, a, b) for(typeof(a) i = (a); i < (b); ++i)
+#define fu(i, n) FU(i, 0, n)
+
+#define mset(c, v) memset(c, v, sizeof(c))
+#define mod(a, b) ((((a)%(b))+(b))%(b))
+#define pb push_back
+#define sz(c) int((c).size())
+const int INF = 0x3F3F3F3F; const int NEGINF = 0xC0C0C0C0;
+const int NULO = -1; const double EPS = 1e-8;
+
+typedef vector<int> vi;
+typedef vector<double> vd;
+typedef vector<vi> vvi;
+
+int cmp(double x, double y = 0, double tol = EPS) {
+	return (x <= y + tol) ? (x + tol < y) ? -1 : 0 : 1;
+}
 #include <vector>
 
 struct point { 
 	double x, y;
 	point(double x = 0, double y = 0): x(x), y(y) {}
 
-	// Only type in the operators you actually need
 	point operator +(point q) const { return point(x + q.x, y + q.y); }
 	point operator -(point q) const { return point(x - q.x, y - q.y); }
 	point operator *(double t) const { return point(x * t, y * t); }
 	point operator /(double t) const { return point(x / t, y / t); }
-	// dot product
 	double operator *(point q) const { return x * q.x + y * q.y; }
-	// "cross" product (actually "signed area of the quadrilateral"
 	double operator %(point q) const { return x * q.y - y * q.x; }
-	// uses "cmp" from the template
+
 	int cmp(point q) const {
 		if (int t = ::cmp(x, q.x)) return t;
 		return ::cmp(y, q.y);
@@ -224,5 +261,34 @@ polygon poly_intersect(polygon& P, polygon& Q) {
 	R.erase(unique(all(R)), R.end());
 	if (R.size() > 1 && R.front() == R.back()) R.pop_back();
 	return R;
+}
+char buf[100];
+int main() {
+	int N, M;
+	while (scanf("%d", &N) && N) {
+		polygon P, Q;
+		int x,y;
+		fu(i, N) {
+			scanf("%d %d", &x, &y);
+			P.push_back(point(x,y));
+		}
+		int M;
+		scanf("%d", &M);
+		fu(i, M) {
+			scanf("%d %d", &x, &y);
+			Q.push_back(point(x,y));
+		}
+		double area1 = poly_area(P);
+		double area2 = poly_area(Q);
+		if (area1 < EPS) reverse(all(P));
+		if (area2 < EPS) reverse(all(Q));
+		double area3 = poly_area(poly_intersect(P, Q));
+		sprintf(buf, "%.2f", fabs(area1) + fabs(area2) - 2.*fabs(area3));
+		int K = strlen(buf);
+		for (int i = K; i < 8; i++) printf(" ");
+		printf("%s", buf);
+	}
+	printf("\n");
+	return 0;
 }
 

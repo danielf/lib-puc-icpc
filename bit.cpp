@@ -1,6 +1,6 @@
 #include <vector>
 
-struct BIT { // start: 830e3dd21ec48035fdd85c1a6225576a
+struct BIT {
 	vector<int> tree;		
 	int N;
 
@@ -8,7 +8,7 @@ struct BIT { // start: 830e3dd21ec48035fdd85c1a6225576a
 		N = _N+1;
 		tree.resize(N,0);
 	}	
-	
+	// makes V[ind] += value (value can be negative)
 	void update(int ind, int value) { // O(log n)
 		ind++;
 		while (ind < N) {
@@ -16,7 +16,7 @@ struct BIT { // start: 830e3dd21ec48035fdd85c1a6225576a
 			ind += (ind & -ind);
 		}	
 	}
-	
+	// Gets the sum of first ind elements
 	int get(int ind) { // O(log n)
 		int sum=0;
 		while (ind > 0) {		
@@ -25,7 +25,7 @@ struct BIT { // start: 830e3dd21ec48035fdd85c1a6225576a
 		}
 		return sum;
 	}
-
+	// Gets sum of [ind1, ind2)
 	int get(int ind1, int ind2)	{ // O(log n)
 		if (ind1 >= ind2) return 0;
 		return get(ind2) - get(ind1);
