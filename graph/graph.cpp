@@ -47,9 +47,9 @@ struct graph {
     queue<int> Q; Q.push(s);
     while (!Q.empty()) {
       int u = Q.front(); Q.pop();
-      forall(i, adj[u]) {
-        int v = dest[*i];
-        if (capres(*i) > 0 && d[v] == INF) {
+      for (auto i : adj[u]) {
+        int v = dest[i];
+        if (capres(i) > 0 && d[v] == INF) {
           d[v] = d[u] + 1; Q.push(v);
         }
       }
@@ -81,7 +81,7 @@ struct graph {
     while (MFbfs(ini, end))
       while (MFdfs(ini, end, INF));
     int F = 0;
-    forall(a, adj[ini]) F += flow[*a];
+		for (int a : adj[ini]) F += flow[a];
     return F;
   }
 
@@ -111,8 +111,8 @@ struct graph {
       int u = q.top().second.first, f = q.top().second.second;
       double d = -q.top().first; q.pop();
       if (ent[u] != -2) continue; dist[u] = d; ent[u] = f;
-      forall(a, adj[u]) if (capres(*a) >= delta)
-        q.push(make_pair(-(dist[u] + rescost(*a)), make_pair(dest[*a], *a)));
+			for (int a : adj[u]) if (capres(a) >= delta)
+        q.push(make_pair(-(dist[u] + rescost(a)), make_pair(dest[a], a)));
     }
 
     fu(u, sz(adj)) if (ent[u] != -2 && imb[u] <= -delta) {
@@ -164,18 +164,18 @@ struct graph {
 
   int dfs_artpbridge(int u, int ent) {
     int nf = 0;
-    forall(a, adj[u]) {
-      int v = dest[*a];
+		for (int a : adj[u]) {
+      int v = dest[a];
       if (depth[v] == -1) {
         least[v] = depth[v] = depth[u] + 1;
-        dfs_artpbridge(v, *a); nf++;
+        dfs_artpbridge(v, a); nf++;
 
         if (least[v] >= depth[u]) {
           artp[u] = true;
-          if (least[v] == depth[v]) bridge[*a] = bridge[inv(*a)] = true;
+          if (least[v] == depth[v]) bridge[a] = bridge[inv(a)] = true;
         } else least[u] = min(least[u], least[v]);
       }
-      else if (inv(*a) != ent) least[u] = min(least[u], depth[v]);
+      else if (inv(a) != ent) least[u] = min(least[u], depth[v]);
     }
     return nf;
   }
@@ -201,9 +201,9 @@ struct graph {
   int transp(int a) { return (a & 0x1); }
 
   void dfs_topsort(int u) {
-    forall(a, adj[u]) {
-      int v = dest[*a];
-      if (!transp(*a) && depth[v] == -1) {
+		for (int a : adj[u]) {
+      int v = dest[a];
+      if (!transp(a) && depth[v] == -1) {
         depth[v] = depth[u] + 1;
         dfs_topsort(v);
       }
@@ -213,9 +213,9 @@ struct graph {
 
   void dfs_compfortcon(int u, int ent) {
     rep[u] = ent;
-    forall(a, adj[u]) {
-      int v = dest[*a];
-      if (transp(*a) && rep[v] == -1) dfs_compfortcon(v, ent);
+		for (int a : adj[u]) {
+      int v = dest[a];
+      if (transp(a) && rep[v] == -1) dfs_compfortcon(v, ent);
     }
   }
 
@@ -242,8 +242,8 @@ struct graph {
   int dfs_match(int node, int m) {
     if (match[node] == m) return 0;
     match[node] = m;
-    forall (it, adj[node]) {
-      int j = dest[*it];
+		for (int ar : adj[node]) {
+      int j = dest[it];
       if (match[j] == -1 || dfs_match(match[j], m)) {
         match[j] = node;
         return 1;
