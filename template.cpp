@@ -33,6 +33,7 @@ using namespace std;
 const int INF = 0x3F3F3F3F; const int NEGINF = 0xC0C0C0C0;
 const int NULO = -1; const double EPS = 1e-8;
 
+typedef long long ll;
 typedef vector<int> vi;
 typedef vector<double> vd;
 typedef vector<vi> vvi;
