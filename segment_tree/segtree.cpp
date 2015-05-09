@@ -10,13 +10,15 @@ struct segtree {
 	int N;
 	vector<T> tree;
 	segtree(int _N) : N(_N) {
-		int e = 33 - __builtin_clz(N-1);
-		tree.resize(1<<e);
+		int e = 32 - __builtin_clz(N-1);
+		if (N == 1) e = 0;
+		N = 1<<e;
+		tree.resize(1<<(e+1));
 	}
 	// Vector to be in the leaves
 	void setup(vector<T>& V, REC) {
 		if (R == -1) R = N;
-		if (L >= N) return;
+		if (L >= sz(V)) return;
 		if (R - L == 1) {
 			tree[node] = V[L];
 			return;
