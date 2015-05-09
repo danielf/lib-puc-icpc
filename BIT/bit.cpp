@@ -14,6 +14,7 @@ struct BIT {
 		}	
 	}
 	int get(int ind) {
+		ind++;
 		int sum=0;
 		while(ind > 0) {
 			sum += tree[ind];
@@ -22,7 +23,7 @@ struct BIT {
 		return sum;
 	}
 	int get(int ind1, int ind2) {
-		if (ind1>=ind2) return 0;
-		return get(ind2) - get(ind1);
+		if (ind1>ind2) return 0;
+		return get(ind2) - get(ind1-1);
 	}
 };

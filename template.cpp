@@ -19,11 +19,11 @@ using namespace std;
 #define rall(v) (v).rbegin(), (v).rend()
 
 // If using C++11, change __typeof__ to decltype
-#define _for(i, a, b) for (typeof(a) i = (a); i != (b); ++i)
+#define _for(i, a, b) for (decltype(a) i = (a); i != (b); ++i)
 #define foreach(x...) _for(x)
 #define forall(i, v) foreach(i, all(v))
 // If using C++11, change __typeof__ to decltype
-#define FU(i, a, b) for(typeof(a) i = (a); i < (b); ++i)
+#define FU(i, a, b) for(decltype(a) i = (a); i < (b); ++i)
 #define fu(i, n) FU(i, 0, n)
 
 #define mset(c, v) memset(c, v, sizeof(c))
