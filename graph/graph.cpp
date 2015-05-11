@@ -4,7 +4,7 @@ struct graph {
   //
   vi dest;  // use sz(dest) as nar
   vvi adj;  // use sz(adj) as nvt
-  int inv(int a) { return a ^ 0x1; }
+  int inv(int a) { return a ^ 1; }
   graph(int n = 0) {
     _ini = _end = -1; // only for flows
     adj.resize(n);
@@ -242,8 +242,8 @@ struct graph {
   int dfs_match(int node, int m) {
     if (match[node] == m) return 0;
     match[node] = m;
-		for (int ar : adj[node]) {
-      int j = dest[it];
+		for (int a : adj[node]) {
+      int j = dest[a];
       if (match[j] == -1 || dfs_match(match[j], m)) {
         match[j] = node;
         return 1;
