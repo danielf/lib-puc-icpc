@@ -59,7 +59,8 @@ struct segtree_lazy {
 		}
 		push(node, L, R);
 		int m = (L + R)/2;
-		return tree[node] = op(_update(i, j, upd, LC, L, m), _update(i, j, upd, RC, m, R));
+		return tree[node] = 
+			op(_update(i, j, upd, LC, L, m), _update(i, j, upd, RC, m, R));
 	}
 	// queries the CLOSED interval [i,j]
 	T query(int i, int j) { return _query(i, j+1); }

@@ -13,9 +13,8 @@ int main() {
 	sort(all(V));
 	int ans = 0;
 	UF U(n);
-	for (auto &x : V)
-		if (U.unio(get<1>(x), get<2>(x)))
-			ans += get<0>(x);
+	for (auto &x : V) if (U.unio(get<1>(x), get<2>(x)))
+		ans += get<0>(x);
 	printf("%d\n", ans);
 	return 0;
 }

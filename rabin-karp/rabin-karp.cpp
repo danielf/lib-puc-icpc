@@ -1,9 +1,8 @@
-
 const int RK_PRIME = 5800079;
 // in case there is TLE
 
 // all == true if want indices of all occurences of pat in s
-// runs in O(N) but can be wrong!
+// runs in O(N) but can be wrong with small probability!
 //
 // In case of WA, try changing the RK_PRIME to another prime number and rerunning
 // try this a few times before giving up :)

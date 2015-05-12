@@ -10,40 +10,11 @@ clean:
 #	echo >> $@
 #	cat main.cpp >> $@
 
-library.txt: \
-		index.txt \
-		compila \
-		template.cpp \
-		vimrc.txt \
-		hash.sh \
-		modelo.java \
-		sizes.txt \
-		primes/primes.txt \
-		util/util.cpp \
-		geometry/geometry.cpp \
-		bigint/bigint.cpp \
-		number_theory/number_theory.cpp \
-		linear_algebra/linear_algebra.cpp \
-		simplex/simplex.cpp \
-		poker/poker.cpp \
-		graph/graph.cpp \
-		aho-corasick/aho-corasick.cpp \
-		segment_tree/segment_tree.cpp \
-		polynomial/polynomial.cpp \
-		karatsuba.cpp \
-		rmq.cpp \
-		bit.cpp \
-		resto_chines/trc.cpp \
-		rabin-karp/rabin-karp.cpp \
-		scheduling-notes.txt
+library.txt:
 	rm -f $@ $@.tmp
 	touch $@.tmp
 	./make-header.py --no-line-break "Summary" >> $@.tmp
 	cat index.txt >> $@.tmp
-	./make-header.py "C++ Compilation script" >> $@.tmp
-	cat compila >> $@.tmp
-	./make-header.py "Java template" >> $@.tmp
-	cat modelo.java >> $@.tmp
 	./make-header.py --page-break "C++ template" >> $@.tmp
 	cat template.cpp >> $@.tmp
 	
@@ -64,26 +35,33 @@ library.txt: \
 	
 	./make-header.py --page-break "Graphs" >> $@.tmp
 	cat graph/graph.cpp >> $@.tmp
-	./make-header.py "Kruskal" >> $@.tmp
+	
+	./make-header.py --page-break "Kruskal" >> $@.tmp
 	cat kruskal/kruskal.cpp >> $@.tmp
 	
-	./make-header.py --page-break "Aho-Corasick" >> $@.tmp
-	cat aho-corasick/aho-corasick.cpp >> $@.tmp
+	./make-header.py "Dijkstra - PRIM" >> $@.tmp
+	cat kruskal/dijkstra.cpp >> $@.tmp
+	
+	./make-header.py --page-break "LCA" >> $@.tmp
+	cat kruskal/lca.cpp >> $@.tmp
 	
 	./make-header.py --page-break "Segment Tree" >> $@.tmp
-	cat segment_tree/segment_tree.cpp >> $@.tmp
+	cat segment_tree/segtree.cpp >> $@.tmp
 	
-	./make-header.py --page-break "Polynomials (not very stable!)" >> $@.tmp
-	cat polynomial/polynomial.cpp >> $@.tmp
+	./make-header.py --page-break "Segment Tree (lazy update)" >> $@.tmp
+	cat segment_tree/segtree_lazy.cpp >> $@.tmp
 	
-	./make-header.py --page-break "Karatsuba (integer polynomials multiplication)" >> $@.tmp
-	cat karatsuba.cpp >> $@.tmp
+	./make-header.py "Union Find" >> $@.tmp
+	cat kruskal/unionfind.cpp >> $@.tmp
 	
 	./make-header.py --page-break "RMQ (Range Minimum Query)" >> $@.tmp
-	cat rmq.cpp >> $@.tmp
+	cat RMQ/RMQ.cpp >> $@.tmp
 	
 	./make-header.py --page-break "BIT (Binary Index Tree)" >> $@.tmp
-	cat bit.cpp >> $@.tmp
+	cat BIT/bit.cpp >> $@.tmp
+	
+	./make-header.py --page-break "Suffix Array" >> $@.tmp
+	cat suffix/suffix.cpp >> $@.tmp
 	
 	./make-header.py --page-break "Chinese Remainder Theorem" >> $@.tmp
 	cat resto_chines/trc.cpp >> $@.tmp
@@ -91,6 +69,43 @@ library.txt: \
 	./make-header.py --page-break "Rabin-Karp (randomized String Matching)" >> $@.tmp
 	cat rabin-karp/rabin-karp.cpp >> $@.tmp
 	
+	./make-header.py --page-break "FFT" >> $@.tmp
+	cat FFT.cpp >> $@.tmp
+	
+	./make-header.py --page-break "Trie (Example of)" >> $@.tmp
+	cat trie.cpp >> $@.tmp
+	
+	./make-header.py --page-break "Aho-Corasick" >> $@.tmp
+	cat aho-corasick/aho-corasick.cpp >> $@.tmp
+	
+	./make-header.py --page-break "Polynomials (not very stable!)" >> $@.tmp
+	cat polynomial/polynomial.cpp >> $@.tmp
+	
+	./make-header.py --page-break "Karatsuba (integer polynomials multiplication)" >> $@.tmp
+	cat karatsuba.cpp >> $@.tmp
+	
+	./make-header.py --page-break "Scheduling" >> $@.tmp
+	cat scheduling-notes.txt >> $@.tmp
+	
+	
+	echo '' >> $@.tmp
+	echo " " >> $@.tmp
+	echo '' >> $@.tmp
+	echo " " >> $@.tmp
+	echo '' >> $@.tmp
+	echo " " >> $@.tmp
+	echo '' >> $@.tmp
+	echo " " >> $@.tmp
+	echo '' >> $@.tmp
+	echo " " >> $@.tmp
+	echo '' >> $@.tmp
+	echo " " >> $@.tmp
+	echo '' >> $@.tmp
+	echo " " >> $@.tmp
+	echo '' >> $@.tmp
+	echo " " >> $@.tmp
+	echo '' >> $@.tmp
+	echo " " >> $@.tmp
 	echo '' >> $@.tmp
 	
 	iconv -f utf8 -t latin1 -o $@ $@.tmp

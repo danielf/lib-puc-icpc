@@ -1,4 +1,4 @@
-#include <vector>
+#include "../template.cpp"
 
 struct point { 
 	double x, y;
@@ -112,12 +112,12 @@ polygon convex_hull(vector<point>& T) {
 	point::pivot = *min_element(all(T));
 	sort(all(T), radial_lt);
 	// If colinear points are part of hull, insert next two lines
-	//for (k = n-2; k >= 0 && ccw(T[0], T[n-1], T[k]) == 0; k--);
-	//reverse((k+1) + all(T));
+	for (k = n-2; k >= 0 && ccw(T[0], T[n-1], T[k]) == 0; k--);
+	reverse((k+1) + all(T));
 
 	for (int i = 0; i < n; i++) {
 		// If colinear points are part, change >= to >
-		while (j > 1 && ccw(U[j-1], U[j-2], T[i]) >= 0) j--;
+		while (j > 1 && ccw(U[j-1], U[j-2], T[i]) > 0) j--;
 		U[j++] = T[i];
 	}
 	U.erase(j + all(U));
@@ -148,6 +148,7 @@ point line_intersect(point p, point q, point r, point s) {
 //
 
 typedef pair<point, double> circle; // center, radius
+
 bool in_circle(circle C, point p) { // is point p in circle C?
 	return cmp((p - C.first)*(p - C.first), C.second*C.second) <= 0;
 }
@@ -220,3 +221,23 @@ polygon poly_intersect(polygon& P, polygon& Q) {
 	return R;
 }
 
+int main() {
+	int N;
+	while (scanf("%d", &N) != EOF && N) {
+		vector<point> V(N);
+		for (auto &x : V) scanf("%lf %lf", &x.x, &x.y);
+		int qnt = 0;
+		while (!V.empty()) {
+			auto P = convex_hull(V);
+			qnt++;
+			vector<bool> valid(sz(V), true);
+			for (auto x : P) fu(i, sz(V)) if (V[i] == x) valid[i] = false;
+			vector<point> V2;
+			fu(i, sz(V)) if (valid[i]) V2.pb(V[i]);
+			swap(V, V2); // O(1)
+		}
+		if (qnt % 2 == 1) printf("Take this onion to the lab!\n");
+		else printf("Do not take this onion to the lab!\n");
+	}
+	return 0;
+}

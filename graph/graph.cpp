@@ -6,7 +6,6 @@ struct graph {
   vvi adj;  // use sz(adj) as nvt
   int inv(int a) { return a ^ 1; }
   graph(int n = 0) {
-    _ini = _end = -1; // only for flows
     adj.resize(n);
     imb.resize(n);
   }
@@ -28,13 +27,12 @@ struct graph {
   //
 
   vi cap, flow;
-  int _ini, _end;   // ini, end of last maxflow
 
   int orig(int a) { return dest[inv(a)]; }
   int capres(int a) { return cap[a] - flow[a]; }
 
   //////////////////////////////////////////////////////////////////////////////
-  // Max Flow! - Dinic O(n^2 * m) incremental
+  // Max Flow! - Dinic O(n^2 * m)
   // don't call maxflow with ini == end
   //
 
@@ -73,11 +71,7 @@ struct graph {
   }
 
   int maxflow(int ini, int end) {
-    if (_ini != ini || _end != end) {
-      flow = vi(sz(dest));
-      _ini = ini;
-      _end = end;
-    }
+    flow = vi(sz(dest));
     while (MFbfs(ini, end))
       while (MFdfs(ini, end, INF));
     int F = 0;
@@ -87,7 +81,7 @@ struct graph {
 
 
   //////////////////////////////////////////////////////////////////////////////
-  // Min Cost Flow! - O(m^2 * log n * log U) incremental
+  // Min Cost Flow! - O(m^2 * log n * log U)
   // Don't forget to specify the [imb]
   // look at [imb] for feasibility
   //

@@ -200,8 +200,8 @@ int main() {
 		vector<value> V(N);
 		fu(i, N) V[i] = {S[i], (i % 2)*(S[i] % 2), (1 - (i%2))*(S[i]%2)};
 		seg.setup(V);
+		ll ans = 0;
 		fu(i, M) {
-			ll ans = 0;
 			if (O[i] == 1) {
 				ll a = A[i]-1;
 				ll len = B[i];
@@ -211,7 +211,7 @@ int main() {
 				ans = (ans + c*len + d*len*(len-1)/2) % MOD;
 				// first part
 				ll end = min(N, a+len);
-				seg.update(a, len, Tlazy(c - a*d, d));
+				seg.update(a, end, Tlazy(c - a*d, d));
 				// second part
 				if (end < a+len) {
 					len = a+len-end;
@@ -224,7 +224,7 @@ int main() {
 				ans = (ans + len*c) % MOD;
 				ll end = min(N, a+len);
 				ans = (ans + seg.query(a, end).sum) % MOD;
-				seg.update(a, len, Tlazy(c));
+				seg.update(a, end, Tlazy(c));
 				if (end < a + len) {
 					len = a + len - end;
 					ans = (ans + seg.query(0, len).sum) % MOD;
@@ -251,9 +251,8 @@ int main() {
 					ans = (ans + q.oddodd + q.oddeven) % MOD;
 				}
 			}
-			printf("%lld - %lld\n", O[i], ans);
 		}
-//		printf("Case #%d: %lld\n", _42+1, ans);
+		printf("Case #%d: %lld\n", _42+1, ans);
 	}
 	return 0;
 }

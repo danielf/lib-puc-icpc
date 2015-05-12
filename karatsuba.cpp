@@ -24,7 +24,8 @@ void karatsuba(int r[], int g1, int p1[], int g2, int p2[], int _lvl = 0) {
 	karatsuba(r, degree2, p1, degree2, p2, _lvl+1);
 
 	// A1*B1
-	karatsuba(r+2*degree2+2, g1-degree2-1, p1+degree2+1, g2-degree2-1, p2+degree2+1, _lvl+1);
+	karatsuba(r+2*degree2+2, g1-degree2-1, p1+degree2+1, g2-degree2-1, p2+degree2+1,
+			_lvl+1);
 
 	// (A0+A1)*(B0+B1)
 	for (int i = 0; i <= degree2; i++)

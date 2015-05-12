@@ -1,8 +1,61 @@
+#include <cstdio>
+#include <cmath>
+#include <cstring>
+#include <cstdlib>
+#include <vector>
+#include <string>
+#include <queue>
+#include <algorithm>
+#include <iostream>
+#include <utility>
+using namespace std;
+
+#define TRACE(x...) 
+#define WATCH(x) TRACE(cout << #x" = " << x << endl)
+#define PRINT(x...) TRACE(printf(x); fflush(stdout))
+
+#define all(v) (v).begin(), (v).end()
+
+#define FU(i, a, b) for(decltype(b) i = (a); i < (b); ++i)
+#define fu(i, n) FU(i, 0, n)
+
+#define FD(i, a, b) for (decltype(b) i = (b)-1; i >= a; --i)
+#define fd(i, n) FD(i, 0, n)
+
+#define mod(a, b) ((((a)%(b))+(b))%(b))
+#define pb push_back
+#define sz(c) int((c).size())
+#define mp make_pair
+
+const int INF = 0x3F3F3F3F; const int NEGINF = 0xC0C0C0C0;
+const double EPS = 1e-8;
+
+typedef vector<int> vi;
+typedef vector<vi> vvi;
+typedef vector<double> vd;
+typedef long long ll;
+typedef vector<ll> vll;
+typedef vector<vll> vvll;
+
+int cmp(double x, double y = 0, double tol = EPS) {
+	return (x <= y + tol) ? (x + tol < y) ? -1 : 0 : 1;
+}
+
+inline void scanint(int &x) {
+	auto gc = getchar_unlocked;
+	int c = gc();
+	x = 0;
+	int neg = 0;
+	for (;((c < '0' || c > '9') && c != '-'); c = gc());
+	if (c == '-') {neg = 1; c = gc();}
+	for (;c >= '0' && c <= '9'; c = gc()) {x = 10*x + c - '0';}
+	if (neg) x = -x;
+}
 ////////////////////////////////////////////////////////////////////////////////
 // Computes GCD of x and y
 //
 
-ll gcd(int x, int y) { return y ? gcd(y, x % y) : abs(x); }
+int gcd(int x, int y) { return y ? gcd(y, x % y) : abs(x); }
 
 ////////////////////////////////////////////////////////////////////////////////
 // Computes lcm of x and y
@@ -105,18 +158,11 @@ void comp_pascal() {
 
 // runs in O(log b)
 
-ll power(ll a, ll b) {
+ll power(ll a, ll b, ll m) {
 	if (b == 0) return 1;
-	ll x = power(a, b/2);
-	if (b % 2 == 0) return x*x;
-	else return a*x*x;
-}
-
-ll power(ll a, ll b, ll mod) {
-	if (b == 0) return 1;
-	ll x = power(a, b/2, mod);
-	if (b % 2 == 0) return (x*x) % mod;
-	else return (((a*x) % mod)*x) % mod;
+	ll x = power(a, b/2, m);
+	if (b % 2 == 0) return (x*x) % m;
+	else return (((a*x) % m)*x) % m;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -185,9 +231,6 @@ vi calc_mu(int N) {
 	return ans;
 }
 
-////////////////////////////////////////////////////////////////////////////////
-// Discrete Log ////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
 // discrete log (solves a^x = b (mod N)) in O(sqrt(N)). Returns -1 if no solution
 #include <unordered_map>
 ll discrete_log(ll a, ll b, ll N) {
@@ -196,16 +239,30 @@ ll discrete_log(ll a, ll b, ll N) {
 	a /= d; b /= d; N /= d;
 	ll sqN = 0;
 	for (; sqN*sqN < N; sqN++);
+	WATCH(N); WATCH(sqN);
 	ll giant = power(find_bezout(a, N, N).first, sqN, N);
+	WATCH(giant);
 	unordered_map<ll, ll> baby;
 	ll tmp = 1;
 	fu(i, sqN) {
 		if (!baby.count(tmp)) baby[tmp] = i;
 		tmp = (a*tmp) % N;
 	}
+	for (auto x : baby) PRINT("baby[%lld] = %lld\n", x.first, x.second);
 	fu(i, sqN) {
 		if (baby.count(b)) return baby[b] + i*sqN;
 		b = (giant*b) % N;
 	}
 	return -1;
 }
+
+int main() {
+	ll P, B, N;
+	while (scanf("%lld %lld %lld", &P, &B, &N) != EOF) {
+		ll ans = discrete_log(B, N, P);
+		if (ans == -1) printf("no solution\n");
+		else printf("%lld\n", ans);
+	}
+	return 0;
+}
+
