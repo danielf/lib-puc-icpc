@@ -12,8 +12,8 @@ struct UF {
 	bool unio(int a, int b) { // returns false if a and b are already joined
 		a = rep(a); b = rep(b);
 		if (a == b) return false;
-		if (rank[a] < rank[b]) rep[a] = b;
-		else rep[b] = a;
+		if (rank[a] < rank[b]) p[a] = b;
+		else p[b] = a;
 		if (rank[a] == rank[b]) rank[a]++;
 		return true;
 	}

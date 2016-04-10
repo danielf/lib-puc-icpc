@@ -1,5 +1,7 @@
 #!/bin/bash
 
-hash=$(cpp -fpreprocessed -P /dev/stdin | sed ':a;N;$!ba;s/[ \t\n]//g' | md5sum)
+input=$(cat /dev/stdin)
+hash=$(cpp -fpreprocessed -P <(echo "$input") | sed ':a;N;$!ba;s/[ \t\n]//g' | md5sum)
 echo "// start: ${hash}"
-cat /dev/stdin
+echo "$input"
+echo "// end"
