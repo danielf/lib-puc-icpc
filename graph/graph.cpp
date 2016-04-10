@@ -1,18 +1,22 @@
+#define pb push_back
+#define sz(x) ((int)(x).size())
+#define FU(i, a, b) for (int i = a; i < b; ++i)
+#define fu(i, b) FU(i, 0, b)
+
 struct graph {
   //////////////////////////////////////////////////////////////////////////////
   // Shared part. Also known as: You will need this!
   //
-  vi dest;  // use sz(dest) as nar
-  vvi adj;  // use sz(adj) as nvt
+  vi dest;  // use sz(dest) as number of arcs
+  vvi adj;  // use sz(adj) as number of vertices
   int inv(int a) { return a ^ 0x1; }
   graph(int n = 0) {
-    _ini = _end = -1; // only for flows
     adj.resize(n);
-    imb.resize(n);
+    imb.resize(n); // only for mincostflow
   }
   // Adds an arc to the graph. u is capacity, c is cost.
   // u is only needed on flows, and c only on min-cost-flow
-  int arc(int i, int j, int u = 0, double c = 0) {
+  int arc(int i, int j, int u = 1, double c = 0) {
     dest.pb(j);
     adj[i].pb(sz(dest)-1);
     dest.pb(i);
@@ -28,13 +32,12 @@ struct graph {
   //
 
   vi cap, flow;
-  int _ini, _end;   // ini, end of last maxflow
 
   int orig(int a) { return dest[inv(a)]; }
   int capres(int a) { return cap[a] - flow[a]; }
 
   //////////////////////////////////////////////////////////////////////////////
-  // Max Flow! - Dinic O(n^2 * m) incremental
+  // Max Flow! - Dinic O(n^2 * m)
   // don't call maxflow with ini == end
   //
 
@@ -73,11 +76,7 @@ struct graph {
   }
 
   int maxflow(int ini, int end) {
-    if (_ini != ini || _end != end) {
-      flow = vi(sz(dest));
-      _ini = ini;
-      _end = end;
-    }
+    flow = vi(sz(dest));
     while (MFbfs(ini, end))
       while (MFdfs(ini, end, INF));
     int F = 0;
@@ -85,9 +84,25 @@ struct graph {
     return F;
   }
 
+	// Only call after finding maxflow
+	vi mincut(int ini) {
+		vi ans;
+		vector<bool> mark(sz(adj), false);
+		mark[ini] = true; ans.pb(ini);
+		fu(pos, ans.size()) {
+			int x = ans[pos];
+			for (int ar : adj[x]) if (capres(ar) > 0) {
+				int y = dest[ar];
+			 	if (mark[y]) continue;
+				ans.pb(y); mark[y] = true;
+			}
+		}
+		return ans;
+	}
+
 
   //////////////////////////////////////////////////////////////////////////////
-  // Min Cost Flow! - O(m^2 * log n * log U) incremental
+  // Min Cost Flow! - O(m^2 * log n * log U)
   // Don't forget to specify the [imb]
   // look at [imb] for feasibility
   //
@@ -100,7 +115,7 @@ struct graph {
     return cost[a] + pot[orig(a)] - pot[dest[a]];
   }
 
-  bool dijkstra() {
+  bool MCFdijkstra() {
     priority_queue<pair<double, pair<int, int> > > q;
     vi ent(sz(adj), -2);
     vd dist(sz(adj), INF);
@@ -131,6 +146,8 @@ struct graph {
   double mincostflow() {
     pot.resize(sz(adj));
     flow.resize(sz(dest));
+		// Assumes no capacity bigger or equal than 2*0x40000000
+		// i.e. assumes fits in int
     for (delta = 0x40000000; delta > 0; delta /= 2) {
       fu(a, sz(dest)) {
         int u = orig(a), v = dest[a];
@@ -141,7 +158,7 @@ struct graph {
           flow[a] += capres(a);
         }
       }
-      while (dijkstra());
+      while (MCFdijkstra());
     }
     double C = 0.0;
     fu(a, sz(dest)) if (flow[a] > 0) C += flow[a] * cost[a];

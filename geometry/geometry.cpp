@@ -1,8 +1,6 @@
-#include <vector>
-
 struct point { 
 	double x, y;
-	point(double x = 0, double y = 0): x(x), y(y) {}
+	explicit point(double x = 0, double y = 0): x(x), y(y) {}
 
 	// Only type in the operators you actually need
 	point operator +(point q) const { return point(x + q.x, y + q.y); }
