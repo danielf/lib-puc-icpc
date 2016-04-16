@@ -7,7 +7,7 @@ using namespace std;
 #define WATCH(x) TRACE(cout << #x" = " << x << endl)
 #define PRINT(x...) TRACE(printf(x))
 #define WATCHR(a, b) TRACE(for (auto c=a; c!=b;) cout << *(c++) << " "; cout << endl)
-#define WATCHC(V) TRACE(cout << #V" = "; WATCHR(V.begin(), V.end()))
+#define WATCHC(V) TRACE({cout << #V" = "; WATCHR(V.begin(), V.end());})
 
 typedef long long ll;
 typedef vector<int> vi;
