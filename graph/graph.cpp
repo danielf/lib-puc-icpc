@@ -52,12 +52,12 @@ template<typename COST = double> struct graph {
       int u = Q.front(); Q.pop();
       for (auto i : adj[u]) {
         int v = dest[i];
-        if (capres(i) > 0 && d[v] == INF) {
+        if (capres(i) > 0 && d[v] == INT_MAX/2) {
           d[v] = d[u] + 1; Q.push(v);
         }
       }
     }
-    return d[t] != INF;
+    return d[t] != INT_MAX/2;
   }
 
   ll MFdfs(int u, int t, ll f) {
@@ -262,7 +262,7 @@ template<typename COST = double> struct graph {
     if (match[node] == m) return 0;
     match[node] = m;
 		for (int ar : adj[node]) {
-      int j = dest[it];
+      int j = dest[ar];
       if (match[j] == -1 || dfs_match(match[j], m)) {
         match[j] = node;
         return 1;
