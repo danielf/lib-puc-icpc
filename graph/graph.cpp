@@ -143,7 +143,7 @@ template<typename COST = double> struct graph {
     return false;
   }
 
-  double mincostflow() {
+  COST mincostflow() {
     pot.resize(sz(adj));
     flow.resize(sz(dest));
 		// Assumes no capacity bigger or equal than 2*0x40000000
@@ -152,6 +152,7 @@ template<typename COST = double> struct graph {
     for (delta = 0x40000000; delta > 0; delta /= 2) {
       fu(a, sz(dest)) {
         int u = orig(a), v = dest[a];
+				// if COST = ll use rescost(a) < 0 without cmp
         if (capres(a) >= delta && cmp(rescost(a)) < 0) {
           imb[u] -= capres(a);
           imb[v] += capres(a);
