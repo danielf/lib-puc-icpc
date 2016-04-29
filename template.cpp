@@ -15,6 +15,10 @@ typedef vector<vi> vvi;
 typedef vector<ll> vll;
 typedef vector<vll> vvll;
 
+ll mod(ll a, ll b) {
+	return ((a%b)+b)%b;
+}
+
 int main() {
 	ios_base::sync_with_stdio(false);
 	cout << fixed << setprecision(15);
