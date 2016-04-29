@@ -12,8 +12,8 @@ using namespace std;
 typedef long long ll;
 typedef vector<int> vi;
 typedef vector<vi> vvi;
-typedef vector<ll> vl;
-typedef vector<vl> vvl;
+typedef vector<ll> vll;
+typedef vector<vll> vvll;
 
 int main() {
 	ios_base::sync_with_stdio(false);
