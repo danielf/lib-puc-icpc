@@ -3,7 +3,7 @@
 #define FU(i, a, b) for (int i = a; i < b; ++i)
 #define fu(i, b) FU(i, 0, b)
 
-struct graph {
+template<typename COST = double> struct graph {
   //////////////////////////////////////////////////////////////////////////////
   // Shared part. Also known as: You will need this!
   //
@@ -16,7 +16,7 @@ struct graph {
   }
   // Adds an arc to the graph. u is capacity, c is cost.
   // u is only needed on flows, and c only on min-cost-flow
-  int arc(int i, int j, int u = 1, double c = 0) {
+  int arc(int i, int j, ll u = 1, COST c = 0) {
     dest.pb(j);
     adj[i].pb(sz(dest)-1);
     dest.pb(i);
@@ -31,20 +31,20 @@ struct graph {
   // For both flows!!
   //
 
-  vi cap, flow;
+  vll cap, flow;
 
   int orig(int a) { return dest[inv(a)]; }
-  int capres(int a) { return cap[a] - flow[a]; }
+  ll capres(int a) { return cap[a] - flow[a]; }
 
   //////////////////////////////////////////////////////////////////////////////
   // Max Flow! - Dinic O(n^2 * m)
   // don't call maxflow with ini == end
   //
 
-  vi d, curAdj;
+  vi curAdj, d;
 
   bool MFbfs(int s, int t) {
-    d = vi(sz(adj), INF);
+    d.assign(sz(adj), INT_MAX/2);
     curAdj = vi(sz(adj));
     d[s] = 0;
     queue<int> Q; Q.push(s);
@@ -60,12 +60,12 @@ struct graph {
     return d[t] != INF;
   }
 
-  int MFdfs(int u, int t, int f) {
+  ll MFdfs(int u, int t, ll f) {
     if (u == t) return f;
     for(int &i = curAdj[u]; i < adj[u].size(); ++i) {
       int ar = adj[u][i], v = dest[ar];
       if (d[v] != d[u]+1 || capres(ar) == 0) continue;
-      int tmpF = MFdfs(v, t, min(f, capres(ar)));
+      ll tmpF = MFdfs(v, t, min(f, capres(ar)));
       if (tmpF) {
         flow[ar] += tmpF;
         flow[inv(ar)] -= tmpF;
@@ -75,11 +75,11 @@ struct graph {
     return 0;
   }
 
-  int maxflow(int ini, int end) {
-    flow = vi(sz(dest));
+  ll maxflow(int ini, int end) {
+    flow.assign(sz(dest), 0);
     while (MFbfs(ini, end))
-      while (MFdfs(ini, end, INF));
-    int F = 0;
+      while (MFdfs(ini, end, LLONG_MAX/2));
+    ll F = 0;
 		for (int a : adj[ini]) F += flow[a];
     return F;
   }
@@ -107,24 +107,24 @@ struct graph {
   // look at [imb] for feasibility
   //
 
-  vi imb;
-  vd cost, pot;
-  int delta;
+	vll imb;
+  vector<COST> cost, pot;
+  ll delta;
 
-  double rescost(int a) {
+  COST rescost(int a) {
     return cost[a] + pot[orig(a)] - pot[dest[a]];
   }
 
   bool MCFdijkstra() {
-    priority_queue<pair<double, pair<int, int> > > q;
+    priority_queue<pair<COST, pair<int, int> > > q;
     vi ent(sz(adj), -2);
-    vd dist(sz(adj), INF);
+    vector<COST> dist(sz(adj), INFINITY); // change to LLONG_MAX/2 if COST = ll
     fu(u, sz(adj)) if (imb[u] >= delta)
-      q.push(make_pair(0.0, make_pair(u, -1)));
+      q.push(make_pair(0, make_pair(u, -1)));
 
     while (!q.empty()) {
       int u = q.top().second.first, f = q.top().second.second;
-      double d = -q.top().first; q.pop();
+      COST d = -q.top().first; q.pop();
       if (ent[u] != -2) continue; dist[u] = d; ent[u] = f;
 			for (int a : adj[u]) if (capres(a) >= delta)
         q.push(make_pair(-(dist[u] + rescost(a)), make_pair(dest[a], a)));
@@ -148,6 +148,7 @@ struct graph {
     flow.resize(sz(dest));
 		// Assumes no capacity bigger or equal than 2*0x40000000
 		// i.e. assumes fits in int
+		// Increase this limit if necessary but should always be power of 2
     for (delta = 0x40000000; delta > 0; delta /= 2) {
       fu(a, sz(dest)) {
         int u = orig(a), v = dest[a];
@@ -160,7 +161,7 @@ struct graph {
       }
       while (MCFdijkstra());
     }
-    double C = 0.0;
+  	COST C = 0;
     fu(a, sz(dest)) if (flow[a] > 0) C += flow[a] * cost[a];
     return C;
   }
