@@ -35,7 +35,7 @@ struct point {
 
 point point::pivot; // only needed for convex hull
 
-double norm(point p){ return sqrt(p.x * p.x + p.y * p.y); }
+double norm(point p){ return sqrt(p * p); }
 double arg(point p) { return atan2(p.y, p.x); }
 
 typedef vector<point> polygon;
@@ -153,30 +153,18 @@ point line_intersect(point p, point q, point r, point s) {
 
 struct rect{
     double ax, ay, bx, by; // (ax, ay) lower left, (bx, by) top right
-    rect(double ax = 0, double ay = 0,
+    explicit rect(double ax = 0, double ay = 0,
          double bx = 0, double by = 0): ax(ax), ay(ay),
                                         bx(bx), by(by) {}
 };
 
 // Returns the intersection of r and s. (0, 0, 0, 0) if area zero.
 rect inter(rect r, rect s){
-    if(r.ax > s.ax) return inter(s, r);
-    if(s.ax >= r.bx || s.by <= r.ay || s.ay >= r.by) return rect();
-    if(s.ay >= r.ay){
-        if(s.by <= r.by && s.bx <= r.bx) return s;
-        if(s.by >= r.by && s.bx >= r.bx) return rect(s.ax, s.ay, r.bx, r.by);
-        if(s.by >= r.by && s.bx <= r.bx) return rect(s.ax, s.ay, s.bx, r.by);
-        else return rect(s.ax, s.ay, r.bx, s.by);
-    }
-    else{
-        if(s.by <= r.by && s.bx <= r.bx) return rect(s.ax, r.ay, s.bx, s.by);
-        if(s.by >= r.by && s.bx >= r.bx) return rect(s.ax, r.ay, r.bx, r.by);
-        if(s.by >= r.by && s.bx <= r.bx) return rect(s.ax, r.ay, s.bx, r.by);
-        else return rect(s.ax, r.ay, r.bx, s.by);
-    }
+    rect ans(max(s.ax, r.ax), max(s.ay, r.ay), min(s.bx, r.bx), min(s.by, r.by));
+    if (cmp(ans.xa, ans.xb) > 0 || cmp(ans.ya, ans.yb) > 0)
+      return rect(INFINITY);
+    return ans;
 }
-
-
 
 ////////////////////////////////////////////////////////////////////////////////
 // Line-circle and circle-circle intersections
@@ -229,7 +217,7 @@ ppt cline(point o, double r, point a, point b){
 // Inverse of p in circle. Assumes o != p.
 point cinv(point o, double r, point p){
     point p0 = p - o;
-    return o + p0 * (r*r/(norm(p0) * norm(p0)));
+    return o + p0 * (r*r/(p0 * p0));
 }
 
 ////////////////////////////////////////////////////////////////////////////////
