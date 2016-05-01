@@ -1,4 +1,10 @@
-struct point { 
+const double EPS = 1e-8;
+
+int cmp(double x, double y = 0, double tol = EPS) {
+  return (x <= y + tol) ? (x + tol < y) ? -1 : 0 : 1;
+}
+
+struct point {
 	double x, y;
 	explicit point(double x = 0, double y = 0): x(x), y(y) {}
 
@@ -19,17 +25,17 @@ struct point {
 	bool operator ==(point q) const { return cmp(q) == 0; }
 	bool operator !=(point q) const { return cmp(q) != 0; }
 	bool operator < (point q) const { return cmp(q) <  0; }
-	
+
 	friend ostream& operator <<(ostream& o, point p) {
 		return o << "(" << p.x << ", " << p.y << ")";
 	}
-	
+
 	static point pivot; // only needed for convex hull
 };
 
 point point::pivot; // only needed for convex hull
 
-double abs(point p) { return hypot(p.x, p.y); }
+double norm(point p){ return sqrt(p.x * p.x + p.y * p.y); }
 double arg(point p) { return atan2(p.y, p.x); }
 
 typedef vector<point> polygon;
@@ -47,7 +53,7 @@ inline double angle(point p, point q, point r) {
 
 ////////////////////////////////////////////////////////////////////////////////
 // Is q inside [p,r]? (all segments are closed)
-// 
+//
 
 bool between(point p, point q, point r) {
 	return ccw(p, q, r) == 0 && cmp((p - q) * (r - q)) <= 0;
@@ -69,7 +75,7 @@ bool seg_intersect(point p, point q, point r, point s) {
 
 ////////////////////////////////////////////////////////////////////////////////
 // Distance from r to [p,q]
-// 
+//
 
 double seg_distance(point p, point q, point r) {
 	point A = r - q, B = r - p, C = q - p;
@@ -81,11 +87,11 @@ double seg_distance(point p, point q, point r) {
 
 ////////////////////////////////////////////////////////////////////////////////
 // Classifies p with respect of polygon T (not necessarily convex)
-// 
+//
 // Returns -1 if on border, 0 if outside, 1 if inside
-// 
+//
 
-int in_poly(point p, polygon& T) { 
+int in_poly(point p, polygon& T) {
 	double a = 0; int N = T.size();
 	for (int i = 0; i < N; i++) {
 		if (between(T[i], p, T[(i+1) % N])) return -1;
@@ -142,9 +148,89 @@ point line_intersect(point p, point q, point r, point s) {
 	return point(point(a.x, b.x) % c, point(a.y, b.y) % c) / (a % b);
 }
 
+////////////////////////////////////////////////////////////////////////////////
+// Rectangle intersection
+
+struct rect{
+    double ax, ay, bx, by; // (ax, ay) lower left, (bx, by) top right
+    rect(double ax = 0, double ay = 0,
+         double bx = 0, double by = 0): ax(ax), ay(ay),
+                                        bx(bx), by(by) {}
+};
+
+// Returns the intersection of r and s. (0, 0, 0, 0) if area zero.
+rect inter(rect r, rect s){
+    if(r.ax > s.ax) return inter(s, r);
+    if(s.ax >= r.bx || s.by <= r.ay || s.ay >= r.by) return rect();
+    if(s.ay >= r.ay){
+        if(s.by <= r.by && s.bx <= r.bx) return s;
+        if(s.by >= r.by && s.bx >= r.bx) return rect(s.ax, s.ay, r.bx, r.by);
+        if(s.by >= r.by && s.bx <= r.bx) return rect(s.ax, s.ay, s.bx, r.by);
+        else return rect(s.ax, s.ay, r.bx, s.by);
+    }
+    else{
+        if(s.by <= r.by && s.bx <= r.bx) return rect(s.ax, r.ay, s.bx, s.by);
+        if(s.by >= r.by && s.bx >= r.bx) return rect(s.ax, r.ay, r.bx, r.by);
+        if(s.by >= r.by && s.bx <= r.bx) return rect(s.ax, r.ay, s.bx, r.by);
+        else return rect(s.ax, r.ay, r.bx, s.by);
+    }
+}
 
 
 
+////////////////////////////////////////////////////////////////////////////////
+// Line-circle and circle-circle intersections
+
+// Returns the foot of the perpendicular from P to line AB
+point foot(point P, point A, point B) {
+    point dir = B-A;
+    return (dir*((P-A)*dir))/(dir*dir) + A;
+}
+
+typedef pair<point, point> ppt;
+
+// Returns the two points R1, R2 at distance d from q
+// such that PQR1 = PQR2 = 90. Assumes p != q.
+ppt disppt(point P, point Q, double d){
+    point dir = P - Q;
+    point r = point(dir.y, -dir.x);
+    point k = r * (d/norm(r));
+    return ppt{Q + k, Q - k};
+}
+
+// Intersection of two circles.
+// If circles are tangent, second point inf true. If disjoint both inf true.
+ppt circint(point o1, double r1, point o2, double r2){
+    point dir = o2 - o1;
+    point in(INFINITY, INFINITY);
+    double d = norm(dir);
+    // tangent
+    if(cmp(r1 + r2, d) == 0 || cmp(d + r2, r1) == 0 || cmp(d + r1, r2) == 0)
+        return ppt{o1 + dir * r1/(r1 + r2), in};
+    // no inter
+    if(cmp(r1 + r2, d) == -1 || cmp(d + r2, r1) == -1 || cmp(d + r1, r2) == -1)
+        return ppt{in, in};
+    // two inters
+    double x = (d*d - r2*r2 + r1*r1)/(2*d);
+    return disppt(o1, o1 + dir * x/d, sqrt(r1*r1 - x*x));
+}
+
+// Intersect line and circle.
+// If  tangent, second point inf true. If disjoint both inf true.
+ppt cline(point o, double r, point a, point b){
+    point h = foot(o, a, b);
+    point in(INFINITY, INFINITY);
+    double d = norm(h - o);
+    if(cmp(d, r) == 0) return ppt{h, in};
+    if(cmp(d, r) == 1) return ppt{in, in};
+    return disppt(o, h, sqrt(r*r - d*d));
+}
+
+// Inverse of p in circle. Assumes o != p.
+point cinv(point o, double r, point p){
+    point p0 = p - o;
+    return o + p0 * (r*r/(norm(p0) * norm(p0)));
+}
 
 ////////////////////////////////////////////////////////////////////////////////
 // Find the smallest circle containing all the points in expected time O(N)
