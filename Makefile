@@ -80,7 +80,8 @@ library.txt: \
 	
 	./make-header.py --page-break "Least Common Ancestor" >> $@.tmp
 	cat heavy_light/lca.cpp >> $@.tmp
-	./make-header.py "Heavy-Light Decomposition" >> $@.tmp
+	
+	./make-header.py --page-break "Heavy-Light Decomposition" >> $@.tmp
 	cat heavy_light/heavy_light.cpp >> $@.tmp
 	
 	./make-header.py --page-break "Segment Tree" >> $@.tmp
@@ -112,6 +113,9 @@ library.txt: \
 	
 	./make-header.py "Suffix Array" >> $@.tmp
 	cat suffix_array/suffix_array.cpp >> $@.tmp
+	
+	./make-header.py "Knuth Morris Pratt" >> $@.tmp
+	cat strings/knuth_morris_pratt.cpp >> $@.tmp
 	
 	echo '' >> $@.tmp
 	
