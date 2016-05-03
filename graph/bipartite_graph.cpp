@@ -64,4 +64,3 @@ struct bipartite_graph {
     }
 };
 
-

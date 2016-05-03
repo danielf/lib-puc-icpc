@@ -250,34 +250,4 @@ template<typename COST = double> struct graph {
     for (int i = sz(adj)-1; i >= 0; i--) if (rep[ord[i]] == -1)
       dfs_compfortcon(ord[i], ord[i]);
   }
-
-  //////////////////////////////////////////////////////////////////////////////
-  // Bipartite Matching
-  // see [match] for results
-  // match[i] = matching of "i", -1 if unmatched
-  // left hand side = [0, k-1], and right hand side = [k, N-1]
-  
-  vi match;
-  int dfs_match(int node, int m) {
-    if (match[node] == m) return 0;
-    match[node] = m;
-		for (int ar : adj[node]) {
-      int j = dest[ar];
-      if (match[j] == -1 || dfs_match(match[j], m)) {
-        match[j] = node;
-        return 1;
-      }
-    }
-    return 0;
-  }
-
-  int bipartite_match(int k) {
-    int N = sz(adj);
-    match = vi(N, -1); // during dfs, match for LHS acts as mark
-    int ans = 0;
-    fu(i, k) ans += dfs_match(i, i);
-		fu(i, k) match[i] = -1; // fix match for LHS
-    FU(i, k, N) if (match[i] != -1) match[match[i]] = i;
-    return ans;
-  }
 };

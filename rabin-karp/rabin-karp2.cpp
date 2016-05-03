@@ -19,7 +19,9 @@ namespace rabin_karp {
                 res.vals[i] = (vals[i] op h.vals[i]) % primes[i]; \
             return res;
 
-        bool operator==(const strong_mod &h) { return !memcmp(this, &h, sizeof(strong_mod)); }
+        bool operator==(const strong_mod &h) { 
+            return !memcmp(this, &h, sizeof(strong_mod));
+        }
         strong_mod operator*(const strong_mod &h) { combine(h, * 1ll *); }
         strong_mod operator+(const strong_mod &h) { combine(h, +); }
 

@@ -64,8 +64,16 @@ library.txt: \
 	
 	./make-header.py --page-break "Graphs" >> $@.tmp
 	cat graph/graph.cpp >> $@.tmp
-	./make-header.py "Kruskal" >> $@.tmp
-	cat kruskal/kruskal.cpp >> $@.tmp
+	./make-header.py "Bipartite Graphs" >> $@.tmp
+	cat graph/bipartite_graph.cpp >> $@.tmp
+	
+	./make-header.py "Union Find" >> $@.tmp
+	cat data_structures/union_find.cpp >> $@.tmp
+	
+	./make-header.py --page-break "Least Common Ancestor" >> $@.tmp
+	cat heavy_light/lca.cpp >> $@.tmp
+	./make-header.py "Heavy-Light Decomposition" >> $@.tmp
+	cat heavy_light/heavy_light.cpp >> $@.tmp
 	
 	./make-header.py --page-break "Segment Tree" >> $@.tmp
 	cat data_structures/segment_tree.cpp >> $@.tmp
@@ -85,13 +93,16 @@ library.txt: \
 	./make-header.py --page-break "Chinese Remainder Theorem" >> $@.tmp
 	cat resto_chines/trc.cpp >> $@.tmp
 	
+	./make-header.py "Upper Envelope" >> $@.tmp
+	cat upper_envelope/upper_envelope.cpp >> $@.tmp
+	
 	./make-header.py --page-break "Rabin-Karp (randomized String Matching)" >> $@.tmp
 	cat rabin-karp/rabin-karp2.cpp >> $@.tmp
 	
 	./make-header.py --page-break "Aho-Corasick" >> $@.tmp
 	cat aho-corasick/aho-corasick2.cpp >> $@.tmp
 	
-	./make-header.py --page-break "Suffix Array" >> $@.tmp
+	./make-header.py "Suffix Array" >> $@.tmp
 	cat suffix_array/suffix_array.cpp >> $@.tmp
 	
 	echo '' >> $@.tmp
