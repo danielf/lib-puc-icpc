@@ -40,8 +40,6 @@ library.txt: \
 	touch $@.tmp
 	./make-header.py --no-line-break "Summary" >> $@.tmp
 	cat index.txt >> $@.tmp
-	./make-header.py "C++ Compilation script" >> $@.tmp
-	cat compila >> $@.tmp
 	./make-header.py "vimrc" >> $@.tmp
 	cat vimrc.txt >> $@.tmp
 	./make-header.py "Hash Utility" >> $@.tmp
@@ -54,9 +52,6 @@ library.txt: \
 	
 	./make-header.py --page-break "Some numbers to know" >> $@.tmp
 	cat sizes.txt >> $@.tmp
-	
-	./make-header.py --page-break "Primes up to 10000" >> $@.tmp
-	cat primes/primes.txt >> $@.tmp
 	
 	./make-header.py --page-break "Geometry" >> $@.tmp
 	cat geometry/geometry.cpp >> $@.tmp
@@ -106,8 +101,11 @@ library.txt: \
 	./make-header.py "Upper Envelope" >> $@.tmp
 	cat upper_envelope/upper_envelope.cpp >> $@.tmp
 	
-	./make-header.py "Rabin-Karp (randomized String Matching)" >> $@.tmp
+	./make-header.py "Rabin-Karp (Randomized String Matching)" >> $@.tmp
 	cat rabin-karp/rabin-karp2.cpp >> $@.tmp
+	
+	./make-header.py "Good Code" >> $@.tmp
+	cat dudu.cpp >> $@.tmp
 	
 	./make-header.py --page-break "Aho-Corasick" >> $@.tmp
 	cat aho-corasick/aho-corasick2.cpp >> $@.tmp
@@ -124,6 +122,15 @@ library.txt: \
 	./make-header.py --page-break "FFT (ll)" >> $@.tmp
 	cat FFT.cpp >> $@.tmp
 	
+	
+	./make-header.py --page-break "Fields" >> $@.tmp
+	cat fields.cpp >> $@.tmp
+	
+	./make-header.py --page-break "Triangulation (with constraints)" >> $@.tmp
+	cat triangulate.cpp >> $@.tmp
+	
+	./make-header.py --page-break "Vitao of triangle" >> $@.tmp
+	cat vitao.cpp >> $@.tmp
 	echo '' >> $@.tmp
 	
 	iconv -f utf8 -t latin1 -o $@ $@.tmp

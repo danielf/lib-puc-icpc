@@ -2,10 +2,10 @@
 struct union_find {
     vector<int> P, R, S;
     
-// 		start: f3d026d4b4e6b58f158e77cfe9db65d7  -
+// 		start: fe7af7970a172b3ba0c164de046b4255  -
     union_find (int N) {
         P.resize(N), R.resize(N, 0), S.resize(N, 1);
-        for (int i = 0; i < N; i++){
+        for (int i = 0; i < N; i++)
             P[i] = i;
     }
     

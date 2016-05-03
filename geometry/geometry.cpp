@@ -188,10 +188,10 @@ struct rect{
 // end
 
 // Returns the intersection of r and s. (0, 0, 0, 0) if area zero.
-// start: 3f02dbe7ed1b001d72a628b6a5a5ee50  -
+// start: f8621df2f037f693a72045b7921c62c8  -
 rect inter(rect r, rect s){
     rect ans(max(s.ax, r.ax), max(s.ay, r.ay), min(s.bx, r.bx), min(s.by, r.by));
-    if (cmp(ans.xa, ans.xb) > 0 || cmp(ans.ya, ans.yb) > 0)
+    if (cmp(ans.ax, ans.bx) > 0 || cmp(ans.ay, ans.by) > 0)
       return rect(INFINITY);
     return ans;
 }
@@ -289,10 +289,10 @@ circle spanning_circle(vector<point>& T) {
 	for (int i = 0; i < n; i++) if (!in_circle(C, T[i])) {
 		C = circle(T[i], 0);
 		for (int j = 0; j < i; j++) if (!in_circle(C, T[j])) {
-			C = circle((T[i] + T[j]) / 2, abs(T[i] - T[j]) / 2);
+			C = circle((T[i] + T[j]) / 2, norm(T[i] - T[j]) / 2);
 			for (int k = 0; k < j; k++) if (!in_circle(C, T[k])) {
 				point o = circumcenter(T[i], T[j], T[k]);
-				C = circle(o, abs(o - T[k]));
+				C = circle(o, norm(o - T[k]));
 			}
 		}
 	}
