@@ -42,10 +42,15 @@ library.txt: \
 	cat index.txt >> $@.tmp
 	./make-header.py "C++ Compilation script" >> $@.tmp
 	cat compila >> $@.tmp
-	./make-header.py "Java template" >> $@.tmp
-	cat modelo.java >> $@.tmp
+	./make-header.py "vimrc" >> $@.tmp
+	cat vimrc.txt >> $@.tmp
+	./make-header.py "Hash Utility" >> $@.tmp
+	cat hash.sh >> $@.tmp
+	
 	./make-header.py --page-break "C++ template" >> $@.tmp
 	cat template.cpp >> $@.tmp
+	./make-header.py "Java template" >> $@.tmp
+	cat modelo.java >> $@.tmp
 	
 	./make-header.py --page-break "Some numbers to know" >> $@.tmp
 	cat sizes.txt >> $@.tmp
@@ -55,6 +60,9 @@ library.txt: \
 	
 	./make-header.py --page-break "Geometry" >> $@.tmp
 	cat geometry/geometry.cpp >> $@.tmp
+	
+	./make-header.py "Simpson's Rule" >> $@.tmp
+	cat simpson.cpp >> $@.tmp
 	
 	./make-header.py --page-break "Number Theory" >> $@.tmp
 	cat number_theory/number_theory.cpp >> $@.tmp
@@ -72,7 +80,8 @@ library.txt: \
 	
 	./make-header.py --page-break "Least Common Ancestor" >> $@.tmp
 	cat heavy_light/lca.cpp >> $@.tmp
-	./make-header.py "Heavy-Light Decomposition" >> $@.tmp
+	
+	./make-header.py --page-break "Heavy-Light Decomposition" >> $@.tmp
 	cat heavy_light/heavy_light.cpp >> $@.tmp
 	
 	./make-header.py --page-break "Segment Tree" >> $@.tmp
@@ -104,6 +113,9 @@ library.txt: \
 	
 	./make-header.py "Suffix Array" >> $@.tmp
 	cat suffix_array/suffix_array.cpp >> $@.tmp
+	
+	./make-header.py "Knuth Morris Pratt" >> $@.tmp
+	cat strings/knuth_morris_pratt.cpp >> $@.tmp
 	
 	echo '' >> $@.tmp
 	
