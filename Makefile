@@ -42,10 +42,15 @@ library.txt: \
 	cat index.txt >> $@.tmp
 	./make-header.py "C++ Compilation script" >> $@.tmp
 	cat compila >> $@.tmp
-	./make-header.py "Java template" >> $@.tmp
-	cat modelo.java >> $@.tmp
+	./make-header.py "vimrc" >> $@.tmp
+	cat vimrc.txt >> $@.tmp
+	./make-header.py "Hash Utility" >> $@.tmp
+	cat hash.sh >> $@.tmp
+	
 	./make-header.py --page-break "C++ template" >> $@.tmp
 	cat template.cpp >> $@.tmp
+	./make-header.py "Java template" >> $@.tmp
+	cat modelo.java >> $@.tmp
 	
 	./make-header.py --page-break "Some numbers to know" >> $@.tmp
 	cat sizes.txt >> $@.tmp
@@ -55,6 +60,9 @@ library.txt: \
 	
 	./make-header.py --page-break "Geometry" >> $@.tmp
 	cat geometry/geometry.cpp >> $@.tmp
+	
+	./make-header.py "Simpson's Rule" >> $@.tmp
+	cat simpson.cpp >> $@.tmp
 	
 	./make-header.py --page-break "Number Theory" >> $@.tmp
 	cat number_theory/number_theory.cpp >> $@.tmp
