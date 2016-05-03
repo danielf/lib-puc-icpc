@@ -37,7 +37,7 @@ namespace rabin_karp {
 // 		end
     };
 // end
-
+
 // start: 40c3dfd13ad947b825de8f8008c71e88  -
     const int MAXL = 2e5 + 200;
     const int BASE = 3001;

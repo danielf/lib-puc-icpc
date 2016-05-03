@@ -51,7 +51,7 @@ template<typename COST = double> struct graph {
   int orig(int a) { return dest[inv(a)]; }
   ll capres(int a) { return cap[a] - flow[a]; }
 // end
-
+
   //////////////////////////////////////////////////////////////////////////////
   // Max Flow! - Dinic O(n^2 * m)
   // don't call maxflow with ini == end
@@ -253,7 +253,6 @@ template<typename COST = double> struct graph {
 
 // start: 5518d3135f7ed5734417aaf00196d328  -
   vi ord, rep;
-
   int transp(int a) { return (a & 0x1); }
 
   void dfs_topsort(int u) {

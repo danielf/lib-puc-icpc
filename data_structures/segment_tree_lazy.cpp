@@ -49,7 +49,7 @@ template<typename T, typename U> struct seg_tree_lazy {
         }
     }
 // end
- 
+ 
 // start: 683b0f44d3e398b1fba2f57717eeeb57  -
     void propagate(int i) {
         for (int h = H; h > 0; h--) {

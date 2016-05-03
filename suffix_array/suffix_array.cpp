@@ -1,18 +1,16 @@
+// start: 5b6ebffa6b58194fb3a34fa4da262405  - whole file
 struct suffix_array{
-// start: 04da0bae5a94912e86d531e447979161  -
-    const int INF = 0x7fffffff;
-
+// start: cd423fa86f63bc8f3a829ae1fbc5a0ac  -
     int L, D;
     string str;
-    vector<vector<int> > suff;
+    vector<vector<int>> suff;
     vector<int> rank_of, at_rank;
 
     pair<pair<int, int>, int> __make_rep(int l, int i, int p){
-        if(!l) return {{str[i], INF}, i};
-        return {{suff[l-1][i], (i+p<L) ? suff[l-1][i+p] : INF}, i};
+        if(!l) return {{str[i], INT_MAX}, i};
+        return {{suff[l-1][i], (i+p<L) ? suff[l-1][i+p] : INT_MAX}, i};
     }
 // end
-
 // start: 7f467c5199ccc0286659cc89066018b4  -
     suffix_array(string _str){
         str = _str;
@@ -34,7 +32,6 @@ struct suffix_array{
             }
 // 		end
         }
-
 // 		start: f3494da70c3c9e87a337976e17343714  -
         rank_of.resize(L);
         at_rank.resize(L);
@@ -45,7 +42,6 @@ struct suffix_array{
 // 		end
     }
 // end
-
     // compare the string at [i, i+l1) to the string at [j, j+l2) 
 // start: 220d76d1b9380fbffb0c7b618ffe59f9  -
     int comp(int i, int l1, int j, int l2){
@@ -60,7 +56,6 @@ struct suffix_array{
         return (l1!=l2) ? (l1<l2) ? -1 : 1 : 0;
     }
 // end
-
     // find the interval of suffix ranks corresponding 
     // to instances of the substring at [i, i+len)
 // start: e5bae4b76531bfacce1eeb684e4daf96  -
@@ -76,7 +71,6 @@ struct suffix_array{
             else lo = mi+1;
         }
 // 		end
-
 // 		start: 13dd4f224536810740c0a8115dbd4687  -
         int right = rank_of[i];
         for(int lo=right, hi=L-1; lo<=hi; ){
@@ -93,3 +87,4 @@ struct suffix_array{
     } 
 // end
 };
+// end

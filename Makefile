@@ -67,8 +67,6 @@ library.txt: \
 	./make-header.py --page-break "Number Theory" >> $@.tmp
 	cat number_theory/number_theory.cpp >> $@.tmp
 	
-	./make-header.py --page-break "Poker" >> $@.tmp
-	cat poker/poker.cpp >> $@.tmp
 	
 	./make-header.py --page-break "Graphs" >> $@.tmp
 	cat graph/graph.cpp >> $@.tmp
@@ -90,11 +88,14 @@ library.txt: \
 	./make-header.py --page-break "Segment Tree with Lazy Propagation" >> $@.tmp
 	cat data_structures/segment_tree_lazy.cpp >> $@.tmp
 	
-	./make-header.py "BIT (Binary Index Tree)" >> $@.tmp
+	./make-header.py --page-break "BIT (Binary Index Tree)" >> $@.tmp
 	cat data_structures/binary_indexed_tree.cpp >> $@.tmp
 	
 	./make-header.py --page-break "Polynomials (not very stable!)" >> $@.tmp
 	cat polynomial/polynomial.cpp >> $@.tmp
+	
+	./make-header.py "Poker" >> $@.tmp
+	cat poker/poker.cpp >> $@.tmp
 	
 	./make-header.py --page-break "Karatsuba (integer polynomials multiplication)" >> $@.tmp
 	cat karatsuba.cpp >> $@.tmp
@@ -105,7 +106,7 @@ library.txt: \
 	./make-header.py "Upper Envelope" >> $@.tmp
 	cat upper_envelope/upper_envelope.cpp >> $@.tmp
 	
-	./make-header.py --page-break "Rabin-Karp (randomized String Matching)" >> $@.tmp
+	./make-header.py "Rabin-Karp (randomized String Matching)" >> $@.tmp
 	cat rabin-karp/rabin-karp2.cpp >> $@.tmp
 	
 	./make-header.py --page-break "Aho-Corasick" >> $@.tmp
@@ -114,12 +115,12 @@ library.txt: \
 	./make-header.py "Suffix Array" >> $@.tmp
 	cat suffix_array/suffix_array.cpp >> $@.tmp
 	
-	./make-header.py "Knuth Morris Pratt" >> $@.tmp
+	./make-header.py --page-break "Knuth Morris Pratt" >> $@.tmp
 	cat strings/knuth_morris_pratt.cpp >> $@.tmp
 	
 	echo '' >> $@.tmp
 	
-	iconv -f UTF-8 -t LATIN1 $@.tmp > $@
+	iconv -f utf8 -t latin1 -o $@ $@.tmp
 	rm -f $@.tmp
 
 library.pdf: library.txt

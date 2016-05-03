@@ -102,7 +102,7 @@ double seg_distance(point p, point q, point r) {
 	else return fabs(A % B) / sqrt(c);
 }
 // end
-
+
 ////////////////////////////////////////////////////////////////////////////////
 // Classifies p with respect of polygon T (not necessarily convex)
 //
@@ -155,7 +155,6 @@ polygon convex_hull(vector<point>& T) {
 ////////////////////////////////////////////////////////////////////////////////
 // Computes the (oriented) area of T. Positive if counterclockwise
 //
-
 // start: 37d19b20a94a6b9a6533390401df9180  -
 double poly_area(const polygon& T) {
 	double s = 0; int n = T.size();
@@ -164,7 +163,7 @@ double poly_area(const polygon& T) {
 	return s / 2;
 }
 // end
-
+
 ////////////////////////////////////////////////////////////////////////////////
 // Finds intersection between lines (p,q) and (r,s)
 // (Warning: Divides by zero if parallel! Will return NaN or INF in this case)
@@ -221,7 +220,7 @@ ppt disppt(point P, point Q, double d){
     return ppt{Q + k, Q - k};
 }
 // end
-
+
 // Intersection of two circles.
 // If circles are tangent, second point inf true. If disjoint both inf true.
 // start: d96b52879809fe722958e28c2d3854a9  -
