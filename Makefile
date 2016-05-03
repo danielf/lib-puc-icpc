@@ -118,6 +118,12 @@ library.txt: \
 	./make-header.py --page-break "Knuth Morris Pratt" >> $@.tmp
 	cat strings/knuth_morris_pratt.cpp >> $@.tmp
 	
+	./make-header.py --page-break "FFT (double)" >> $@.tmp
+	cat fft/fft2.cpp >> $@.tmp
+	
+	./make-header.py --page-break "FFT (ll)" >> $@.tmp
+	cat FFT.cpp >> $@.tmp
+	
 	echo '' >> $@.tmp
 	
 	iconv -f utf8 -t latin1 -o $@ $@.tmp
