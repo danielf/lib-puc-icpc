@@ -67,11 +67,14 @@ library.txt: \
 	./make-header.py "Kruskal" >> $@.tmp
 	cat kruskal/kruskal.cpp >> $@.tmp
 	
-	./make-header.py --page-break "Aho-Corasick" >> $@.tmp
-	cat aho-corasick/aho-corasick.cpp >> $@.tmp
-	
 	./make-header.py --page-break "Segment Tree" >> $@.tmp
-	cat segment_tree/segment_tree.cpp >> $@.tmp
+	cat data_structures/segment_tree.cpp >> $@.tmp
+	
+	./make-header.py --page-break "Segment Tree with Lazy Propagation" >> $@.tmp
+	cat data_structures/segment_tree_lazy.cpp >> $@.tmp
+	
+	./make-header.py "BIT (Binary Index Tree)" >> $@.tmp
+	cat data_structures/binary_indexed_tree.cpp >> $@.tmp
 	
 	./make-header.py --page-break "Polynomials (not very stable!)" >> $@.tmp
 	cat polynomial/polynomial.cpp >> $@.tmp
@@ -79,21 +82,21 @@ library.txt: \
 	./make-header.py --page-break "Karatsuba (integer polynomials multiplication)" >> $@.tmp
 	cat karatsuba.cpp >> $@.tmp
 	
-	./make-header.py --page-break "RMQ (Range Minimum Query)" >> $@.tmp
-	cat rmq.cpp >> $@.tmp
-	
-	./make-header.py --page-break "BIT (Binary Index Tree)" >> $@.tmp
-	cat bit.cpp >> $@.tmp
-	
 	./make-header.py --page-break "Chinese Remainder Theorem" >> $@.tmp
 	cat resto_chines/trc.cpp >> $@.tmp
 	
 	./make-header.py --page-break "Rabin-Karp (randomized String Matching)" >> $@.tmp
-	cat rabin-karp/rabin-karp.cpp >> $@.tmp
+	cat rabin-karp/rabin-karp2.cpp >> $@.tmp
+	
+	./make-header.py --page-break "Aho-Corasick" >> $@.tmp
+	cat aho-corasick/aho-corasick2.cpp >> $@.tmp
+	
+	./make-header.py --page-break "Suffix Array" >> $@.tmp
+	cat suffix_array/suffix_array.cpp >> $@.tmp
 	
 	echo '' >> $@.tmp
 	
-	iconv -f utf8 -t latin1 -o $@ $@.tmp
+	iconv -f UTF-8 -t LATIN1 $@.tmp > $@
 	rm -f $@.tmp
 
 library.pdf: library.txt
