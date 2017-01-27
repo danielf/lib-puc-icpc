@@ -36,7 +36,7 @@ typedef vector<double> vd;
 typedef vector<vi> vvi;
 
 int cmp(double x, double y = 0, double tol = EPS) {
-	return (x <= y + tol) ? (x + tol < y) ? -1 : 0 : 1;
+  return (x <= y + tol) ? (x + tol < y) ? -1 : 0 : 1;
 }
 struct graph {
 
@@ -50,7 +50,7 @@ struct graph {
   int inv(int a) { return a ^ 0x1; }
 
   graph(int n = 0) {
-		_ini = _end = -1; // only for flows
+    _ini = _end = -1; // only for flows
     adj.resize(n);
     imb.resize(n);
   }
@@ -285,48 +285,48 @@ struct graph {
   //////////////////////////////////////////////////////////////////////////////
   // Bipartite Matching
   // see [match] for results
-	// match[i] = matching of "i", -1 if unmatched
-	// left hand side = [0, k-1], and right hand side = [k, N-1]
-	
-	vi match;
-	int dfs_match(int node, int m) {
-		if (match[node] == m) return 0;
-		match[node] = m;
-		forall (it, adj[node]) {
-			int j = dest[*it];
-			if (match[j] == -1 || dfs_match(match[j], m)) {
-				match[j] = node;
-				return 1;
-			}
-		}
-		return 0;
-	}
+  // match[i] = matching of "i", -1 if unmatched
+  // left hand side = [0, k-1], and right hand side = [k, N-1]
 
-	int bipartite_match(int k) {
-		int N = sz(adj);
-		match = vi(N, -1); // during dfs, match for LHS acts as mark
-		int ans = 0;
-		fu(i, k) ans += dfs_match(i, i);
-		FU(i, k, N) if (match[i] != -1) match[match[i]] = i;
-		return ans;
-	}
+  vi match;
+  int dfs_match(int node, int m) {
+    if (match[node] == m) return 0;
+    match[node] = m;
+    forall (it, adj[node]) {
+      int j = dest[*it];
+      if (match[j] == -1 || dfs_match(match[j], m)) {
+        match[j] = node;
+        return 1;
+      }
+    }
+    return 0;
+  }
+
+  int bipartite_match(int k) {
+    int N = sz(adj);
+    match = vi(N, -1); // during dfs, match for LHS acts as mark
+    int ans = 0;
+    fu(i, k) ans += dfs_match(i, i);
+    FU(i, k, N) if (match[i] != -1) match[match[i]] = i;
+    return ans;
+  }
 };
 
 int main() {
-	int n, m;
-	double s,v;
-	while (scanf("%d %d %lf %lf", &n, &m, &s, &v) != EOF) {
-		graph G(n+m);
-		vector<pair<double, double> > pos;
-		fu(i, n+m) {
-			double x,y;
-			scanf("%lf %lf", &x, &y);
-			pos.pb(make_pair(x,y));
-		}
-		fu(i, n) fu(j, m)
-			if (cmp(hypot(pos[i].second - pos[n+j].second, pos[i].first - pos[n+j].first), s*v) <= 0)
-				G.arc(i, n+j);
-		printf("%d\n", n - G.bipartite_match(n));
-	}
-	return 0;
+  int n, m;
+  double s,v;
+  while (scanf("%d %d %lf %lf", &n, &m, &s, &v) != EOF) {
+    graph G(n+m);
+    vector<pair<double, double> > pos;
+    fu(i, n+m) {
+      double x,y;
+      scanf("%lf %lf", &x, &y);
+      pos.pb(make_pair(x,y));
+    }
+    fu(i, n) fu(j, m)
+      if (cmp(hypot(pos[i].second - pos[n+j].second, pos[i].first - pos[n+j].first), s*v) <= 0)
+        G.arc(i, n+j);
+    printf("%d\n", n - G.bipartite_match(n));
+  }
+  return 0;
 }

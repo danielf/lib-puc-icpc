@@ -1,90 +1,90 @@
 // start: 5b6ebffa6b58194fb3a34fa4da262405  - whole file
 struct suffix_array{
 // start: cd423fa86f63bc8f3a829ae1fbc5a0ac  -
-    int L, D;
-    string str;
-    vector<vector<int>> suff;
-    vector<int> rank_of, at_rank;
+  int L, D;
+  string str;
+  vector<vector<int>> suff;
+  vector<int> rank_of, at_rank;
 
-    pair<pair<int, int>, int> __make_rep(int l, int i, int p){
-        if(!l) return {{str[i], INT_MAX}, i};
-        return {{suff[l-1][i], (i+p<L) ? suff[l-1][i+p] : INT_MAX}, i};
-    }
+  pair<pair<int, int>, int> __make_rep(int l, int i, int p){
+    if(!l) return {{str[i], INT_MAX}, i};
+    return {{suff[l-1][i], (i+p<L) ? suff[l-1][i+p] : INT_MAX}, i};
+  }
 // end
 // start: 7f467c5199ccc0286659cc89066018b4  -
-    suffix_array(string _str){
-        str = _str;
-        L = str.size();
-        D = 33 - __builtin_clz(L-1);
-        suff.resize(D);
+  suffix_array(string _str){
+    str = _str;
+    L = str.size();
+    D = 33 - __builtin_clz(L-1);
+    suff.resize(D);
 
-        vector<pair<pair<int, int>, int> > keys(L);
-// 		start: b6b4a1ce766aa59f096ef3ac120d2348  -
-        for(int l=0; l<D; l++){
-            for(int i=0; i<L; i++)
-                keys[i] = __make_rep(l, i, 1<<(l-1));
-            sort(keys.begin(), keys.end());
-            
-            suff[l].resize(L);
-            for(int i=0, r=0; i<L; i++){
-                if(i>0 && keys[i].first != keys[i-1].first) r++;
-                suff[l][keys[i].second] = r;
-            }
-// 		end
-        }
-// 		start: f3494da70c3c9e87a337976e17343714  -
-        rank_of.resize(L);
-        at_rank.resize(L);
-        for(int i=0; i<L; i++){
-            rank_of[i] = suff.back()[i];
-            at_rank[rank_of[i]] = i;
-        }
-// 		end
+    vector<pair<pair<int, int>, int> > keys(L);
+//   start: b6b4a1ce766aa59f096ef3ac120d2348  -
+    for(int l=0; l<D; l++){
+      for(int i=0; i<L; i++)
+        keys[i] = __make_rep(l, i, 1<<(l-1));
+      sort(keys.begin(), keys.end());
+
+      suff[l].resize(L);
+      for(int i=0, r=0; i<L; i++){
+        if(i>0 && keys[i].first != keys[i-1].first) r++;
+        suff[l][keys[i].second] = r;
+      }
+//   end
     }
+//   start: f3494da70c3c9e87a337976e17343714  -
+    rank_of.resize(L);
+    at_rank.resize(L);
+    for(int i=0; i<L; i++){
+      rank_of[i] = suff.back()[i];
+      at_rank[rank_of[i]] = i;
+    }
+//   end
+  }
 // end
-    // compare the string at [i, i+l1) to the string at [j, j+l2) 
+  // compare the string at [i, i+l1) to the string at [j, j+l2)
 // start: 220d76d1b9380fbffb0c7b618ffe59f9  -
-    int comp(int i, int l1, int j, int l2){
-        int cl = min(l1, l2);
-        for(int l=0; l<D; l++)
-            if((cl>>l)&1){
-                if(suff[l][i] != suff[l][j]) 
-                    return suff[l][i] < suff[l][j] ? -1 : 1;
-                i += 1<<l, j += 1<<l;
-            }
+  int comp(int i, int l1, int j, int l2){
+    int cl = min(l1, l2);
+    for(int l=0; l<D; l++)
+      if((cl>>l)&1){
+        if(suff[l][i] != suff[l][j])
+          return suff[l][i] < suff[l][j] ? -1 : 1;
+        i += 1<<l, j += 1<<l;
+      }
 
-        return (l1!=l2) ? (l1<l2) ? -1 : 1 : 0;
-    }
+    return (l1!=l2) ? (l1<l2) ? -1 : 1 : 0;
+  }
 // end
-    // find the interval of suffix ranks corresponding 
-    // to instances of the substring at [i, i+len)
+  // find the interval of suffix ranks corresponding
+  // to instances of the substring at [i, i+len)
 // start: e5bae4b76531bfacce1eeb684e4daf96  -
-    pair<int, int> find_range(int i, int len){
-// 		start: 1751a0a043988299c2f1d9fa1d6973ae  -
-        int left = rank_of[i]; 
-        for(int lo=0, hi=left; lo<=hi; ){
-            int mi = (lo + hi)/2;
-            if(comp(i, len, at_rank[mi], len) == 0){
-                left = mi;
-                hi = mi-1;
-            }
-            else lo = mi+1;
-        }
-// 		end
-// 		start: 13dd4f224536810740c0a8115dbd4687  -
-        int right = rank_of[i];
-        for(int lo=right, hi=L-1; lo<=hi; ){
-            int mi = (lo + hi)/2;
-            if(comp(i, len, at_rank[mi], len) == 0){
-                right = mi;
-                lo = mi+1;
-            }
-            else hi = mi-1;
-        }
-// 		end
+  pair<int, int> find_range(int i, int len){
+//   start: 1751a0a043988299c2f1d9fa1d6973ae  -
+    int left = rank_of[i];
+    for(int lo=0, hi=left; lo<=hi; ){
+      int mi = (lo + hi)/2;
+      if(comp(i, len, at_rank[mi], len) == 0){
+        left = mi;
+        hi = mi-1;
+      }
+      else lo = mi+1;
+    }
+//   end
+//   start: 13dd4f224536810740c0a8115dbd4687  -
+    int right = rank_of[i];
+    for(int lo=right, hi=L-1; lo<=hi; ){
+      int mi = (lo + hi)/2;
+      if(comp(i, len, at_rank[mi], len) == 0){
+        right = mi;
+        lo = mi+1;
+      }
+      else hi = mi-1;
+    }
+//   end
 
-        return make_pair(left, right);
-    } 
+    return make_pair(left, right);
+  }
 // end
 };
 // end

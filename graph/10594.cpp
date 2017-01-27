@@ -36,7 +36,7 @@ typedef vector<double> vd;
 typedef vector<vi> vvi;
 
 int cmp(double x, double y = 0, double tol = EPS) {
-	return (x <= y + tol) ? (x + tol < y) ? -1 : 0 : 1;
+  return (x <= y + tol) ? (x + tol < y) ? -1 : 0 : 1;
 }
 struct graph {
 
@@ -50,7 +50,7 @@ struct graph {
   int inv(int a) { return a ^ 0x1; }
 
   graph(int n = 0) {
-		_ini = _end = -1; // only for flows
+    _ini = _end = -1; // only for flows
     adj.resize(n);
     imb.resize(n);
   }
@@ -285,21 +285,21 @@ struct graph {
 
 pair<pair<int, int>, int> edges[5010];
 int main() {
-	int N, M;
-	while (scanf("%d %d", &N, &M) != EOF) {
-		graph G(N);
-		fu(i, M) scanf("%d %d %d", &edges[i].first.first, &edges[i].first.second, &edges[i].second);
-		int D, K;
-		scanf("%d %d", &D, &K);
-		G.imb[0] = D;
-		G.imb[N-1] = -D;
-		fu(i, M) {
-			G.arc(edges[i].first.first - 1, edges[i].first.second - 1, K, edges[i].second);
-			G.arc(edges[i].first.second - 1, edges[i].first.first - 1, K, edges[i].second);
-		}
-		double ans = G.mincostflow();
-		if (count(all(G.imb), 0) != N) printf("Impossible.\n");
-		else printf("%.0f\n", ans);
-	}
-	return 0;
+  int N, M;
+  while (scanf("%d %d", &N, &M) != EOF) {
+    graph G(N);
+    fu(i, M) scanf("%d %d %d", &edges[i].first.first, &edges[i].first.second, &edges[i].second);
+    int D, K;
+    scanf("%d %d", &D, &K);
+    G.imb[0] = D;
+    G.imb[N-1] = -D;
+    fu(i, M) {
+      G.arc(edges[i].first.first - 1, edges[i].first.second - 1, K, edges[i].second);
+      G.arc(edges[i].first.second - 1, edges[i].first.first - 1, K, edges[i].second);
+    }
+    double ans = G.mincostflow();
+    if (count(all(G.imb), 0) != N) printf("Impossible.\n");
+    else printf("%.0f\n", ans);
+  }
+  return 0;
 }

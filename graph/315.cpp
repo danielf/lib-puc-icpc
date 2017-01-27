@@ -37,7 +37,7 @@ typedef vector<double> vd;
 typedef vector<vi> vvi;
 
 int cmp(double x, double y = 0, double tol = EPS) {
-	return (x <= y + tol) ? (x + tol < y) ? -1 : 0 : 1;
+  return (x <= y + tol) ? (x + tol < y) ? -1 : 0 : 1;
 }
 struct graph {
 
@@ -51,7 +51,7 @@ struct graph {
   int inv(int a) { return a ^ 0x1; }
 
   graph(int n = 0) {
-		_ini = _end = -1; // only for flows
+    _ini = _end = -1; // only for flows
     adj.resize(n);
     imb.resize(n);
   }
@@ -285,25 +285,25 @@ struct graph {
 };
 
 int main() {
-	int N;
-	string sN;
-	while (getline(cin,sN)) {
-		N = atoi(sN.c_str());
-		if (N == 0) break;
-		graph G(N);
-		string s;
-		while (true) {
-			getline(cin,s);
-			stringstream ss;
-			ss << s;
-			int t;
-			ss >> t;
-			if (t == 0) break;
-			int k;
-			while (ss >> k) {G.arc(t-1, k-1); G.arc(k-1,t-1);}
-		}
-		G.artpbridge();
-		printf("%d\n", count(all(G.artp), true));
-	}
-	return 0;
+  int N;
+  string sN;
+  while (getline(cin,sN)) {
+    N = atoi(sN.c_str());
+    if (N == 0) break;
+    graph G(N);
+    string s;
+    while (true) {
+      getline(cin,s);
+      stringstream ss;
+      ss << s;
+      int t;
+      ss >> t;
+      if (t == 0) break;
+      int k;
+      while (ss >> k) {G.arc(t-1, k-1); G.arc(k-1,t-1);}
+    }
+    G.artpbridge();
+    printf("%d\n", count(all(G.artp), true));
+  }
+  return 0;
 }

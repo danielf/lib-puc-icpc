@@ -36,7 +36,7 @@ typedef vector<double> vd;
 typedef vector<vi> vvi;
 
 int cmp(double x, double y = 0, double tol = EPS) {
-	return (x <= y + tol) ? (x + tol < y) ? -1 : 0 : 1;
+  return (x <= y + tol) ? (x + tol < y) ? -1 : 0 : 1;
 }
 struct graph {
 
@@ -50,7 +50,7 @@ struct graph {
   int inv(int a) { return a ^ 0x1; }
 
   graph(int n = 0) {
-		_ini = _end = -1; // only for flows
+    _ini = _end = -1; // only for flows
     adj.resize(n);
     imb.resize(n);
   }
@@ -284,41 +284,41 @@ struct graph {
 };
 
 int main() {
-	int N;
-	bool fc = true;
-	while (scanf("%d", &N) && N) {
-		if (!fc) printf("\n");
-		fc = false;
-		graph G(26);
-		vector<bool> in(26, false);
-		fu(i, N) {
-			vector<int> t;
-			fu(j, 5) {
-				char k;
-				scanf(" %c", &k);
-				t.push_back(k-'A');
-				in[k-'A'] = true;
-			}
-			char a;
-			scanf(" %c", &a);
-			in[a-'A'] = true;
-			forall(it, t) G.arc(a-'A', *it);
-		}
-		G.compfortcon();
-		vvi ans(26);
-		fu(i, 26) ans[G.rep[i]].pb(i);
-		fu(i, 26) sort(all(ans[i]));
-		sort(all(ans));
-		forall(it, ans) {
-			bool first = true;
-			if (it->empty() || !in[(*it)[0]]) continue;
-			forall(it2, *it) {
-				if (!first) printf(" ");
-				first = false;
-				printf("%c", *it2 + 'A');
-			}
-			printf("\n");
-		}
-	}
-	return 0;
+  int N;
+  bool fc = true;
+  while (scanf("%d", &N) && N) {
+    if (!fc) printf("\n");
+    fc = false;
+    graph G(26);
+    vector<bool> in(26, false);
+    fu(i, N) {
+      vector<int> t;
+      fu(j, 5) {
+        char k;
+        scanf(" %c", &k);
+        t.push_back(k-'A');
+        in[k-'A'] = true;
+      }
+      char a;
+      scanf(" %c", &a);
+      in[a-'A'] = true;
+      forall(it, t) G.arc(a-'A', *it);
+    }
+    G.compfortcon();
+    vvi ans(26);
+    fu(i, 26) ans[G.rep[i]].pb(i);
+    fu(i, 26) sort(all(ans[i]));
+    sort(all(ans));
+    forall(it, ans) {
+      bool first = true;
+      if (it->empty() || !in[(*it)[0]]) continue;
+      forall(it2, *it) {
+        if (!first) printf(" ");
+        first = false;
+        printf("%c", *it2 + 'A');
+      }
+      printf("\n");
+    }
+  }
+  return 0;
 }

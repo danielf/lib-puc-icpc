@@ -36,7 +36,7 @@ typedef vector<double> vd;
 typedef vector<vi> vvi;
 
 int cmp(double x, double y = 0, double tol = EPS) {
-	return (x <= y + tol) ? (x + tol < y) ? -1 : 0 : 1;
+  return (x <= y + tol) ? (x + tol < y) ? -1 : 0 : 1;
 }
 struct graph {
 
@@ -50,7 +50,7 @@ struct graph {
   int inv(int a) { return a ^ 0x1; }
 
   graph(int n = 0) {
-		_ini = _end = -1;
+    _ini = _end = -1;
     adj.resize(n);
     imb.resize(n);
   }
@@ -284,19 +284,19 @@ struct graph {
 };
 
 int main() {
-		int N;
-		int _ = 1;
-		while (scanf("%d", &N) && N) {
-			graph G(N);
-			int s,t,c;
-			scanf("%d %d %d", &s, &t, &c);
-			while (c--) {
-				int x,y,u;
-				scanf("%d %d %d", &x, &y, &u);
-				G.arc(x-1,y-1,u);
-				G.arc(y-1,x-1,u);
-			}
-			printf("Network %d\nThe bandwidth is %d.\n\n", _++, G.maxflow(s-1, t-1));
-		}
-		return 0;
+    int N;
+    int _ = 1;
+    while (scanf("%d", &N) && N) {
+      graph G(N);
+      int s,t,c;
+      scanf("%d %d %d", &s, &t, &c);
+      while (c--) {
+        int x,y,u;
+        scanf("%d %d %d", &x, &y, &u);
+        G.arc(x-1,y-1,u);
+        G.arc(y-1,x-1,u);
+      }
+      printf("Network %d\nThe bandwidth is %d.\n\n", _++, G.maxflow(s-1, t-1));
+    }
+    return 0;
 }

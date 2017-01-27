@@ -101,27 +101,27 @@ template<typename COST = double> struct graph {
     while (MFbfs(ini, end))
       while (MFdfs(ini, end, LLONG_MAX/2));
     ll F = 0;
-		for (int a : adj[ini]) F += flow[a];
+    for (int a : adj[ini]) F += flow[a];
     return F;
   }
 // end
 
-	// Only call after finding maxflow
+  // Only call after finding maxflow
 // start: 354d6065ddad2fe69327181f4c9ff769  -
-	vi mincut(int ini) {
-		vi ans;
-		vector<bool> mark(sz(adj), false);
-		mark[ini] = true; ans.pb(ini);
-		fu(pos, ans.size()) {
-			int x = ans[pos];
-			for (int ar : adj[x]) if (capres(ar) > 0) {
-				int y = dest[ar];
-			 	if (mark[y]) continue;
-				ans.pb(y); mark[y] = true;
-			}
-		}
-		return ans;
-	}
+  vi mincut(int ini) {
+    vi ans;
+    vector<bool> mark(sz(adj), false);
+    mark[ini] = true; ans.pb(ini);
+    fu(pos, ans.size()) {
+      int x = ans[pos];
+      for (int ar : adj[x]) if (capres(ar) > 0) {
+        int y = dest[ar];
+         if (mark[y]) continue;
+        ans.pb(y); mark[y] = true;
+      }
+    }
+    return ans;
+  }
 // end
 
 
@@ -132,7 +132,7 @@ template<typename COST = double> struct graph {
   //
 
 // start: 07e1e897ed6aff4d535d70dfd5ed2756  -
-	vll imb;
+  vll imb;
   vector<COST> cost, pot;
   ll delta;
 
@@ -149,15 +149,15 @@ template<typename COST = double> struct graph {
     fu(u, sz(adj)) if (imb[u] >= delta)
       q.push(make_pair(0, make_pair(u, -1)));
 
-// 		start: 543d49eb5b190bf731112bf3b177981b  -
+//     start: 543d49eb5b190bf731112bf3b177981b  -
     while (!q.empty()) {
       int u = q.top().second.first, f = q.top().second.second;
       COST d = -q.top().first; q.pop();
       if (ent[u] != -2) continue; dist[u] = d; ent[u] = f;
-			for (int a : adj[u]) if (capres(a) >= delta)
+      for (int a : adj[u]) if (capres(a) >= delta)
         q.push(make_pair(-(dist[u] + rescost(a)), make_pair(dest[a], a)));
     }
-//	 	end
+//     end
 
     fu(u, sz(adj)) if (ent[u] != -2 && imb[u] <= -delta) {
       fu(v, sz(adj)) pot[v] += dist[v];
@@ -177,13 +177,13 @@ template<typename COST = double> struct graph {
   COST mincostflow() {
     pot.resize(sz(adj));
     flow.resize(sz(dest));
-		// Assumes no capacity bigger or equal than 2*0x40000000
-		// i.e. assumes fits in int; 7 0s
-		// Increase this limit if necessary but should always be power of 2
+    // Assumes no capacity bigger or equal than 2*0x40000000
+    // i.e. assumes fits in int; 7 0s
+    // Increase this limit if necessary but should always be power of 2
     for (delta = 0x40000000; delta > 0; delta /= 2) {
       fu(a, sz(dest)) {
         int u = orig(a), v = dest[a];
-				// if COST = ll use rescost(a) < 0 without cmp
+        // if COST = ll use rescost(a) < 0 without cmp
         if (capres(a) >= delta && cmp(rescost(a)) < 0) {
           imb[u] -= capres(a);
           imb[v] += capres(a);
@@ -193,7 +193,7 @@ template<typename COST = double> struct graph {
       }
       while (MCFdijkstra());
     }
-  	COST C = 0;
+    COST C = 0;
     fu(a, sz(dest)) if (flow[a] > 0) C += flow[a] * cost[a];
     return C;
   }
@@ -216,7 +216,7 @@ template<typename COST = double> struct graph {
 // start: e96781accca10408e2522db91edd6ba6  -
   int dfs_artpbridge(int u, int ent) {
     int nf = 0;
-		for (int a : adj[u]) {
+    for (int a : adj[u]) {
       int v = dest[a];
       if (depth[v] == -1) {
         least[v] = depth[v] = depth[u] + 1;
@@ -256,7 +256,7 @@ template<typename COST = double> struct graph {
   int transp(int a) { return (a & 0x1); }
 
   void dfs_topsort(int u) {
-		for (int a : adj[u]) {
+    for (int a : adj[u]) {
       int v = dest[a];
       if (!transp(a) && depth[v] == -1) {
         depth[v] = depth[u] + 1;
@@ -270,7 +270,7 @@ template<typename COST = double> struct graph {
 // start: 66b144601ddc1a01c2b18754d62ded5a  -
   void dfs_compfortcon(int u, int ent) {
     rep[u] = ent;
-		for (int a : adj[u]) {
+    for (int a : adj[u]) {
       int v = dest[a];
       if (transp(a) && rep[v] == -1) dfs_compfortcon(v, ent);
     }

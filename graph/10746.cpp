@@ -36,7 +36,7 @@ typedef vector<double> vd;
 typedef vector<vi> vvi;
 
 int cmp(double x, double y = 0, double tol = EPS) {
-	return (x <= y + tol) ? (x + tol < y) ? -1 : 0 : 1;
+  return (x <= y + tol) ? (x + tol < y) ? -1 : 0 : 1;
 }
 struct graph {
 
@@ -50,7 +50,7 @@ struct graph {
   int inv(int a) { return a ^ 0x1; }
 
   graph(int n = 0) {
-		_ini = _end = -1; // only for flows
+    _ini = _end = -1; // only for flows
     adj.resize(n);
     imb.resize(n);
   }
@@ -284,18 +284,18 @@ struct graph {
 };
 
 int main() {
-	int N, M;
-	while (scanf("%d %d", &N, &M) && (N || M)) {
-		graph G(N+M+1);
-		fu(i, N) G.imb[i] = 1;
-		G.imb[N+M] = -N;
-		fu(i, M) G.arc(N+i, N+M, 1, 0.);
-		fu(i, N) fu(j, M) {
-			double t;
-			scanf("%lf", &t);
-			G.arc(i, N+j, 1, t);
-		}
-		printf("%.2f\n", G.mincostflow()/N);
-	}
-	return 0;
+  int N, M;
+  while (scanf("%d %d", &N, &M) && (N || M)) {
+    graph G(N+M+1);
+    fu(i, N) G.imb[i] = 1;
+    G.imb[N+M] = -N;
+    fu(i, M) G.arc(N+i, N+M, 1, 0.);
+    fu(i, N) fu(j, M) {
+      double t;
+      scanf("%lf", &t);
+      G.arc(i, N+j, 1, t);
+    }
+    printf("%.2f\n", G.mincostflow()/N);
+  }
+  return 0;
 }

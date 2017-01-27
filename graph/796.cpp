@@ -36,7 +36,7 @@ typedef vector<double> vd;
 typedef vector<vi> vvi;
 
 int cmp(double x, double y = 0, double tol = EPS) {
-	return (x <= y + tol) ? (x + tol < y) ? -1 : 0 : 1;
+  return (x <= y + tol) ? (x + tol < y) ? -1 : 0 : 1;
 }
 struct graph {
 
@@ -50,7 +50,7 @@ struct graph {
   int inv(int a) { return a ^ 0x1; }
 
   graph(int n = 0) {
-		_ini = _end = -1; // only for flows
+    _ini = _end = -1; // only for flows
     adj.resize(n);
     imb.resize(n);
   }
@@ -284,28 +284,28 @@ struct graph {
 };
 
 int main() {
-	int N;
-	while (scanf("%d", &N) != EOF) {
-		graph G(N);
-		fu(i, N) {
-			int id, m;
-			scanf("%d (%d)", &id, &m);
-			fu(j, m) {
-				int t;
-				scanf("%d", &t);
-				if (id < t) G.arc(id, t);
-			}
-		}
-		G.artpbridge();
-		vector<pair<int, int> > ans;
-		fu(i, sz(G.dest)) if (G.bridge[i]) {
-			ans.push_back(make_pair(G.dest[i], G.orig(i)));
-			if (ans.back().first > ans.back().second) swap(ans.back().first, ans.back().second);
-		}
-		sort(all(ans));
-		ans.erase(unique(all(ans)), ans.end());
-		printf("%d critical links\n", ans.size());
-		forall(it, ans) printf("%d - %d\n", it->first, it->second);
-		printf("\n");
-	}
+  int N;
+  while (scanf("%d", &N) != EOF) {
+    graph G(N);
+    fu(i, N) {
+      int id, m;
+      scanf("%d (%d)", &id, &m);
+      fu(j, m) {
+        int t;
+        scanf("%d", &t);
+        if (id < t) G.arc(id, t);
+      }
+    }
+    G.artpbridge();
+    vector<pair<int, int> > ans;
+    fu(i, sz(G.dest)) if (G.bridge[i]) {
+      ans.push_back(make_pair(G.dest[i], G.orig(i)));
+      if (ans.back().first > ans.back().second) swap(ans.back().first, ans.back().second);
+    }
+    sort(all(ans));
+    ans.erase(unique(all(ans)), ans.end());
+    printf("%d critical links\n", ans.size());
+    forall(it, ans) printf("%d - %d\n", it->first, it->second);
+    printf("\n");
+  }
 }

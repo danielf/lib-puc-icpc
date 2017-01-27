@@ -9,18 +9,21 @@ using namespace std;
 #define WATCHR(a, b) TRACE(for (auto c=a; c!=b;) cout << *(c++) << " "; cout << endl)
 #define WATCHC(V) TRACE({cout << #V" = "; WATCHR(V.begin(), V.end());})
 
-typedef long long ll;
-typedef vector<int> vi;
-typedef vector<vi> vvi;
-typedef vector<ll> vll;
-typedef vector<vll> vvll;
+#define FU(i, a, b) for (auto i = a; i < b; ++i)
+#define fu(i, b) FU(i, 0, b)
+#define FD(i, a, b) for (auto i = (b) - 1; i >= a; --i)
+#define fd(i, b) FD(i, 0, b)
+
+using ll = long long;
+using vi = vector<int>;
+using vvi = vector<vi>;
+using vll = vector<ll>;
+using vvll = vector<vll>;
+using vd = vector<double>;
+using vb = vector<bool>;
+using pii = pair<int, int>;
+using pll = pair<ll, ll>;
 
 ll mod(ll a, ll b) {
-	return ((a%b)+b)%b;
-}
-
-int main() {
-	ios_base::sync_with_stdio(false);
-	cout << fixed << setprecision(15);
-	return 0;
+  return ((a%b)+b)%b;
 }
