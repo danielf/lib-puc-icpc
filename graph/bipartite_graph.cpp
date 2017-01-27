@@ -1,5 +1,4 @@
 struct bipartite_graph {
-// start: 15d633d47577c09ead3f01702ac57f13  -
   int A, B;
   vector<vector<int>> adj;
 
@@ -12,9 +11,7 @@ struct bipartite_graph {
     adj[i].push_back(A+j);
     adj[A+j].push_back(i);
   }
-// end
 
-// start: 33ab9cb3460ef82cf446dcf63b153d72  -
   vector<int> visit, match;
 
   bool augment(int loc, int run) {
@@ -30,9 +27,7 @@ struct bipartite_graph {
 
     return false;
   }
-// end
 
-// start: 4bf94a144cb9a9695e95740e39644303  -
   int matching() {
     visit = vector<int>(A+B, -1);
     match = vector<int>(A+B, -1);
@@ -42,9 +37,7 @@ struct bipartite_graph {
       ans += augment(i, i);
     return ans;
   }
-// end
 
-// start: 2257c2cea2b93264b3d24ded03d8425c  -
   vector<bool> vertex_cover() {
     vector<bool> res(A + B, false);
     queue<int> bfs;
@@ -69,6 +62,5 @@ struct bipartite_graph {
 
     return res;
   }
-// end
 };
 

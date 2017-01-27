@@ -27,3 +27,7 @@ using pll = pair<ll, ll>;
 ll mod(ll a, ll b) {
   return ((a%b)+b)%b;
 }
+
+int cmp(double x, double y = 0, double tol = 1.e-7) {
+	return (x <= y + tol) ? (x + tol < y) ? -1 : 0 : 1;
+}

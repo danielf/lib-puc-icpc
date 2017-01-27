@@ -6,9 +6,7 @@
 
 // Needs Bezout, gcd, lcm from number theory
 
-// start: 0361be01566c3a8c10e4f8171c650fd3  -
 int CRT(vector< pair<int, int> > &v) { // vector of (remainder, modulo)
-//     start: cd2001d31d8c6a2c13dd8233ee40546b  -
   vector<ll> e(v.size());
    ll N = 1, g = 0;
   for (int i=0; i < (int)v.size(); i++) {
@@ -23,15 +21,11 @@ int CRT(vector< pair<int, int> > &v) { // vector of (remainder, modulo)
     ll d = find_bezout(ni, N_ni, ni).second;
     e[i] = (d * N_ni) % N;
   }
-//     end
 
-//     start: 5d7335e6ac4009d5ea6f6d3b94b4e712  -
   ll x = 0;
   for (int i=0; i < (int)v.size(); i++) {
     x += (v[i].first * e[i]) % N;
     x %= N;
   }
   return x;
-//     end
 }
-// end

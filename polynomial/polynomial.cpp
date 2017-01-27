@@ -1,6 +1,4 @@
-// start: 1a79e5c92ec95320f26f7f3fb44c8e2c  - whole file
 
-// start: 05ec662581c0d27a0c23b392edbe31ae  -
 typedef complex<double> cdouble;
 
 int cmp(cdouble x, cdouble y = 0, double tol = EPS) {
@@ -8,10 +6,8 @@ int cmp(cdouble x, cdouble y = 0, double tol = EPS) {
 }
 
 const int SIZE = 200;
-// end
 
 struct poly {
-// start: 4f6d309cb971488f62ffa950659f6054  -
   cdouble poly[SIZE]; int n;
   poly(int n = 0): n(n) { memset(p, 0, sizeof(p)); }
   cdouble& operator [](int i) { return p[i]; }
@@ -21,8 +17,6 @@ struct poly {
       r[i-1] = p[i] * cdouble(i);
     return r;
   }
-// end
-// start: 6461301fd4492e53f6049b34103efae0  -
   pair<poly, cdouble> ruffini(cdouble z) {
     if (n == 0) return make_pair(poly(), 0);
     poly r(n-1);
@@ -30,8 +24,6 @@ struct poly {
     return make_pair(r, r[0] * z + p[0]);
   }
   cdouble operator ()(cdouble z) { return ruffini(z).second; }
-// end
-// start: 10fb0b97428a1c1699424969e7b66b40  -
   cdouble find_one_root(cdouble x) {
     poly p0 = *this, p1 = ~p0, p2 = ~p1;
     int m = 1000;
@@ -48,8 +40,6 @@ struct poly {
     }
     return x;
   }
-// end
-// start: 9830e2041fede8e428a154fb4382450e  -
   vector<cdouble> roots() {
     poly q = *this;
     vector<cdouble> r;
@@ -61,6 +51,4 @@ struct poly {
     }
     return r; // extract real part with real(r[0]) and imag(r[0])
   }
-// end
 };
-// end

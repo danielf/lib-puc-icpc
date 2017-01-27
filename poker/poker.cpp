@@ -1,5 +1,3 @@
-// start: 73f47d7d8b054d031103c95435fbecfe  - whole file
-// start: d3727bced6c9754ecc08e6cef18ee396  -
 const char* rank_names = "**23456789TJQKA";
 const char* suit_names = "CDHS";
 struct card {
@@ -13,8 +11,6 @@ struct card {
   }
   void print() { printf("%c%c", rank_names[rank], suit_names[suit]); }
 };
-// end
-// start: 3042c3c9b5284f136f0c45df53a4dfcb  -
 struct freq_lt {
   int* freq;
   freq_lt(int* freq): freq(freq) {}
@@ -23,10 +19,7 @@ struct freq_lt {
     else return A.rank > B.rank;
   }
 };
-// end
-// start: 70d2d90f4c6e1dba934a882f0921a1b8  -
 struct hand {
-//     start: 15ab97662e9269e1bea0c739781fd654  -
   card C[5];
   int type() {
     int freq[15]; memset(freq, 0, sizeof(freq));
@@ -38,8 +31,6 @@ struct hand {
           C[i].rank != C[i-1].rank - 1) straight = false;
       freq[C[i].rank]++;
     }
-//     end
-//     start: d66c95944b51eaaf5cc99f3726878bec  -
     sort(C, C+5, freq_lt(freq));
     if (straight && C[0].rank == 14) {
       card temp = C[0];
@@ -56,15 +47,10 @@ struct hand {
     else if (kind[3]) return 3;
     else return kind[2];
   }
-//     end
-//     start: 0f1a828d09a1083824c93fa25584d78b  -
   bool operator <(hand H) {
     if (int t = type() - H.type()) return t < 0;
     for (int i = 0; i < 5; i++)
       if (int t = C[i].rank - H.C[i].rank) return t < 0;
     return false;
   }
-//     end
-// end
 };
-// end

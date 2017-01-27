@@ -1,4 +1,4 @@
-struct simplex { // start: 7d174118d91eb5593c22995dca80cbc5
+struct simplex {
   int m, n, p, q;
   double s;
   dvet x, y, sx, sy, c;
@@ -7,7 +7,7 @@ struct simplex { // start: 7d174118d91eb5593c22995dca80cbc5
   linsys F;
 
   simplex() {}
-  // start: d15c194b4fc4610838c6b313f9dbe507
+
   simplex(dvet c): c(c), m(0), n(c.m), y(-c) {
     N.m = sy.m = AT.m = n;
     for (int j = 0; j < n; j++) {
@@ -19,7 +19,7 @@ struct simplex { // start: 7d174118d91eb5593c22995dca80cbc5
   //////////////////////////////////////////////////////////////////////////////
   // Adiciona a restrição A*x <= b.
   //
-  void constraint(dvet a, double b) { // start: 9f737a109e3d79a8dc3187c0f7432ac1
+  void constraint(dvet a, double b) {
     for (int j = 0; j < n; j++) AT[j][m] = a[j];
     AT[AT.m++][AT.n++] = 1;
     for (int k = 0; k < AT.m; k++) AT[k].m = AT.n;
@@ -29,7 +29,7 @@ struct simplex { // start: 7d174118d91eb5593c22995dca80cbc5
     B[B.m++] = n + m++;
   }
 
-  // start: 5861445f89c0604edeb597b20d866fd7
+
   void find_entering(int m, dvet& x, dvet& sx, int& p, int& q) {
     for (int i = 0; i < m; i++) {
       double t = - x[i] / sx[i];
@@ -39,7 +39,7 @@ struct simplex { // start: 7d174118d91eb5593c22995dca80cbc5
     }
   }
 
-  // start: b7cc0a56548af207d7fb4f997f5c3ed8
+
   int find_leaving(int m, dvet& x, dvet& dx, dvet& sx) {
     int k = -1;
     double r = 0.;
@@ -54,7 +54,7 @@ struct simplex { // start: 7d174118d91eb5593c22995dca80cbc5
   void pivot(dvet& x, dvet& dx, int q) {
     double t = x[q] / dx[q]; x -= dx * t; x[q] = t;
   }
-  double solve(dvet& r) { // start: bb56d7dff67e75bffe328e16ddc02162
+  double solve(dvet& r) {
     dvet dx, dy;
     while (true) {
       s = 0.; p = -1; q = -1;

@@ -9,7 +9,7 @@ const int MAX_PAD = 1010;
 typedef map<char, int> mapach;
 typedef map<string, int> mapastr;
 
-struct automato { // start: 4110944b7d50b6cf6f0ce1fba678e8f0
+struct automato {
   mapach trans[MAX_NO];
   mapastr pad;
   list<int> pos[MAX_PAD];
@@ -23,7 +23,7 @@ struct automato { // start: 4110944b7d50b6cf6f0ce1fba678e8f0
   // Uma chamada por instância, antes de todas as outras funções.
   //
 
-  void inic() { // start: 2f9e1c059b4273dfc2101e55ef01d872
+  void inic() {
     memset(falha, NULO, sizeof(falha));
     memset(final, NULO, sizeof(final));
     for (int i = 0; i < numNos; i++) trans[i].clear();
@@ -37,7 +37,7 @@ struct automato { // start: 4110944b7d50b6cf6f0ce1fba678e8f0
   // Retorna o índice de acesso a variável global pos.
   //
 
-  int adiciona_padrao(char* s) { // start: 3fded97ebe5abadd5f32eec1e664f720
+  int adiciona_padrao(char* s) {
     pair<mapach::iterator, bool> pch;
     int i, no = 0, numPad = pad.size();
 
@@ -59,7 +59,7 @@ struct automato { // start: 4110944b7d50b6cf6f0ce1fba678e8f0
   // Uma chamada por instância, depois da adição de todos os padrões.
   //
 
-  void gera_falhas() { // start: 86406cdd8be662abf51a86166ef94ed9
+  void gera_falhas() {
     queue<int> fila;
     int filho;
     foreach (it, all(trans[0])) {
@@ -94,7 +94,7 @@ struct automato { // start: 4110944b7d50b6cf6f0ce1fba678e8f0
   // Preenche a variável global pos.
   //
 
-  void consulta(char* s) { // start: d74c178165a68dd4949792efc8e82819
+  void consulta(char* s) {
     int ret, atual = 0, i = 0;
 
     int N = pad.size();

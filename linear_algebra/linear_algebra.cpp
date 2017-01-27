@@ -1,6 +1,6 @@
 const int TAM = 100;
 
-struct ivet { // start: 747b379fe4b8e112552e1d093715c278
+struct ivet {
   int m, u[TAM];
 
   ivet(int m = 0): m(m) {
@@ -15,7 +15,7 @@ struct ivet { // start: 747b379fe4b8e112552e1d093715c278
   }
 };
 
-struct dvet { // start: ccdca382b418bc5c59ddb48dcae1f57f
+struct dvet {
   int m; double u[TAM];
 
   dvet(int m = 0): m(m) {
@@ -55,7 +55,7 @@ struct dvet { // start: ccdca382b418bc5c59ddb48dcae1f57f
   }
 };
 
-struct mat { // start: a029cd5c14f17260c81ddd1843fee779
+struct mat {
   int m, n; dvet u[TAM];
 
   mat(int m = 0, int n = 0): m(m), n(n) {
@@ -87,11 +87,11 @@ struct mat { // start: a029cd5c14f17260c81ddd1843fee779
 // Sistemas lineares ///////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
 
-struct linsys { // start: 5f18f344922331d27137e24d6f9b04c7
+struct linsys {
   ivet P, Q; dvet D; mat L, U;
   int m, n, r;
 
-  void compile (const mat& A) { // start: 98c076ec8e309fd25e8faedb0da81129
+  void compile (const mat& A) {
     m = A.m; n = A.n;
     P = ivet(m); L = mat(m); D = dvet(); U = A; Q = ivet(n);
     for (r = 0; r < min(m, n); r++) {
@@ -121,7 +121,7 @@ struct linsys { // start: 5f18f344922331d27137e24d6f9b04c7
   // x.m = 0 caso o sistema seja impossível.
   //
 
-  dvet solve(dvet b) { // start: 6eaec57c7ee31557c847764a1046ed73
+  dvet solve(dvet b) {
     dvet x = b % P;
     for (int i = 0; i < m; i++) x[i] -= L[i] * x;
     for (int i = 0; i < r; i++) x[i] *= D[i];
@@ -136,7 +136,7 @@ struct linsys { // start: 5f18f344922331d27137e24d6f9b04c7
   // Retorna a fatoração LU de ~A.
   //
 
-  linsys operator ~() { // start: 2c550e512eebad82af0706f5349d08af
+  linsys operator ~() {
     linsys F;
     F.P = Q; F.Q = P; F.D = D; F.L = ~U; F.U = ~L;
     F.m = n; F.n = m; F.r = r;

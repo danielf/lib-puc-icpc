@@ -4,13 +4,13 @@ const int DIG = 4;
 const int BASE = 10000; // BASE**3 < 2**51
 const int TAM = 2048;
 
-struct bigint { // start: ea95411d6424e3e46ba34e801639db49
+struct bigint {
   int v[TAM], n;
-  bigint(int x = 0): n(1) { // start: abccfeb09be9c7eda1f70aea80948972
+  bigint(int x = 0): n(1) {
     memset(v, 0, sizeof(v));
     v[n++] = x; fix();
   }
-  bigint(char *s): n(1) { // start: 959c8166b28135e983fda4929f6c66a0
+  bigint(char *s): n(1) {
     memset(v, 0, sizeof(v));
     int sign = 1;
     while (*s && !isdigit(*s)) if (*s++ == '-') sign *= -1;
@@ -22,7 +22,7 @@ struct bigint { // start: ea95411d6424e3e46ba34e801639db49
     }
     free(t); fix();
   }
-  bigint& fix(int m = 0) { // start: c48040a2d18d109614097bd8473eb48a
+  bigint& fix(int m = 0) {
     n = max(m, n);
     int sign = 0;
     for (int i = 1, e = 0; i <= n || e && (n = i); i++) {
@@ -35,7 +35,7 @@ struct bigint { // start: ea95411d6424e3e46ba34e801639db49
     return *this;
   }
 
-  int cmp(const bigint& x=0) const { // start: 0af6101d468cbc9ce27f720d4e1c4d11
+  int cmp(const bigint& x=0) const {
     int i = max(n, x.n), t = 0;
     while (1) if ((t = ::cmp(v[i], x.v[i])) || i-- == 0) return t;
   }
@@ -43,7 +43,7 @@ struct bigint { // start: ea95411d6424e3e46ba34e801639db49
   bool operator ==(const bigint& x) const { return cmp(x) == 0; }
   bool operator !=(const bigint& x) const { return cmp(x) != 0; }
 
-  operator string() const { // start: 29d6dcb9a4f970287d0a3fcec244433b
+  operator string() const {
     ostringstream s; s << v[n];
     for (int i = n - 1; i > 0; i--) {
       s.width(DIG); s.fill('0'); s << abs(v[i]);
@@ -77,7 +77,7 @@ struct bigint { // start: ea95411d6424e3e46ba34e801639db49
   }
   bigint& operator *=(const bigint& x) { return *this = *this * x; }
   // cmp(x / y) == cmp(x) * cmp(y); cmp(x % y) == cmp(x);
-  bigint div(const bigint& x) { // start: 9cb6d7a22a046e666a8e9e85193bc60f
+  bigint div(const bigint& x) {
     if (x == 0) return 0;
     bigint q; q.n = max(n - x.n + 1, 0);
     int d = x.v[x.n] * BASE + x.v[x.n-1];
@@ -94,13 +94,13 @@ struct bigint { // start: ea95411d6424e3e46ba34e801639db49
   bigint& operator %=(const bigint& x) { div(x); return *this; }
   bigint operator /(const bigint& x) { return bigint(*this).div(x); }
   bigint operator %(const bigint& x) { return bigint(*this) %= x; }
-  bigint pow(int x) { // start: 3a233cf5d13d2d59a0ce923e586abefd
+  bigint pow(int x) {
     if (x < 0) return (*this == 1 || *this == -1) ? pow(-x) : 0;
     bigint r = 1;
     for (int i = 0; i < x; i++) r *= *this;
     return r;
   }
-  bigint root(int x) { // start: a36949a29165de09212495289d176d64
+  bigint root(int x) {
     if (cmp() == 0 || cmp() < 0 && x % 2 == 0) return 0;
     if (*this == 1 || x == 1) return *this;
     if (cmp() < 0) return -(-*this).root(x);

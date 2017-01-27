@@ -81,7 +81,6 @@ double union_area(vector<rect>& R) {
   return r;
 }
 
-// start: 9c68317bfe979b572fa4ca44a5cbfffc
 double union_perimeter(vector<rect>& R) {
   int n = R.size(); if (n == 0) return 0;
   vector< pair<double, int> > E;
